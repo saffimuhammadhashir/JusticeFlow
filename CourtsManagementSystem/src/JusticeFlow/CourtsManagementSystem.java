@@ -1,27 +1,35 @@
 package JusticeFlow;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class CourtsManagementSystem {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        
-        // Instantiate the DatabaseHandler
         DatabaseHandler dbHandler = new DatabaseHandler();
-        
-        // Assuming Register() is a method to create a new user
-        // dbHandler.Register(); 
-        
 
+        System.out.println("Welcome to the Courts Management System!");
 
-        // Test login
-        System.out.println("\nTesting login...");
-        String isLoggedIn = dbHandler.Login();
-        
-        // Check if login is successful
-        System.out.println("Login status: " + (!isLoggedIn.equals("None") ? "Success" : "Failure"));
+        Case hardcodedCase = new Case(
+                19,
+                "Hardcoded Case Title",
+                "Civil",
+                "Pending",
+                new Date(),
+                new Date(),
+                1,
+                2,
+                new ArrayList<>());
 
+        dbHandler.saveOrUpdateCase(hardcodedCase);
+        hardcodedCase.updateCaseFiles();
+
+        System.out.println("Hardcoded case added to the database:");
+        System.out.println(hardcodedCase);
+
+        System.out.println("Thank you for using the Courts Management System.");
         scanner.close();
     }
 }

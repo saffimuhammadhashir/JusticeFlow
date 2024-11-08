@@ -2,6 +2,8 @@
 USE sda_project;
 
 -- Drop Statements
+DROP TABLE IF EXISTS CaseFiles;
+DROP TABLE IF EXISTS Cases;
 DROP TABLE IF EXISTS Lawyers;
 DROP TABLE IF EXISTS Prosecutors;
 DROP TABLE IF EXISTS BarAssociations;
@@ -17,6 +19,7 @@ DROP TABLE IF EXISTS ITAdmins;
 DROP TABLE IF EXISTS Courts;
 DROP TABLE IF EXISTS Witnesses;
 DROP TABLE IF EXISTS Jurors;
+DROP TABLE IF EXISTS UserApplication;
 DROP TABLE IF EXISTS Users;
 
 -- Create tables for the system
@@ -28,7 +31,8 @@ CREATE TABLE Users (
     Password VARCHAR(255) NOT NULL,
     Role ENUM('Judge', 'Clerk', 'Lawyer', 'Court Administrator', 'Plaintiff', 'Defendant', 'Witness', 'Bailiff', 'Juror', 'Court Reporter', 'Probation Officer', 'IT Admin', 'Prosecutor') NOT NULL,
     Email VARCHAR(255) UNIQUE NOT NULL,
-    PhoneNumber VARCHAR(20)
+    PhoneNumber VARCHAR(20),
+	Activate BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE Courts (
@@ -247,6 +251,37 @@ CREATE TABLE Prosecutors (
 );
 
 
+CREATE TABLE UserApplication (
+    ApplicationID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT NOT NULL,
+    ApplicationStatus INT DEFAULT 0,
+    SubmissionDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Cases (
+    CaseID INT AUTO_INCREMENT PRIMARY KEY,
+    CaseTitle VARCHAR(255) NOT NULL,
+    CaseType VARCHAR(100),
+    CaseStatus VARCHAR(100),
+    FilingDate DATE,
+    CourtDate DATE,
+    PlaintiffID INT,
+    DefendantID INT,
+    FOREIGN KEY (PlaintiffID) REFERENCES Plaintiffs(PlaintiffID),
+    FOREIGN KEY (DefendantID) REFERENCES Defendants(DefendantID)
+);
+
+CREATE TABLE CaseFiles (
+    FileID INT AUTO_INCREMENT PRIMARY KEY,
+    CaseID INT,
+    FileName VARCHAR(255) NOT NULL,
+    FileHash VARCHAR(255) NOT NULL,
+    UploadDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (CaseID) REFERENCES Cases(CaseID)
+);
+
 
 
 
@@ -255,6 +290,9 @@ CREATE TABLE Prosecutors (
 
 -- Select statements
 SELECT * FROM Users;
+SELECT * FROM Cases;
+SELECT * FROM CaseFiles;
+select * from UserApplication;
 SELECT * FROM Courts;
 SELECT * FROM Judges;
 SELECT * FROM Clerks;
