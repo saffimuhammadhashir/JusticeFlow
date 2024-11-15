@@ -1,5 +1,7 @@
 -- Use the database
 USE sda_project;
+SHOW TABLES;
+
 
 -- Drop Statements
 DROP TABLE IF EXISTS CaseFiles;
@@ -267,8 +269,8 @@ CREATE TABLE Cases (
     CaseStatus VARCHAR(100),
     FilingDate DATE,
     CourtDate DATE,
-    PlaintiffID INT,
-    DefendantID INT,
+    PlaintiffID INT DEFAULT NULL,
+    DefendantID INT DEFAULT NULL,
     FOREIGN KEY (PlaintiffID) REFERENCES Plaintiffs(PlaintiffID),
     FOREIGN KEY (DefendantID) REFERENCES Defendants(DefendantID)
 );
@@ -283,6 +285,15 @@ CREATE TABLE CaseFiles (
 );
 
 
+CREATE TABLE Notifications (
+    NotificationID INT AUTO_INCREMENT PRIMARY KEY, -- Unique ID for each notification
+    CaseID INT,                                   -- Associated case ID
+    RecipientsID JSON,                            -- List of recipient IDs (stored as JSON)
+    RecipientsType JSON,                          -- List of recipient types (stored as JSON)
+    SenderID INT,                                 -- Sender ID
+    SenderType VARCHAR(255),                      -- Sender type
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp when the notification is created
+);
 
 
 

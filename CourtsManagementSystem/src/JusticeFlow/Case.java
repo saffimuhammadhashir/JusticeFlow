@@ -1,5 +1,6 @@
 package JusticeFlow;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,12 +14,17 @@ public class Case {
     private Date courtDate;
     private int plaintiffID;
     private int defendantID;
-    private List<File> files;
+    private List<CaseFile> files;  // Changed to CaseFile from File
 
     // Constructor initializes all attributes of a case, including details like case title,
     // type, status, filing and court dates, IDs of plaintiff and defendant, and associated files.
     public Case(int caseID, String caseTitle, String caseType, String caseStatus,
-            Date filingDate, Date courtDate, int plaintiffID, int defendantID, List<File> files) {
+                Date filingDate, Date courtDate, int plaintiffID, int defendantID) {
+        this(caseID, caseTitle, caseType, caseStatus, filingDate, courtDate, plaintiffID, defendantID, new ArrayList<>());
+    }
+
+    public Case(int caseID, String caseTitle, String caseType, String caseStatus,
+                Date filingDate, Date courtDate, int plaintiffID, int defendantID, List<CaseFile> files) {
         this.caseID = caseID;
         this.caseTitle = caseTitle;
         this.caseType = caseType;
@@ -94,72 +100,37 @@ public class Case {
         this.defendantID = defendantID;
     }
 
-    public List<File> getFiles() {
+    public List<CaseFile> getFiles() {
         return files;
     }
 
-    public void setFiles(List<File> files) {
+    public void setFiles(List<CaseFile> files) {
         this.files = files;
     }
 
     // Adds a new file to the case's list of files, representing a document or item associated with the case.
-    public void addFile(File file) {
+    public void addFile(CaseFile file) {
         this.files.add(file);
     }
 
     // Updates case files by first saving the files through the FileHandler,
     // then saving or updating the case record through DatabaseHandler.
-    public void updateCaseFiles() {
-        DatabaseHandler dbHandler = new DatabaseHandler();
-        FileHandler.saveFileForCase(this);
+    public void updateCaseFiles(FileHandler filehandler, DatabaseHandler dbHandler) {
+        // filehandler.saveFileForCase(this);
         dbHandler.saveOrUpdateCase(this);
     }
 
     // Converts the case details, including associated file details, into a readable string format.
     @Override
     public String toString() {
-        String fileDetails = "";
-        for (File file : files) {
-            fileDetails += "\n" + file.toString();
+        StringBuilder fileDetails = new StringBuilder();
+        for (CaseFile file : files) {
+            fileDetails.append("\n").append(file.toString());
         }
 
         return "Case ID: " + caseID + "\nTitle: " + caseTitle + "\nType: " + caseType +
                 "\nStatus: " + caseStatus + "\nFiled On: " + filingDate + "\nCourt Date: " + courtDate +
                 "\nPlaintiff ID: " + plaintiffID + "\nDefendant ID: " + defendantID +
-                "\nAssociated Files: " + fileDetails;
-    }
-
-    // Inner class File represents individual files associated with a case, storing both file name and its hash.
-    public static class File {
-        private String fileName;
-        private String fileHash;
-
-        // Constructor initializes the file with its name and hash value.
-        public File(String fileName, String fileHash) {
-            this.fileName = fileName;
-            this.fileHash = fileHash;
-        }
-
-        public String getFileName() {
-            return fileName;
-        }
-
-        public void setFileName(String fileName) {
-            this.fileName = fileName;
-        }
-
-        public String getFileHash() {
-            return fileHash;
-        }
-
-        public void setFileHash(String fileHash) {
-            this.fileHash = fileHash;
-        }
-
-        // Converts the file details into a readable string format.
-        @Override
-        public String toString() {
-            return "File Name: " + fileName + ", Hash: " + fileHash;
-        }
+                "\nAssociated Files: " + fileDetails.toString();
     }
 }

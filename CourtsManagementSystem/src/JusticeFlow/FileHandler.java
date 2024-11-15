@@ -8,9 +8,17 @@ import java.awt.*;
 
 public class FileHandler {
 
+    private DatabaseHandler dbHandler;
+
+    // Constructor where the DatabaseHandler is injected
+
+    public FileHandler(DatabaseHandler dbHandler) {
+        this.dbHandler = dbHandler;
+    }
+
     // Saves a selected file for a given case, including hashing the file, copying it to a
     // dedicated storage directory, and adding file details to the case's file list.
-    public static void saveFileForCase(Case caseObj) {
+    public void saveFileForCase(Case caseObj) {
         File selectedFile = openFileDialog();
 
         if (selectedFile != null) {
@@ -32,8 +40,7 @@ public class FileHandler {
                 File destinationFile = new File(caseDirectory, selectedFile.getName());
                 copyFile(filePath, destinationFile.getAbsolutePath());
 
-                Case.File file = new Case.File(selectedFile.getName(), fileHash);
-                DatabaseHandler dbHandler = new DatabaseHandler();
+                CaseFile file = new CaseFile(selectedFile.getName(), fileHash);  // Changed to CaseFile
                 dbHandler.saveFileDetails(caseObj.getCaseID(), selectedFile.getName(), fileHash);
                 caseObj.addFile(file);
 
@@ -47,7 +54,7 @@ public class FileHandler {
 
     // Opens a native file selection dialog for the user to select a file, returning the chosen file
     // or null if the user cancels the selection.
-    private static File openFileDialog() {
+    private File openFileDialog() {
         FileDialog fileDialog = new FileDialog((Frame) null, "Select a File", FileDialog.LOAD);
         fileDialog.setVisible(true);
 
@@ -63,7 +70,7 @@ public class FileHandler {
 
     // Computes and returns the SHA-256 hash of a file specified by its path, generating a
     // hexadecimal string representation of the hash.
-    private static String getFileHash(String filePath) throws IOException, NoSuchAlgorithmException {
+    private String getFileHash(String filePath) throws IOException, NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         try (InputStream is = Files.newInputStream(Paths.get(filePath))) {
             byte[] byteArray = new byte[1024];
@@ -83,7 +90,7 @@ public class FileHandler {
 
     // Copies a file from a specified source path to a destination path, replacing the existing
     // file if it already exists.
-    private static void copyFile(String sourcePath, String destinationPath) throws IOException {
+    private void copyFile(String sourcePath, String destinationPath) throws IOException {
         Path source = Paths.get(sourcePath);
         Path destination = Paths.get(destinationPath);
         Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);

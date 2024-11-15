@@ -6,12 +6,221 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Date;
+
+import com.mysql.cj.xdevapi.Client;
 
 public class DatabaseHandler {
     private final String url = "jdbc:mysql://localhost:3306/sda_project";
     private final String dbUsername = "root";
     private final String dbPassword = "test12345";
+
+    public void getAllUsers(List<ITAdmin> AllITAdmins,
+            List<Judge> AllJudges,
+            List<Juror> AllJurors,
+            List<Lawyer> AllLawyers,
+            List<CourtAdministrator> AllCourt_Administrators,
+            List<Case> AllCases,
+            List<Plaintiff> AllPlaintiff,
+            List<Defendant> AllDefendant) {
+        String query = "SELECT * FROM Users";
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int userID = resultSet.getInt("UserID");
+                String username = resultSet.getString("Username");
+                String password = resultSet.getString("Password");
+                String role = resultSet.getString("Role");
+                String email = resultSet.getString("Email");
+                String phoneNumber = resultSet.getString("PhoneNumber");
+                boolean isActive = resultSet.getBoolean("Activate");
+
+                // Create User object and add it to the appropriate list
+                User user = new User(userID, username, password, role, email, phoneNumber, isActive);
+
+                switch (role) {
+                    case "Judge":
+                        AllJudges.add((Judge) user);
+                        break;
+                    case "Lawyer":
+                        AllLawyers.add((Lawyer) user);
+                        break;
+                    case "ITAdmin":
+                        AllITAdmins.add((ITAdmin) user);
+                        break;
+                    case "Juror":
+                        AllJurors.add((Juror) user);
+                        break;
+                    case "CourtAdministrator":
+                        AllCourt_Administrators.add((CourtAdministrator) user);
+                        break;
+                    case "Client":
+                         AllDefendant.add((Defendant) user);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAllCases(List<Case> AllCases) {
+        String query = "SELECT * FROM Cases";
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int caseID = resultSet.getInt("CaseID");
+                String caseTitle = resultSet.getString("CaseTitle");
+                String caseType = resultSet.getString("CaseType");
+                String caseStatus = resultSet.getString("CaseStatus");
+                Date filingDate = resultSet.getDate("FilingDate");
+                Date courtDate = resultSet.getDate("CourtDate");
+                int plaintiffID = resultSet.getInt("PlaintiffID");
+                int defendantID = resultSet.getInt("DefendantID");
+
+                // Create Case object and add it to AllCases
+                Case newCase = new Case(caseID, caseTitle, caseType, caseStatus, filingDate, courtDate, plaintiffID,
+                        defendantID);
+                AllCases.add(newCase);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAllLawyers() {
+        String query = "SELECT * FROM Lawyers";
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int lawyerID = resultSet.getInt("LawyerID");
+                String firstName = resultSet.getString("FirstName");
+                String lastName = resultSet.getString("LastName");
+                String licenseNumber = resultSet.getString("LicenseNumber");
+                Date dateOfBirth = resultSet.getDate("DateOfBirth");
+                String gender = resultSet.getString("Gender");
+                int barAssociationID = resultSet.getInt("BarAssociationID");
+                String email = resultSet.getString("Email");
+                String phoneNumber = resultSet.getString("PhoneNumber");
+                int userID = resultSet.getInt("UserID");
+
+                // Create Lawyer object and add it to AllLawyers list
+                Lawyer lawyer = new Lawyer(lawyerID, firstName, lastName, licenseNumber, dateOfBirth, gender,
+                        barAssociationID, email, phoneNumber, userID);
+                AllLawyers.add(lawyer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAllJudges() {
+        String query = "SELECT * FROM Judges";
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int judgeID = resultSet.getInt("JudgeID");
+                String firstName = resultSet.getString("FirstName");
+                String lastName = resultSet.getString("LastName");
+                Date dateOfBirth = resultSet.getDate("DateOfBirth");
+                String gender = resultSet.getString("Gender");
+                String courtAssigned = resultSet.getString("CourtAssigned");
+                String email = resultSet.getString("Email");
+                String phoneNumber = resultSet.getString("PhoneNumber");
+                int userID = resultSet.getInt("UserID");
+
+                // Create Judge object and add it to AllJudges list
+                Judge judge = new Judge(judgeID, firstName, lastName, dateOfBirth, gender, courtAssigned, email,
+                        phoneNumber, userID);
+                AllJudges.add(judge);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAllCourtAdministrators() {
+        String query = "SELECT * FROM CourtAdministrators";
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int adminID = resultSet.getInt("AdminID");
+                String firstName = resultSet.getString("FirstName");
+                String lastName = resultSet.getString("LastName");
+                String department = resultSet.getString("Department");
+                String email = resultSet.getString("Email");
+                String phoneNumber = resultSet.getString("PhoneNumber");
+                int userID = resultSet.getInt("UserID");
+
+                // Create CourtAdministrator object and add it to the list
+                CourtAdministrator admin = new CourtAdministrator(adminID, firstName, lastName, department, email,
+                        phoneNumber, userID);
+                AllCourt_Administrators.add(admin);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAllJurors() {
+        String query = "SELECT * FROM Jurors";
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int jurorID = resultSet.getInt("JurorID");
+                String firstName = resultSet.getString("FirstName");
+                String lastName = resultSet.getString("LastName");
+                String email = resultSet.getString("Email");
+                String phoneNumber = resultSet.getString("PhoneNumber");
+                int userID = resultSet.getInt("UserID");
+
+                // Create Juror object and add it to AllJurors list
+                Juror juror = new Juror(jurorID, firstName, lastName, email, phoneNumber, userID);
+                AllJurors.add(juror);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAllClients() {
+        String query = "SELECT * FROM Clients";
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int clientID = resultSet.getInt("ClientID");
+                String firstName = resultSet.getString("FirstName");
+                String lastName = resultSet.getString("LastName");
+                String email = resultSet.getString("Email");
+                String phoneNumber = resultSet.getString("PhoneNumber");
+                int userID = resultSet.getInt("UserID");
+
+                // Create Client object and add it to AllClients list
+                Client client = new Client(clientID, firstName, lastName, email, phoneNumber, userID);
+                AllClients.add(client);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Saves or updates a case in the database based on its existence. First, it
     // checks if a case with the
@@ -28,6 +237,7 @@ public class DatabaseHandler {
                 ResultSet resultSet = checkStatement.executeQuery();
 
                 if (resultSet.next() && resultSet.getInt(1) > 0) {
+                    // Case exists, update it
                     String updateSQL = "UPDATE Cases SET CaseTitle = ?, CaseType = ?, CaseStatus = ?, " +
                             "FilingDate = ?, CourtDate = ?, PlaintiffID = ?, DefendantID = ? WHERE CaseID = ?";
                     try (PreparedStatement updateStatement = connection.prepareStatement(updateSQL)) {
@@ -36,8 +246,20 @@ public class DatabaseHandler {
                         updateStatement.setString(3, caseObj.getCaseStatus());
                         updateStatement.setDate(4, new java.sql.Date(caseObj.getFilingDate().getTime()));
                         updateStatement.setDate(5, new java.sql.Date(caseObj.getCourtDate().getTime()));
-                        updateStatement.setInt(6, caseObj.getPlaintiffID());
-                        updateStatement.setInt(7, caseObj.getDefendantID());
+
+                        // Check if PlaintiffID or DefendantID is provided, if not, set to NULL
+                        if (caseObj.getPlaintiffID() == 0) {
+                            updateStatement.setNull(6, java.sql.Types.INTEGER);
+                        } else {
+                            updateStatement.setInt(6, caseObj.getPlaintiffID());
+                        }
+
+                        if (caseObj.getDefendantID() == 0) {
+                            updateStatement.setNull(7, java.sql.Types.INTEGER);
+                        } else {
+                            updateStatement.setInt(7, caseObj.getDefendantID());
+                        }
+
                         updateStatement.setInt(8, caseObj.getCaseID());
 
                         int rowsUpdated = updateStatement.executeUpdate();
@@ -48,6 +270,7 @@ public class DatabaseHandler {
                         }
                     }
                 } else {
+                    // Case does not exist, insert a new one
                     String insertSQL = "INSERT INTO Cases (CaseTitle, CaseType, CaseStatus, FilingDate, CourtDate, PlaintiffID, DefendantID) "
                             +
                             "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -58,8 +281,19 @@ public class DatabaseHandler {
                         insertStatement.setString(3, caseObj.getCaseStatus());
                         insertStatement.setDate(4, new java.sql.Date(caseObj.getFilingDate().getTime()));
                         insertStatement.setDate(5, new java.sql.Date(caseObj.getCourtDate().getTime()));
-                        insertStatement.setInt(6, caseObj.getPlaintiffID());
-                        insertStatement.setInt(7, caseObj.getDefendantID());
+
+                        // Check if PlaintiffID or DefendantID is provided, if not, set to NULL
+                        if (caseObj.getPlaintiffID() == 0) {
+                            insertStatement.setNull(6, java.sql.Types.INTEGER);
+                        } else {
+                            insertStatement.setInt(6, caseObj.getPlaintiffID());
+                        }
+
+                        if (caseObj.getDefendantID() == 0) {
+                            insertStatement.setNull(7, java.sql.Types.INTEGER);
+                        } else {
+                            insertStatement.setInt(7, caseObj.getDefendantID());
+                        }
 
                         int rowsInserted = insertStatement.executeUpdate();
                         if (rowsInserted > 0) {
@@ -556,96 +790,6 @@ public class DatabaseHandler {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    
-    public void createDummyUsers() {
-        // Dummy data for each user role
-        String baseUsername = "testuser";
-        String baseEmail = "test@example.com";
-        String basePhoneNumber = "123-456-789";
-        String firstName = "John";
-        String lastName = "Doe";
-        String dateOfBirth = "1990-01-01";
-        String gender = "Male";
-        String dateOfAppointment = "2024-01-01";
-        String dateOfHiring = "2024-01-01";
-        String license = "LICENSE123";
-        String address = "123 Test St, City, Country";
-        Integer courtID = 1;
-        Integer barAssociationID = 1;
-
-        // Create a test user for each role with unique identifiers
-        for (int i = 1; i <= 12; i++) {
-            String username = baseUsername + "_" + i;
-            String email = baseEmail.split("@")[0] + "_" + i + "@example.com";
-            String phoneNumber = basePhoneNumber + i;
-
-            switch (i) {
-                case 1: // Judge
-                    createUserWithRole(username, "password123", "Judge", email, phoneNumber, firstName, lastName,
-                            dateOfBirth, gender,
-                            dateOfAppointment, null, license, address, courtID, null);
-                    break;
-                case 2: // Clerk
-                    createUserWithRole(username, "password123", "Clerk", email, phoneNumber, firstName, lastName,
-                            dateOfBirth, gender,
-                            null, dateOfHiring, null, address, courtID, null);
-                    break;
-                case 3: // Lawyer
-                    createUserWithRole(username, "password123", "Lawyer", email, phoneNumber, firstName, lastName,
-                            dateOfBirth, gender,
-                            null, null, license, address, null, barAssociationID);
-                    break;
-                case 4: // Court Administrator
-                    createUserWithRole(username, "password123", "Court Administrator", email, phoneNumber, firstName,
-                            lastName, dateOfBirth, gender,
-                            null, dateOfHiring, null, address, courtID, null);
-                    break;
-                case 5: // Plaintiff
-                    createUserWithRole(username, "password123", "Plaintiff", email, phoneNumber, firstName, lastName,
-                            dateOfBirth, gender,
-                            null, null, null, address, null, null);
-                    break;
-                case 6: // Defendant
-                    createUserWithRole(username, "password123", "Defendant", email, phoneNumber, firstName, lastName,
-                            dateOfBirth, gender,
-                            null, null, null, address, null, null);
-                    break;
-                case 7: // Witness
-                    createUserWithRole(username, "password123", "Witness", email, phoneNumber, firstName, lastName,
-                            dateOfBirth, gender,
-                            null, null, null, address, null, null);
-                    break;
-                case 8: // Bailiff
-                    createUserWithRole(username, "password123", "Bailiff", email, phoneNumber, firstName, lastName,
-                            dateOfBirth, gender,
-                            dateOfHiring, null, null, address, courtID, null);
-                    break;
-                case 9: // Juror
-                    createUserWithRole(username, "password123", "Juror", email, phoneNumber, firstName, lastName,
-                            dateOfBirth, gender,
-                            null, null, null, address, null, null);
-                    break;
-                case 10: // Court Reporter
-                    createUserWithRole(username, "password123", "Court Reporter", email, phoneNumber, firstName,
-                            lastName, dateOfBirth, gender,
-                            dateOfHiring, null, null, address, courtID, null);
-                    break;
-                case 11: // Probation Officer
-                    createUserWithRole(username, "password123", "Probation Officer", email, phoneNumber, firstName,
-                            lastName, dateOfBirth, gender,
-                            dateOfHiring, null, null, address, courtID, null);
-                    break;
-                case 12: // IT Admin
-                    createUserWithRole(username, "password123", "IT Admin", email, phoneNumber, firstName, lastName,
-                            dateOfBirth, gender,
-                            dateOfHiring, null, null, address, null, null);
-                    break;
-            }
-        }
-
-        System.out.println("Dummy users created for each role.");
     }
 
 }
