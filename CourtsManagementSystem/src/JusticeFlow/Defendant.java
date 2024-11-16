@@ -97,5 +97,18 @@ public class Defendant extends User{
     public void setUserID(int userID) {
         this.userID = userID;
     }
+    @Override
+    public String toString() {
+        return "Defendant {" +
+                "judgeID=" + defendantID +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userID=" + userID +
+                '}';
+    }
 }
 

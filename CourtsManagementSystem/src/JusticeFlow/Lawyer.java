@@ -14,23 +14,34 @@ public class Lawyer extends User {
     private String phoneNumber;
     private int userID;
 
-    public Lawyer(int userID, String username, String password, String role, String email, String phoneNumber,
-            boolean activate,
-            int lawyerID, String firstName, String lastName, String licenseNumber, Date dateOfBirth, String gender,
-            int barAssociationID, String emailAddress, String phoneNum) {
-        super(userID, username, password, role, email, phoneNumber, activate); // Calling the constructor of User class
+    public Lawyer(
+        int userID,
+        String username,
+        String password,
+        String role,
+        String email,
+        String phoneNumber,
+        boolean activate,
+        int lawyerID,
+        String firstName,
+        String lastName,
+        String licenseNumber,
+        Date dateOfBirth,
+        String gender,
+        int barAssociationID) {
+    // Call the superclass constructor
+    super(userID, username, password, role, email, phoneNumber, activate);
 
-        this.lawyerID = lawyerID;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.licenseNumber = licenseNumber;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.barAssociationID = barAssociationID;
-        this.email = emailAddress;
-        this.phoneNumber = phoneNum;
-        this.userID = userID;
-    }
+    // Initialize Lawyer-specific fields
+    this.lawyerID = lawyerID;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.licenseNumber = licenseNumber;
+    this.dateOfBirth = dateOfBirth;
+    this.gender = gender;
+    this.barAssociationID = barAssociationID;
+}
+
 
     public int getLawyerID() {
         return lawyerID;
@@ -110,5 +121,19 @@ public class Lawyer extends User {
 
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+    @Override
+    public String toString() {
+        return "Lawyer {" +
+                "lawyerID=" + lawyerID +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+                ", BarID=" + barAssociationID +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userID=" + userID +
+                '}';
     }
 }

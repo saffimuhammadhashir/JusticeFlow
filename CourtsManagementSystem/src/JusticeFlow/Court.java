@@ -1,6 +1,5 @@
 package JusticeFlow;
 
-
 public class Court {
     private int courtID;
     private String courtName;
@@ -8,6 +7,15 @@ public class Court {
     private String address;
     private String phoneNumber;
     private String email;
+
+    public Court(int courtID, String courtName, String courtType, String address, String phoneNumber, String email) {
+        this.courtID = courtID;
+        this.courtName = courtName;
+        this.courtType = courtType;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
 
     public int getCourtID() {
         return courtID;
@@ -57,4 +65,3 @@ public class Court {
         this.email = email;
     }
 }
-

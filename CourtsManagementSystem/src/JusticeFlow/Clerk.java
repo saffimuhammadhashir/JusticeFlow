@@ -108,4 +108,18 @@ this.userID = userID;
     public void setUserID(int userID) {
         this.userID = userID;
     }
+    @Override
+    public String toString() {
+        return "Clerk {" +
+                "judgeID=" + clerkID +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+                ", courtID=" + courtID +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userID=" + userID +
+                '}';
+    }
 }

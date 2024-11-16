@@ -99,4 +99,17 @@ public class ITAdmin extends User{
     public void setUserID(int userID) {
         this.userID = userID;
     }
+    @Override
+    public String toString() {
+        return "IT Admin {" +
+                "judgeID=" + adminID +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userID=" + userID +
+                '}';
+    }
 }

@@ -13,9 +13,11 @@ public class Prosecutor extends User {
     private String email;
     private String phoneNumber;
     private int userID;
-    public Prosecutor(int userID, String username, String password, String role, String email, String phoneNumber, boolean activate,
-                      int prosecutorID, String firstName, String lastName, String licenseNumber, Date dateOfBirth, String gender,
-                      int barAssociationID) {
+
+    public Prosecutor(int userID, String username, String password, String role, String email, String phoneNumber,
+            boolean activate,
+            int prosecutorID, String firstName, String lastName, String licenseNumber, Date dateOfBirth, String gender,
+            int barAssociationID) {
         super(userID, username, password, role, email, phoneNumber, activate); // Calling the constructor of User class
 
         this.prosecutorID = prosecutorID;
@@ -29,6 +31,7 @@ public class Prosecutor extends User {
         this.phoneNumber = phoneNumber;
         this.userID = userID;
     }
+
     public int getProsecutorID() {
         return prosecutorID;
     }
@@ -108,5 +111,19 @@ public class Prosecutor extends User {
     public void setUserID(int userID) {
         this.userID = userID;
     }
-}
 
+    @Override
+    public String toString() {
+        return "Prosecutor {" +
+                "judgeID=" + prosecutorID +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userID=" + userID +
+                '}';
+    }
+}

@@ -8,6 +8,13 @@ public class UserApplication {
     private int applicationStatus;
     private Date submissionDate;
 
+    public UserApplication(int applicationID, int userID, int applicationStatus, Date submissionDate) {
+        this.applicationID = applicationID;
+        this.userID = userID;
+        this.applicationStatus = applicationStatus;
+        this.submissionDate = submissionDate;
+    }
+
     public int getApplicationID() {
         return applicationID;
     }

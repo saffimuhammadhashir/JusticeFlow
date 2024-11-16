@@ -15,10 +15,9 @@ public class Bailiff extends User {
     private int userID;
 
     public Bailiff(int userID, String username, String password, String role, String email, String phoneNumber,
-            boolean activate,
-            int bailiffID, String firstName, String lastName, Date dateOfBirth, String gender,
-            Date hireDate, int courtID) {
-        super(userID, username, password, role, email, phoneNumber, activate); // Calling the constructor of User class
+            boolean activate, int bailiffID, String firstName, String lastName, Date dateOfBirth,
+            String gender, Date hireDate, int courtID) {
+        super(userID, username, password, role, email, phoneNumber, activate); // Call to User class constructor
 
         this.bailiffID = bailiffID;
         this.firstName = firstName;
@@ -27,9 +26,6 @@ public class Bailiff extends User {
         this.gender = gender;
         this.hireDate = hireDate;
         this.courtID = courtID;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.userID = userID;
     }
 
     public int getBailiffID() {
@@ -110,5 +106,20 @@ public class Bailiff extends User {
 
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+    
+    @Override
+    public String toString() {
+        return "Bailiff {" +
+                "judgeID=" + bailiffID +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+                ", courtID=" + courtID +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userID=" + userID +
+                '}';
     }
 }

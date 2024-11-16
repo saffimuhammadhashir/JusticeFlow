@@ -109,5 +109,19 @@ public class CourtAdministrator extends User {
     public void setUserID(int userID) {
         this.userID = userID;
     }
+    @Override
+    public String toString() {
+        return "Court Admin {" +
+                "judgeID=" + adminID +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+                ", courtID=" + courtID +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userID=" + userID +
+                '}';
+    }
 }
 

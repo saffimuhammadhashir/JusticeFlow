@@ -16,8 +16,8 @@ public class Judge extends User {
 
     public Judge(int userID, String username, String password, String role, String email, String phoneNumber,
             boolean activate,
-            int judgeID, String firstName, String lastName, Date dateOfBirth, String gender, Date appointmentDate,
-            int courtID, String emailAddress, String phoneNum) {
+            int judgeID, String firstName, String lastName, Date dateOfBirth, String gender,
+            Date appointmentDate, int courtID) {
         super(userID, username, password, role, email, phoneNumber, activate); // Calling the constructor of User class
 
         this.judgeID = judgeID;
@@ -27,9 +27,6 @@ public class Judge extends User {
         this.gender = gender;
         this.appointmentDate = appointmentDate;
         this.courtID = courtID;
-        this.email = emailAddress;
-        this.phoneNumber = phoneNum;
-        this.userID = userID;
     }
 
     public int getJudgeID() {
@@ -111,4 +108,21 @@ public class Judge extends User {
     public void setUserID(int userID) {
         this.userID = userID;
     }
+
+    @Override
+    public String toString() {
+        return "Judge {" +
+                "judgeID=" + judgeID +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+                ", appointmentDate=" + appointmentDate +
+                ", courtID=" + courtID +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userID=" + userID +
+                '}';
+    }
+
 }

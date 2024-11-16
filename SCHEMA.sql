@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS Witnesses;
 DROP TABLE IF EXISTS Jurors;
 DROP TABLE IF EXISTS UserApplication;
 DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Notifications;
 
 -- Create tables for the system
 
@@ -269,8 +270,8 @@ CREATE TABLE Cases (
     CaseStatus VARCHAR(100),
     FilingDate DATE,
     CourtDate DATE,
-    PlaintiffID INT DEFAULT NULL,
-    DefendantID INT DEFAULT NULL,
+    PlaintiffID INT  ,
+    DefendantID INT  ,	
     FOREIGN KEY (PlaintiffID) REFERENCES Plaintiffs(PlaintiffID),
     FOREIGN KEY (DefendantID) REFERENCES Defendants(DefendantID)
 );

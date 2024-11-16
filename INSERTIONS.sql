@@ -5,12 +5,6 @@ VALUES
 
 -- Insert Users
 -- (Assuming UserIDs will auto-increment)
-INSERT INTO Users (Username, Password, Role, Email, PhoneNumber)
-VALUES 
-('johnsmith', 'password123', 'Judge', 'johnsmith@court.com', '555-0101'),
-('janedoe', 'password456', 'Clerk', 'janedoe@court.com', '555-0102'),
-('alicejones', 'password789', 'Lawyer', 'alicejones@lawfirm.com', '555-0103'),
-('bobmartin', 'password000', 'Plaintiff', 'bobmartin@plaintiff.com', '555-0104');
 
 -- Insert Courts
 -- (Assuming CourtIDs will auto-increment)
@@ -19,81 +13,163 @@ VALUES
 ('Central Criminal Court', 'Criminal', '123 Court St, Cityville', '555-1001', 'central@court.com'),
 ('Family Court', 'Family', '456 Family Rd, Townsville', '555-1002', 'family@court.com');
 
--- Insert Judges
--- (Assuming JudgeIDs will auto-increment and CourtID references the previously inserted Courts)
-INSERT INTO Judges (FirstName, LastName, DateOfBirth, Gender, AppointmentDate, CourtID, Email, PhoneNumber)
-VALUES 
-('John', 'Smith', '1980-03-15', 'Male', '2010-01-01', 1, 'johnsmith@court.com', '555-0101'),
-('Jane', 'Doe', '1985-07-20', 'Female', '2015-05-12', 2, 'janedoe@court.com', '555-0102');
+-- Inserting dummy data into Users table for all roles
+INSERT INTO Users (Username, Password, Role, Email, PhoneNumber, Activate) VALUES
+-- Judges
+('judge1', 'password1', 'Judge', 'judge1@example.com', '123-456-7890', TRUE),
+('judge2', 'password2', 'Judge', 'judge2@example.com', '234-567-8901', TRUE),
+('judge3', 'password3', 'Judge', 'judge3@example.com', '345-678-9012', TRUE),
+('judge4', 'password4', 'Judge', 'judge4@example.com', '456-789-0123', TRUE),
+('judge5', 'password5', 'Judge', 'judge5@example.com', '567-890-1234', TRUE),
 
--- Insert Clerks
--- (Assuming ClerkIDs will auto-increment and CourtID references the previously inserted Courts)
-INSERT INTO Clerks (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber)
-VALUES 
-('Alice', 'Jones', '1990-02-10', 'Female', '2020-06-15', 1, 'alicejones@court.com', '555-0103'),
-('Bob', 'Martin', '1992-09-25', 'Male', '2021-03-22', 2, 'bobmartin@court.com', '555-0104');
+-- Clerks
+('clerk1', 'password1', 'Clerk', 'clerk1@example.com', '234-567-8901', TRUE),
+('clerk2', 'password2', 'Clerk', 'clerk2@example.com', '345-678-9012', TRUE),
+('clerk3', 'password3', 'Clerk', 'clerk3@example.com', '456-789-0123', TRUE),
+('clerk4', 'password4', 'Clerk', 'clerk4@example.com', '567-890-1234', TRUE),
+('clerk5', 'password5', 'Clerk', 'clerk5@example.com', '678-901-2345', TRUE),
 
--- Insert Lawyers
--- (Assuming LawyerIDs will auto-increment and BarAssociationID references the previously inserted BarAssociation)
-INSERT INTO Lawyers (FirstName, LastName, LicenseNumber, DateOfBirth, Gender, BarAssociationID, Email, PhoneNumber)
-VALUES 
-('Alice', 'Jones', 'L12345', '1988-06-01', 'Female', 1, 'alicejones@lawfirm.com', '555-0103');
+-- Lawyers
+('lawyer1', 'password1', 'Lawyer', 'lawyer1@example.com', '345-678-9012', TRUE),
+('lawyer2', 'password2', 'Lawyer', 'lawyer2@example.com', '456-789-0123', TRUE),
+('lawyer3', 'password3', 'Lawyer', 'lawyer3@example.com', '567-890-1234', TRUE),
+('lawyer4', 'password4', 'Lawyer', 'lawyer4@example.com', '678-901-2345', TRUE),
+('lawyer5', 'password5', 'Lawyer', 'lawyer5@example.com', '789-012-3456', TRUE),
 
--- Insert Court Administrators
--- (Assuming AdminIDs will auto-increment and CourtID references the previously inserted Courts)
-INSERT INTO CourtAdministrators (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber)
-VALUES 
-('Eve', 'Taylor', '1979-05-05', 'Female', '2018-08-12', 1, 'evetaylor@court.com', '555-0105');
+-- Court Administrators
+('admin1', 'password1', 'Court Administrator', 'admin1@example.com', '456-789-0123', TRUE),
+('admin2', 'password2', 'Court Administrator', 'admin2@example.com', '567-890-1234', TRUE),
+('admin3', 'password3', 'Court Administrator', 'admin3@example.com', '678-901-2345', TRUE),
+('admin4', 'password4', 'Court Administrator', 'admin4@example.com', '789-012-3456', TRUE),
+('admin5', 'password5', 'Court Administrator', 'admin5@example.com', '890-123-4567', TRUE),
 
--- Insert Plaintiffs
--- (Assuming PlaintiffIDs will auto-increment)
-INSERT INTO Plaintiffs (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email)
-VALUES 
-('John', 'Doe', '1990-05-15', 'Male', '789 Plaintiff Rd, Cityville', '555-0106', 'johndoe@plaintiff.com'),
-('Emily', 'Clark', '1987-03-12', 'Female', '101 Plaintiff Rd, Cityville', '555-0107', 'emilyclark@plaintiff.com'),
-('Mike', 'Jackson', '1992-11-30', 'Male', '202 Plaintiff Rd, Cityville', '555-0108', 'mikejackson@plaintiff.com'),
-('Sarah', 'White', '1991-01-20', 'Female', '303 Plaintiff Rd, Cityville', '555-0109', 'sarahwhite@plaintiff.com'),
-('David', 'Lee', '1995-08-22', 'Male', '404 Plaintiff Rd, Cityville', '555-0110', 'davidlee@plaintiff.com');
+-- Plaintiffs
+('plaintiff1', 'password1', 'Plaintiff', 'plaintiff1@example.com', '567-890-1234', TRUE),
+('plaintiff2', 'password2', 'Plaintiff', 'plaintiff2@example.com', '678-901-2345', TRUE),
+('plaintiff3', 'password3', 'Plaintiff', 'plaintiff3@example.com', '789-012-3456', TRUE),
+('plaintiff4', 'password4', 'Plaintiff', 'plaintiff4@example.com', '890-123-4567', TRUE),
+('plaintiff5', 'password5', 'Plaintiff', 'plaintiff5@example.com', '901-234-5678', TRUE),
 
--- Insert Defendants
--- (Assuming DefendantIDs will auto-increment)
-INSERT INTO Defendants (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email)
-VALUES 
-('Mary', 'Smith', '1992-04-10', 'Female', '456 Defendant St, Townsville', '555-0107', 'marysmith@defendant.com'),
-('James', 'Brown', '1985-01-18', 'Male', '789 Defendant St, Cityville', '555-0108', 'jamesbrown@defendant.com'),
-('Olivia', 'Williams', '1990-07-09', 'Female', '101 Defendant St, Cityville', '555-0109', 'oliviawilliams@defendant.com'),
-('Lucas', 'Davis', '1987-09-30', 'Male', '202 Defendant St, Cityville', '555-0110', 'lucasdavis@defendant.com'),
-('Sophia', 'Taylor', '1989-04-12', 'Female', '303 Defendant St, Cityville', '555-0111', 'sophiataylor@defendant.com');
+-- Defendants
+('defendant1', 'password1', 'Defendant', 'defendant1@example.com', '678-901-2345', TRUE),
+('defendant2', 'password2', 'Defendant', 'defendant2@example.com', '789-012-3456', TRUE),
+('defendant3', 'password3', 'Defendant', 'defendant3@example.com', '890-123-4567', TRUE),
+('defendant4', 'password4', 'Defendant', 'defendant4@example.com', '901-234-5678', TRUE),
+('defendant5', 'password5', 'Defendant', 'defendant5@example.com', '012-345-6789', TRUE),
 
--- Insert Bailiffs
--- (Assuming BailiffIDs will auto-increment and CourtID references the previously inserted Courts)
-INSERT INTO Bailiffs (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber)
-VALUES 
-('Boris', 'Graham', '1985-11-23', 'Male', '2015-02-12', 1, 'borisgraham@court.com', '555-0108');
+-- Witnesses
+('witness1', 'password1', 'Witness', 'witness1@example.com', '789-012-3456', TRUE),
+('witness2', 'password2', 'Witness', 'witness2@example.com', '890-123-4567', TRUE),
+('witness3', 'password3', 'Witness', 'witness3@example.com', '901-234-5678', TRUE),
+('witness4', 'password4', 'Witness', 'witness4@example.com', '012-345-6789', TRUE),
+('witness5', 'password5', 'Witness', 'witness5@example.com', '123-456-7890', TRUE),
 
--- Insert Court Reporters
--- (Assuming ReporterIDs will auto-increment and CourtID references the previously inserted Courts)
-INSERT INTO CourtReporters (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber)
-VALUES 
-('Susan', 'Adams', '1983-02-11', 'Female', '2012-05-10', 1, 'susanadams@court.com', '555-0109');
+-- Bailiffs
+('bailiff1', 'password1', 'Bailiff', 'bailiff1@example.com', '234-567-8901', TRUE),
+('bailiff2', 'password2', 'Bailiff', 'bailiff2@example.com', '345-678-9012', TRUE),
+('bailiff3', 'password3', 'Bailiff', 'bailiff3@example.com', '456-789-0123', TRUE),
+('bailiff4', 'password4', 'Bailiff', 'bailiff4@example.com', '567-890-1234', TRUE),
+('bailiff5', 'password5', 'Bailiff', 'bailiff5@example.com', '678-901-2345', TRUE),
 
--- Insert Probation Officers
--- (Assuming OfficerIDs will auto-increment and CourtID references the previously inserted Courts)
-INSERT INTO ProbationOfficers (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber)
-VALUES 
-('Carl', 'Thompson', '1977-12-09', 'Male', '2010-03-11', 2, 'carlthompson@court.com', '555-0110');
+-- Jurors
+('juror1', 'password1', 'Juror', 'juror1@example.com', '345-678-9012', TRUE),
+('juror2', 'password2', 'Juror', 'juror2@example.com', '456-789-0123', TRUE),
+('juror3', 'password3', 'Juror', 'juror3@example.com', '567-890-1234', TRUE),
+('juror4', 'password4', 'Juror', 'juror4@example.com', '678-901-2345', TRUE),
+('juror5', 'password5', 'Juror', 'juror5@example.com', '789-012-3456', TRUE),
 
--- Insert IT Admins
--- (Assuming AdminIDs will auto-increment)
-INSERT INTO ITAdmins (FirstName, LastName, DateOfBirth, Gender, HireDate, Email, PhoneNumber)
-VALUES 
-('Peter', 'Williams', '1980-09-10', 'Male', '2016-07-14', 'peterwilliams@it.com', '555-0111');
+-- Court Reporters
+('reporter1', 'password1', 'Court Reporter', 'reporter1@example.com', '234-567-8901', TRUE),
+('reporter2', 'password2', 'Court Reporter', 'reporter2@example.com', '345-678-9012', TRUE),
+('reporter3', 'password3', 'Court Reporter', 'reporter3@example.com', '456-789-0123', TRUE),
+('reporter4', 'password4', 'Court Reporter', 'reporter4@example.com', '567-890-1234', TRUE),
+('reporter5', 'password5', 'Court Reporter', 'reporter5@example.com', '678-901-2345', TRUE),
 
--- Insert Prosecutors
--- (Assuming ProsecutorIDs will auto-increment and BarAssociationID references the previously inserted BarAssociation)
-INSERT INTO Prosecutors (FirstName, LastName, LicenseNumber, DateOfBirth, Gender, BarAssociationID, Email, PhoneNumber)
-VALUES 
-('Tom', 'Harris', 'P54321', '1979-06-30', 'Male', 1, 'tomharris@prosecutor.com', '555-0112');
+-- Probation Officers
+('officer1', 'password1', 'Probation Officer', 'officer1@example.com', '789-012-3456', TRUE),
+('officer2', 'password2', 'Probation Officer', 'officer2@example.com', '890-123-4567', TRUE),
+('officer3', 'password3', 'Probation Officer', 'officer3@example.com', '901-234-5678', TRUE),
+('officer4', 'password4', 'Probation Officer', 'officer4@example.com', '012-345-6789', TRUE),
+('officer5', 'password5', 'Probation Officer', 'officer5@example.com', '123-456-7890', TRUE),
+
+-- IT Admins
+('admin1IT', 'password1', 'IT Admin', 'admin1it@example.com', '234-567-8901', TRUE),
+('admin2IT', 'password2', 'IT Admin', 'admin2it@example.com', '345-678-9012', TRUE),
+('admin3IT', 'password3', 'IT Admin', 'admin3it@example.com', '456-789-0123', TRUE),
+('admin4IT', 'password4', 'IT Admin', 'admin4it@example.com', '567-890-1234', TRUE),
+('admin5IT', 'password5', 'IT Admin', 'admin5it@example.com', '678-901-2345', TRUE),
+
+-- Prosecutors
+('prosecutor1', 'password1', 'Prosecutor', 'prosecutor1@example.com', '345-678-9012', TRUE),
+('prosecutor2', 'password2', 'Prosecutor', 'prosecutor2@example.com', '456-789-0123', TRUE),
+('prosecutor3', 'password3', 'Prosecutor', 'prosecutor3@example.com', '567-890-1234', TRUE),
+('prosecutor4', 'password4', 'Prosecutor', 'prosecutor4@example.com', '678-901-2345', TRUE),
+('prosecutor5', 'password5', 'Prosecutor', 'prosecutor5@example.com', '789-012-3456', TRUE);
+
+
+-- Inserting dummy data into Courts table
+INSERT INTO Courts (CourtName, CourtType, Address, PhoneNumber, Email) VALUES
+('Court A', 'Criminal', '123 Criminal St, City', '555-111-2222', 'courtA@example.com'),
+('Court B', 'Civil', '456 Civil Ave, City', '555-222-3333', 'courtB@example.com'),
+('Court C', 'Family', '789 Family Rd, City', '555-333-4444', 'courtC@example.com'),
+('Court D', 'Criminal', '101 Criminal Blvd, City', '555-444-5555', 'courtD@example.com'),
+('Court E', 'Other', '202 Other Way, City', '555-555-6666', 'courtE@example.com');
+
+-- Inserting dummy data into Judges table (relating UserID from Users and CourtID from Courts)
+INSERT INTO Judges (FirstName, LastName, DateOfBirth, Gender, AppointmentDate, CourtID, Email, PhoneNumber, UserID) VALUES
+('John', 'Doe', '1980-01-01', 'Male', '2010-01-01', 1, 'john.doe@example.com', '123-456-7890', 1),
+('Jane', 'Smith', '1985-02-01', 'Female', '2015-06-15', 2, 'jane.smith@example.com', '234-567-8901', 2),
+('Jim', 'Brown', '1975-03-01', 'Male', '2005-03-12', 3, 'jim.brown@example.com', '345-678-9012', 3),
+('Mary', 'Jones', '1982-04-01', 'Female', '2012-09-01', 4, 'mary.jones@example.com', '456-789-0123', 4),
+('Tom', 'Wilson', '1990-05-01', 'Male', '2020-11-20', 5, 'tom.wilson@example.com', '567-890-1234', 5);
+
+-- Inserting dummy data into Clerks table (relating UserID from Users and CourtID from Courts)
+INSERT INTO Clerks (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber, UserID) VALUES
+('Alice', 'Taylor', '1990-06-10', 'Female', '2020-01-15', 1, 'alice.taylor@example.com', '234-567-8902', 6),
+('Bob', 'Miller', '1988-07-20', 'Male', '2019-04-22', 2, 'bob.miller@example.com', '345-678-9013', 7),
+('Charlie', 'Johnson', '1992-08-25', 'Male', '2021-02-28', 3, 'charlie.johnson@example.com', '456-789-0124', 8),
+('Diana', 'Lee', '1984-09-15', 'Female', '2018-10-05', 4, 'diana.lee@example.com', '567-890-1235', 9),
+('Eve', 'King', '1995-10-30', 'Female', '2022-03-17', 5, 'eve.king@example.com', '678-901-2345', 10);
+
+-- Inserting dummy data into Lawyers table (relating UserID from Users and BarAssociationID from BarAssociations)
+INSERT INTO Lawyers (FirstName, LastName, LicenseNumber, DateOfBirth, Gender, BarAssociationID, Email, PhoneNumber, UserID) VALUES
+('Nancy', 'Adams', 'L12345', '1980-02-10', 'Female', 1, 'nancy.adams@example.com', '123-456-7891', 11),
+('George', 'Clark', 'L67890', '1985-03-05', 'Male', 2, 'george.clark@example.com', '234-567-8903', 12),
+('Emily', 'Evans', 'L11223', '1990-04-15', 'Female', 3, 'emily.evans@example.com', '345-678-9014', 13),
+('Steven', 'Scott', 'L33445', '1975-05-25', 'Male', 4, 'steven.scott@example.com', '456-789-0125', 14),
+('Megan', 'Harris', 'L55667', '1988-06-30', 'Female', 5, 'megan.harris@example.com', '567-890-1236', 15);
+
+-- Inserting dummy data into CourtAdministrators table (relating UserID from Users and CourtID from Courts)
+INSERT INTO CourtAdministrators (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber, UserID) VALUES
+('Jack', 'Green', '1982-07-07', 'Male', '2016-01-11', 1, 'jack.green@example.com', '678-901-2346', 16),
+('Holly', 'White', '1990-08-18', 'Female', '2017-04-02', 2, 'holly.white@example.com', '789-012-3456', 17),
+('Mark', 'Black', '1984-09-19', 'Male', '2018-05-03', 3, 'mark.black@example.com', '890-123-4567', 18),
+('Nina', 'Blue', '1992-10-10', 'Female', '2021-06-10', 4, 'nina.blue@example.com', '901-234-5678', 19),
+('Oscar', 'Red', '1987-11-15', 'Male', '2019-12-01', 5, 'oscar.red@example.com', '012-345-6789', 20);
+
+-- Inserting dummy data into Plaintiffs table (relating UserID from Users)
+INSERT INTO Plaintiffs (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email, UserID) VALUES
+('David', 'Gomez', '1970-12-12', 'Male', '123 Plaintiff St', '234-567-8907', 'david.gomez@example.com', 21),
+('Sophie', 'Martinez', '1983-02-25', 'Female', '456 Plaintiff Blvd', '345-678-9018', 'sophie.martinez@example.com', 22),
+('Liam', 'Rodriguez', '1992-06-18', 'Male', '789 Plaintiff Rd', '456-789-0126', 'liam.rodriguez@example.com', 23),
+('Olivia', 'Lee', '1986-09-29', 'Female', '101 Plaintiff Ave', '567-890-1237', 'olivia.lee@example.com', 24),
+('Noah', 'Hernandez', '1990-10-22', 'Male', '202 Plaintiff Dr', '678-901-2347', 'noah.hernandez@example.com', 25);
+
+-- Inserting dummy data into Defendants table (relating UserID from Users)
+INSERT INTO Defendants (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email, UserID) VALUES
+('John', 'Miller', '1985-11-01', 'Male', '123 Defendant St', '234-567-8908', 'john.miller@example.com', 26),
+('Eva', 'Wright', '1992-12-10', 'Female', '456 Defendant Blvd', '345-678-9019', 'eva.wright@example.com', 27),
+('Max', 'Roberts', '1980-05-15', 'Male', '789 Defendant Rd', '456-789-0127', 'max.roberts@example.com', 28),
+('Sophia', 'Martinez', '1988-04-18', 'Female', '101 Defendant Ave', '567-890-1238', 'sophia.martinez@example.com', 29),
+('Lucas', 'Garcia', '1991-07-25', 'Male', '202 Defendant Dr', '678-901-2348', 'lucas.garcia@example.com', 30);
+
+-- Inserting dummy data into UserApplication table (relating UserID from Users)
+INSERT INTO UserApplication (UserID, ApplicationStatus) VALUES
+(1, 1),
+(2, 0),
+(3, 1),
+(4, 2),
+(5, 0);
 
 -- Insert Cases
 -- (Assuming CaseIDs will auto-increment and PlaintiffID and DefendantID are consistent with previously inserted Plaintiffs and Defendants)
@@ -113,4 +189,36 @@ VALUES
 INSERT INTO CaseFiles (CaseID, FileName, FileHash)
 VALUES 
 (2, 'witness_statement.docx', 'f4d6e7a2b8c901d3');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
