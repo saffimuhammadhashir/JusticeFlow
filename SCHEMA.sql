@@ -2,7 +2,6 @@
 USE sda_project;
 SHOW TABLES;
 
-
 -- Drop Statements
 DROP TABLE IF EXISTS CaseFiles;
 DROP TABLE IF EXISTS Cases;

@@ -329,7 +329,7 @@ public class CourtsManagementSystem {
 
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline after reading an integer
-
+            system.printAllObjects();
             switch (choice) {
                 case 1:
                     system.Login(scanner);

@@ -134,10 +134,10 @@ INSERT INTO Clerks (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID,
 -- Inserting dummy data into Lawyers table (relating UserID from Users and BarAssociationID from BarAssociations)
 INSERT INTO Lawyers (FirstName, LastName, LicenseNumber, DateOfBirth, Gender, BarAssociationID, Email, PhoneNumber, UserID) VALUES
 ('Nancy', 'Adams', 'L12345', '1980-02-10', 'Female', 1, 'nancy.adams@example.com', '123-456-7891', 11),
-('George', 'Clark', 'L67890', '1985-03-05', 'Male', 2, 'george.clark@example.com', '234-567-8903', 12),
-('Emily', 'Evans', 'L11223', '1990-04-15', 'Female', 3, 'emily.evans@example.com', '345-678-9014', 13),
-('Steven', 'Scott', 'L33445', '1975-05-25', 'Male', 4, 'steven.scott@example.com', '456-789-0125', 14),
-('Megan', 'Harris', 'L55667', '1988-06-30', 'Female', 5, 'megan.harris@example.com', '567-890-1236', 15);
+('George', 'Clark', 'L67890', '1985-03-05', 'Male', 1, 'george.clark@example.com', '234-567-8903', 12),
+('Emily', 'Evans', 'L11223', '1990-04-15', 'Female', 1, 'emily.evans@example.com', '345-678-9014', 13),
+('Steven', 'Scott', 'L33445', '1975-05-25', 'Male', 1, 'steven.scott@example.com', '456-789-0125', 14),
+('Megan', 'Harris', 'L55667', '1988-06-30', 'Female', 1, 'megan.harris@example.com', '567-890-1236', 15);
 
 -- Inserting dummy data into CourtAdministrators table (relating UserID from Users and CourtID from Courts)
 INSERT INTO CourtAdministrators (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber, UserID) VALUES

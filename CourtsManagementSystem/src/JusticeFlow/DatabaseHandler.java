@@ -14,9 +14,45 @@ import java.util.Date;
 import com.mysql.cj.xdevapi.Client;
 
 public class DatabaseHandler {
-    private final String url = "jdbc:mysql://localhost:3306/sda_project";
+    private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "test12345";
+    private final String dbPassword = "12345678";
+
+
+    public User getUserById(int userID) {
+        // SQL query to retrieve user data
+        String query = "SELECT * FROM Users WHERE UserID = " + userID;
+
+        // Use try-with-resources to ensure proper closing of resources
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            // Execute the query and process the result set
+            if (resultSet.next()) {
+                // Extract user data from the result set
+                int id = resultSet.getInt("UserID");
+                String username = resultSet.getString("Username");
+                String password = resultSet.getString("Password");
+                String role = resultSet.getString("Role");
+                String email = resultSet.getString("Email");
+                String phoneNumber = resultSet.getString("PhoneNumber");
+                boolean isActive = resultSet.getBoolean("Activate");
+
+                // Return a new User object with the extracted data
+                return new User(id, username, password, role, email, phoneNumber, isActive);
+            } else {
+                System.out.println("User not found with ID: " + userID); // Log message for debugging
+            }
+        } catch (SQLException e) {
+            // Log error message for debugging
+            System.err.println("Error retrieving user data: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // Return null if user is not found
+        return null;
+    }
 
     /**
      * This method authenticates a user based on the username and password
@@ -73,40 +109,7 @@ public class DatabaseHandler {
         return null; // Return null if there was an error or no matching user
     }
 
-    public User getUserById(int userID) {
-        // Database connection parameters
-        String url = "jdbc:mysql://localhost:3306/sda_project";
-        String dbUsername = "root";
-        String dbPassword = "test12345";
 
-        String query = "SELECT * FROM Users WHERE UserID = ?";
-
-        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setInt(1, userID); // Set the userID parameter
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    // Extract user data from the result set
-                    String username = resultSet.getString("Username");
-                    String password = resultSet.getString("Password");
-                    String role = resultSet.getString("Role");
-                    String email = resultSet.getString("Email");
-                    String phoneNumber = resultSet.getString("PhoneNumber");
-                    boolean isActive = resultSet.getBoolean("Activate");
-
-                    // Return a new User object with the extracted data
-                    return new User(userID, username, password, role, email, phoneNumber, isActive);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // Return null if user is not found
-        return null;
-    }
 
     public void getAllCases(List<Case> AllCases) {
         String query = "SELECT * FROM Cases";
@@ -135,7 +138,7 @@ public class DatabaseHandler {
     }
 
     public void getAllLawyers(List<Lawyer> AllLawyers) {
-        String query = "SELECT * FROM Lawyers";
+        String query = "SELECT * FROM lawyers";
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(query)) {
