@@ -13,13 +13,9 @@ public class CourtsManagementSystem {
     List<Lawyer> AllLawyers = new ArrayList<>();
     List<CourtAdministrator> AllCourt_Administrators = new ArrayList<>();
     List<Case> AllCases = new ArrayList<>();
-    List<Bailiff> AllBailiffs = new ArrayList<>();
-    List<Clerk> AllClerks = new ArrayList<>();
-    List<CourtReporter> AllCourtReporters = new ArrayList<>();
+    List<Registrar> AllRegistrar = new ArrayList<>();
     List<ProbationOfficer> AllProbationOfficers = new ArrayList<>();
-    List<Prosecutor> AllProsecutors = new ArrayList<>();
-    List<Plaintiff> AllPlaintiff = new ArrayList<>();
-    List<Defendant> AllDefendant = new ArrayList<>();
+    List<Clients> AllClients=new ArrayList<>();
     List<Witness> AllWitnesses = new ArrayList<>();
     List<BarAssociation> AllBarAssociations = new ArrayList<>();
     List<Court> AllCourts = new ArrayList<>();
@@ -46,13 +42,9 @@ public class CourtsManagementSystem {
             dbHandler.getAllLawyers(AllLawyers);
             dbHandler.getAllCourtAdministrators(AllCourt_Administrators);
             dbHandler.getAllJurors(AllJurors);
-            dbHandler.getAllBailiffs(AllBailiffs);
-            dbHandler.getAllClerks(AllClerks);
-            dbHandler.getAllCourtReporters(AllCourtReporters);
-            dbHandler.getAllDefendants(AllDefendant);
-            dbHandler.getAllPlaintiffs(AllPlaintiff);
+            dbHandler.getAllRegistrar(AllRegistrar);
+            dbHandler.getAllClients(AllClients);
             dbHandler.getAllProbationOfficers(AllProbationOfficers);
-            dbHandler.getAllProsecutors(AllProsecutors);
             dbHandler.getAllWitnesses(AllWitnesses);
             dbHandler.getAllBarAssociations(AllBarAssociations);
             dbHandler.getAllNotifications(AllNotifications);
@@ -96,22 +88,17 @@ public class CourtsManagementSystem {
             System.out.println(admin.toString());
         }
 
-        // Print Plaintiffs
-        System.out.println("\nPlaintiffs:");
-        for (Plaintiff plaintiff : AllPlaintiff) {
-            System.out.println(plaintiff.toString());
-        }
 
         // Print Defendants
         System.out.println("\nDefendants:");
-        for (Defendant defendant : AllDefendant) {
-            System.out.println(defendant.toString());
+        for (Clients client : AllClients) {
+            System.out.println(client.toString());
         }
 
         // Print Bailiffs
-        System.out.println("\nBailiffs:");
-        for (Bailiff bailiff : AllBailiffs) {
-            System.out.println(bailiff.toString());
+        System.out.println("Registrar:");
+        for (Registrar Registrar : AllRegistrar) {
+            System.out.println(Registrar.toString());
         }
 
         // Print Bar Associations
@@ -126,11 +113,6 @@ public class CourtsManagementSystem {
             System.out.println(caseObj.toString());
         }
 
-        // Print Clerks
-        System.out.println("\nClerks:");
-        for (Clerk clerk : AllClerks) {
-            System.out.println(clerk.toString());
-        }
 
         // Print Courts
         System.out.println("\nCourts:");
@@ -138,11 +120,7 @@ public class CourtsManagementSystem {
             System.out.println(court.toString());
         }
 
-        // Print Court Reporters
-        System.out.println("\nCourt Reporters:");
-        for (CourtReporter reporter : AllCourtReporters) {
-            System.out.println(reporter.toString());
-        }
+
 
         // Print Probation Officers
         System.out.println("\nProbation Officers:");
@@ -150,11 +128,7 @@ public class CourtsManagementSystem {
             System.out.println(officer.toString());
         }
 
-        // Print Prosecutors
-        System.out.println("\nProsecutors:");
-        for (Prosecutor prosecutor : AllProsecutors) {
-            System.out.println(prosecutor.toString());
-        }
+
 
         // Print User Applications
         System.out.println("\nUser Applications:");

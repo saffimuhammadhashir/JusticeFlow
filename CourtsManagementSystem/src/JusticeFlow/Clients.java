@@ -1,8 +1,9 @@
 package JusticeFlow;
 
 import java.util.Date;
-public class Defendant extends User{
-    private int defendantID;
+
+public class Clients extends User {
+    private int clientID;
     private String firstName;
     private String lastName;
     private Date dateOfBirth;
@@ -11,12 +12,14 @@ public class Defendant extends User{
     private String phoneNumber;
     private String email;
     private int userID;
-    public Defendant(int userID, String username, String password, String role, String email, String phoneNumber, boolean activate,
-                     int defendantID, String firstName, String lastName, Date dateOfBirth, String gender, 
-                     String address) {
+
+    public Clients(int userID, String username, String password, String role, String email, String phoneNumber,
+            boolean activate,
+            int clientID, String firstName, String lastName, Date dateOfBirth, String gender,
+            String address) {
         super(userID, username, password, role, email, phoneNumber, activate); // Calling the constructor of User class
 
-        this.defendantID = defendantID;
+        this.clientID = clientID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
@@ -26,12 +29,13 @@ public class Defendant extends User{
         this.email = email;
         this.userID = userID;
     }
-    public int getDefendantID() {
-        return defendantID;
+
+    public int getclientID() {
+        return clientID;
     }
 
-    public void setDefendantID(int defendantID) {
-        this.defendantID = defendantID;
+    public void setclientID(int clientID) {
+        this.clientID = clientID;
     }
 
     public String getFirstName() {
@@ -97,10 +101,11 @@ public class Defendant extends User{
     public void setUserID(int userID) {
         this.userID = userID;
     }
+
     @Override
     public String toString() {
-        return "Defendant {" +
-                "judgeID=" + defendantID +
+        return "client {" +
+                "judgeID=" + clientID +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
@@ -111,4 +116,3 @@ public class Defendant extends User{
                 '}';
     }
 }
-

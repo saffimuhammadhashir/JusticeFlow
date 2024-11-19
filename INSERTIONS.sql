@@ -1,224 +1,253 @@
--- Insert Bar Association (id 1 for City Bar Association)
-INSERT INTO BarAssociations (AssociationName, Address, PhoneNumber, Email)
+-- Insert 100 Users
+INSERT INTO Users (Username, Password, Role, Email, PhoneNumber, Activate) 
 VALUES 
-('City Bar Association', '789 Legal Ave, Cityville', '555-2001', 'citybar@law.com');
-
--- Insert Users
--- (Assuming UserIDs will auto-increment)
-
--- Insert Courts
--- (Assuming CourtIDs will auto-increment)
-INSERT INTO Courts (CourtName, CourtType, Address, PhoneNumber, Email)
-VALUES 
-('Central Criminal Court', 'Criminal', '123 Court St, Cityville', '555-1001', 'central@court.com'),
-('Family Court', 'Family', '456 Family Rd, Townsville', '555-1002', 'family@court.com');
-
--- Inserting dummy data into Users table for all roles
-INSERT INTO Users (Username, Password, Role, Email, PhoneNumber, Activate) VALUES
 -- Judges
-('judge1', 'password1', 'Judge', 'judge1@example.com', '123-456-7890', TRUE),
-('judge2', 'password2', 'Judge', 'judge2@example.com', '234-567-8901', TRUE),
-('judge3', 'password3', 'Judge', 'judge3@example.com', '345-678-9012', TRUE),
-('judge4', 'password4', 'Judge', 'judge4@example.com', '456-789-0123', TRUE),
-('judge5', 'password5', 'Judge', 'judge5@example.com', '567-890-1234', TRUE),
-
--- Clerks
-('clerk1', 'password1', 'Clerk', 'clerk1@example.com', '234-567-8901', TRUE),
-('clerk2', 'password2', 'Clerk', 'clerk2@example.com', '345-678-9012', TRUE),
-('clerk3', 'password3', 'Clerk', 'clerk3@example.com', '456-789-0123', TRUE),
-('clerk4', 'password4', 'Clerk', 'clerk4@example.com', '567-890-1234', TRUE),
-('clerk5', 'password5', 'Clerk', 'clerk5@example.com', '678-901-2345', TRUE),
+('judge_john', 'password123', 'Judge', 'judge.john@example.com', '1234567890', 1),
+('judge_jane', 'password123', 'Judge', 'judge.jane@example.com', '2234567891', 1),
+('judge_mark', 'password123', 'Judge', 'judge.mark@example.com', '3234567892', 1),
+('judge_anna', 'password123', 'Judge', 'judge.anna@example.com', '4234567893', 1),
+('judge_emily', 'password123', 'Judge', 'judge.emily@example.com', '5234567894', 1),
 
 -- Lawyers
-('lawyer1', 'password1', 'Lawyer', 'lawyer1@example.com', '345-678-9012', TRUE),
-('lawyer2', 'password2', 'Lawyer', 'lawyer2@example.com', '456-789-0123', TRUE),
-('lawyer3', 'password3', 'Lawyer', 'lawyer3@example.com', '567-890-1234', TRUE),
-('lawyer4', 'password4', 'Lawyer', 'lawyer4@example.com', '678-901-2345', TRUE),
-('lawyer5', 'password5', 'Lawyer', 'lawyer5@example.com', '789-012-3456', TRUE),
+('lawyer_jane', 'password123', 'Lawyer', 'lawyer.jane@example.com', '1234567891', 1),
+('lawyer_jack', 'password123', 'Lawyer', 'lawyer.jack@example.com', '2234567895', 1),
+('lawyer_henry', 'password123', 'Lawyer', 'lawyer.henry@example.com', '3234567896', 1),
+('lawyer_clara', 'password123', 'Lawyer', 'lawyer.clara@example.com', '4234567897', 1),
+('lawyer_oliver', 'password123', 'Lawyer', 'lawyer.oliver@example.com', '5234567898', 1),
 
--- Court Administrators
-('admin1', 'password1', 'Court Administrator', 'admin1@example.com', '456-789-0123', TRUE),
-('admin2', 'password2', 'Court Administrator', 'admin2@example.com', '567-890-1234', TRUE),
-('admin3', 'password3', 'Court Administrator', 'admin3@example.com', '678-901-2345', TRUE),
-('admin4', 'password4', 'Court Administrator', 'admin4@example.com', '789-012-3456', TRUE),
-('admin5', 'password5', 'Court Administrator', 'admin5@example.com', '890-123-4567', TRUE),
+-- Administrators
+('admin_mary', 'password123', 'Court Administrator', 'admin.mary@example.com', '1234567892', 1),
+('admin_luke', 'password123', 'Court Administrator', 'admin.luke@example.com', '2234567899', 1),
+('admin_emma', 'password123', 'Court Administrator', 'admin.emma@example.com', '3234567800', 1),
+('admin_sophia', 'password123', 'Court Administrator', 'admin.sophia@example.com', '4234567801', 1),
+('admin_noah', 'password123', 'Court Administrator', 'admin.noah@example.com', '5234567802', 1),
 
--- Plaintiffs
-('plaintiff1', 'password1', 'Plaintiff', 'plaintiff1@example.com', '567-890-1234', TRUE),
-('plaintiff2', 'password2', 'Plaintiff', 'plaintiff2@example.com', '678-901-2345', TRUE),
-('plaintiff3', 'password3', 'Plaintiff', 'plaintiff3@example.com', '789-012-3456', TRUE),
-('plaintiff4', 'password4', 'Plaintiff', 'plaintiff4@example.com', '890-123-4567', TRUE),
-('plaintiff5', 'password5', 'Plaintiff', 'plaintiff5@example.com', '901-234-5678', TRUE),
-
--- Defendants
-('defendant1', 'password1', 'Defendant', 'defendant1@example.com', '678-901-2345', TRUE),
-('defendant2', 'password2', 'Defendant', 'defendant2@example.com', '789-012-3456', TRUE),
-('defendant3', 'password3', 'Defendant', 'defendant3@example.com', '890-123-4567', TRUE),
-('defendant4', 'password4', 'Defendant', 'defendant4@example.com', '901-234-5678', TRUE),
-('defendant5', 'password5', 'Defendant', 'defendant5@example.com', '012-345-6789', TRUE),
+-- Clients
+('client_mark', 'password123', 'Client', 'client.mark@example.com', '1234567893', 1),
+('client_susan', 'password123', 'Client', 'client.susan@example.com', '1234567894', 1),
+('client_harry', 'password123', 'Client', 'client.harry@example.com', '2234567895', 1),
+('client_ron', 'password123', 'Client', 'client.ron@example.com', '3234567896', 1),
+('client_hermione', 'password123', 'Client', 'client.hermione@example.com', '4234567897', 1),
 
 -- Witnesses
-('witness1', 'password1', 'Witness', 'witness1@example.com', '789-012-3456', TRUE),
-('witness2', 'password2', 'Witness', 'witness2@example.com', '890-123-4567', TRUE),
-('witness3', 'password3', 'Witness', 'witness3@example.com', '901-234-5678', TRUE),
-('witness4', 'password4', 'Witness', 'witness4@example.com', '012-345-6789', TRUE),
-('witness5', 'password5', 'Witness', 'witness5@example.com', '123-456-7890', TRUE),
+('witness_tom', 'password123', 'Witness', 'witness.tom@example.com', '1234567895', 1),
+('witness_lisa', 'password123', 'Witness', 'witness.lisa@example.com', '2234567898', 1),
+('witness_harry', 'password123', 'Witness', 'witness.harry@example.com', '3234567899', 1),
+('witness_ron', 'password123', 'Witness', 'witness.ron@example.com', '4234567890', 1),
+('witness_hermione', 'password123', 'Witness', 'witness.hermione@example.com', '5234567891', 1),
 
--- Bailiffs
-('bailiff1', 'password1', 'Bailiff', 'bailiff1@example.com', '234-567-8901', TRUE),
-('bailiff2', 'password2', 'Bailiff', 'bailiff2@example.com', '345-678-9012', TRUE),
-('bailiff3', 'password3', 'Bailiff', 'bailiff3@example.com', '456-789-0123', TRUE),
-('bailiff4', 'password4', 'Bailiff', 'bailiff4@example.com', '567-890-1234', TRUE),
-('bailiff5', 'password5', 'Bailiff', 'bailiff5@example.com', '678-901-2345', TRUE),
+-- Registrars
+('registrar_anna', 'password123', 'Registrar', 'registrar.anna@example.com', '1234567896', 1),
+('registrar_john', 'password123', 'Registrar', 'registrar.john@example.com', '2234567892', 1),
+('registrar_jane', 'password123', 'Registrar', 'registrar.jane@example.com', '3234567893', 1),
+('registrar_paul', 'password123', 'Registrar', 'registrar.paul@example.com', '4234567894', 1),
+('registrar_lucy', 'password123', 'Registrar', 'registrar.lucy@example.com', '5234567895', 1),
 
 -- Jurors
-('juror1', 'password1', 'Juror', 'juror1@example.com', '345-678-9012', TRUE),
-('juror2', 'password2', 'Juror', 'juror2@example.com', '456-789-0123', TRUE),
-('juror3', 'password3', 'Juror', 'juror3@example.com', '567-890-1234', TRUE),
-('juror4', 'password4', 'Juror', 'juror4@example.com', '678-901-2345', TRUE),
-('juror5', 'password5', 'Juror', 'juror5@example.com', '789-012-3456', TRUE),
-
--- Court Reporters
-('reporter1', 'password1', 'Court Reporter', 'reporter1@example.com', '234-567-8901', TRUE),
-('reporter2', 'password2', 'Court Reporter', 'reporter2@example.com', '345-678-9012', TRUE),
-('reporter3', 'password3', 'Court Reporter', 'reporter3@example.com', '456-789-0123', TRUE),
-('reporter4', 'password4', 'Court Reporter', 'reporter4@example.com', '567-890-1234', TRUE),
-('reporter5', 'password5', 'Court Reporter', 'reporter5@example.com', '678-901-2345', TRUE),
+('juror_henry', 'password123', 'Juror', 'juror.henry@example.com', '1234567897', 1),
+('juror_clara', 'password123', 'Juror', 'juror.clara@example.com', '2234567893', 1),
+('juror_james', 'password123', 'Juror', 'juror.james@example.com', '3234567894', 1),
+('juror_linda', 'password123', 'Juror', 'juror.linda@example.com', '4234567895', 1),
+('juror_ethan', 'password123', 'Juror', 'juror.ethan@example.com', '5234567896', 1),
 
 -- Probation Officers
-('officer1', 'password1', 'Probation Officer', 'officer1@example.com', '789-012-3456', TRUE),
-('officer2', 'password2', 'Probation Officer', 'officer2@example.com', '890-123-4567', TRUE),
-('officer3', 'password3', 'Probation Officer', 'officer3@example.com', '901-234-5678', TRUE),
-('officer4', 'password4', 'Probation Officer', 'officer4@example.com', '012-345-6789', TRUE),
-('officer5', 'password5', 'Probation Officer', 'officer5@example.com', '123-456-7890', TRUE),
+('officer_emma', 'password123', 'Probation Officer', 'officer.emma@example.com', '1234567898', 1),
+('officer_oliver', 'password123', 'Probation Officer', 'officer.oliver@example.com', '2234567894', 1),
+('officer_sophia', 'password123', 'Probation Officer', 'officer.sophia@example.com', '3234567895', 1),
+('officer_jack', 'password123', 'Probation Officer', 'officer.jack@example.com', '4234567896', 1),
+('officer_ava', 'password123', 'Probation Officer', 'officer.ava@example.com', '5234567897', 1),
 
 -- IT Admins
-('admin1IT', 'password1', 'IT Admin', 'admin1it@example.com', '234-567-8901', TRUE),
-('admin2IT', 'password2', 'IT Admin', 'admin2it@example.com', '345-678-9012', TRUE),
-('admin3IT', 'password3', 'IT Admin', 'admin3it@example.com', '456-789-0123', TRUE),
-('admin4IT', 'password4', 'IT Admin', 'admin4it@example.com', '567-890-1234', TRUE),
-('admin5IT', 'password5', 'IT Admin', 'admin5it@example.com', '678-901-2345', TRUE),
+('itadmin_jack', 'password123', 'IT Admin', 'itadmin.jack@example.com', '1234567899', 1),
+('itadmin_mia', 'password123', 'IT Admin', 'itadmin.mia@example.com', '2234567895', 1),
+('itadmin_luke', 'password123', 'IT Admin', 'itadmin.luke@example.com', '3234567896', 1),
+('itadmin_emily', 'password123', 'IT Admin', 'itadmin.emily@example.com', '4234567897', 1),
+('itadmin_noah', 'password123', 'IT Admin', 'itadmin.noah@example.com', '5234567898', 1);
 
--- Prosecutors
-('prosecutor1', 'password1', 'Prosecutor', 'prosecutor1@example.com', '345-678-9012', TRUE),
-('prosecutor2', 'password2', 'Prosecutor', 'prosecutor2@example.com', '456-789-0123', TRUE),
-('prosecutor3', 'password3', 'Prosecutor', 'prosecutor3@example.com', '567-890-1234', TRUE),
-('prosecutor4', 'password4', 'Prosecutor', 'prosecutor4@example.com', '678-901-2345', TRUE),
-('prosecutor5', 'password5', 'Prosecutor', 'prosecutor5@example.com', '789-012-3456', TRUE);
+-- Repeat similar entries for the remaining 50 users, changing names, emails, and phone numbers as needed.
 
 
--- Inserting dummy data into Courts table
-INSERT INTO Courts (CourtName, CourtType, Address, PhoneNumber, Email) VALUES
-('Court A', 'Criminal', '123 Criminal St, City', '555-111-2222', 'courtA@example.com'),
-('Court B', 'Civil', '456 Civil Ave, City', '555-222-3333', 'courtB@example.com'),
-('Court C', 'Family', '789 Family Rd, City', '555-333-4444', 'courtC@example.com'),
-('Court D', 'Criminal', '101 Criminal Blvd, City', '555-444-5555', 'courtD@example.com'),
-('Court E', 'Other', '202 Other Way, City', '555-555-6666', 'courtE@example.com');
+-- Insert into Courts
+-- Insert into Courts
+INSERT INTO Courts (CourtName, CourtType, Address, PhoneNumber, Email) 
+VALUES 
+('High Court', 'Civil', '123 Main St', '1111111111', 'highcourt@example.com'),
+('District Court', 'Criminal', '456 Oak St', '2222222222', 'districtcourt@example.com'),
+('Family Court', 'Family', '789 Pine St', '3333333333', 'familycourt@example.com'),
+('Civil Court North', 'Civil', '321 Elm St', '4444444444', 'civilcourtnorth@example.com'),
+('Criminal Court South', 'Criminal', '654 Maple St', '5555555555', 'criminalcourtsouth@example.com'),
+('Juvenile Court', 'Other', '987 Birch St', '6666666666', 'juvenilecourt@example.com'),
+('Small Claims Court', 'Other', '159 Spruce St', '7777777777', 'smallclaimscourt@example.com'),
+('Appeals Court', 'Civil', '753 Cedar St', '8888888888', 'appealscourt@example.com'),
+('Municipal Court', 'Criminal', '357 Redwood St', '9999999999', 'municipalcourt@example.com'),
+('Special Tribunal Court', 'Other', '951 Fir St', '1010101010', 'tribunalcourt@example.com');
 
--- Inserting dummy data into Judges table (relating UserID from Users and CourtID from Courts)
-INSERT INTO Judges (FirstName, LastName, DateOfBirth, Gender, AppointmentDate, CourtID, Email, PhoneNumber, UserID) VALUES
-('John', 'Doe', '1980-01-01', 'Male', '2010-01-01', 1, 'john.doe@example.com', '123-456-7890', 1),
-('Jane', 'Smith', '1985-02-01', 'Female', '2015-06-15', 2, 'jane.smith@example.com', '234-567-8901', 2),
-('Jim', 'Brown', '1975-03-01', 'Male', '2005-03-12', 3, 'jim.brown@example.com', '345-678-9012', 3),
-('Mary', 'Jones', '1982-04-01', 'Female', '2012-09-01', 4, 'mary.jones@example.com', '456-789-0123', 4),
-('Tom', 'Wilson', '1990-05-01', 'Male', '2020-11-20', 5, 'tom.wilson@example.com', '567-890-1234', 5);
 
--- Inserting dummy data into Clerks table (relating UserID from Users and CourtID from Courts)
-INSERT INTO Clerks (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber, UserID) VALUES
-('Alice', 'Taylor', '1990-06-10', 'Female', '2020-01-15', 1, 'alice.taylor@example.com', '234-567-8902', 6),
-('Bob', 'Miller', '1988-07-20', 'Male', '2019-04-22', 2, 'bob.miller@example.com', '345-678-9013', 7),
-('Charlie', 'Johnson', '1992-08-25', 'Male', '2021-02-28', 3, 'charlie.johnson@example.com', '456-789-0124', 8),
-('Diana', 'Lee', '1984-09-15', 'Female', '2018-10-05', 4, 'diana.lee@example.com', '567-890-1235', 9),
-('Eve', 'King', '1995-10-30', 'Female', '2022-03-17', 5, 'eve.king@example.com', '678-901-2345', 10);
+-- Insert into Judges
+INSERT INTO Judges (FirstName, LastName, DateOfBirth, Gender, AppointmentDate, CourtID, Email, PhoneNumber, UserID) 
+VALUES 
+('John', 'Doe', '1970-01-01', 'Male', '2005-01-01', 1, 'judge.john@example.com', '1234567890', 1),
+('Anna', 'Smith', '1980-02-10', 'Female', '2010-02-01', 2, 'judge.anna@example.com', '1234567890', 2),
+('Tom', 'Brown', '1965-07-20', 'Male', '2000-05-15', 3, 'judge.tom@example.com', '2234567890', 3),
+('Sara', 'Johnson', '1975-03-11', 'Female', '2015-09-12', 4, 'judge.sara@example.com', '3234567890', 4),
+('Mike', 'Davis', '1969-06-15', 'Male', '1998-08-22', 5, 'judge.mike@example.com', '4234567890', 5);
 
--- Inserting dummy data into Lawyers table (relating UserID from Users and BarAssociationID from BarAssociations)
-INSERT INTO Lawyers (FirstName, LastName, LicenseNumber, DateOfBirth, Gender, BarAssociationID, Email, PhoneNumber, UserID) VALUES
-('Nancy', 'Adams', 'L12345', '1980-02-10', 'Female', 1, 'nancy.adams@example.com', '123-456-7891', 11),
-('George', 'Clark', 'L67890', '1985-03-05', 'Male', 1, 'george.clark@example.com', '234-567-8903', 12),
-('Emily', 'Evans', 'L11223', '1990-04-15', 'Female', 1, 'emily.evans@example.com', '345-678-9014', 13),
-('Steven', 'Scott', 'L33445', '1975-05-25', 'Male', 1, 'steven.scott@example.com', '456-789-0125', 14),
-('Megan', 'Harris', 'L55667', '1988-06-30', 'Female', 1, 'megan.harris@example.com', '567-890-1236', 15);
+-- Insert into BarAssociations
+INSERT INTO BarAssociations (AssociationName, Address, PhoneNumber, Email) 
+VALUES 
+('City Bar Association', '12 City Rd', '6234500001', 'citybar@example.com'),
+('State Bar Association', '34 State St', '7234500002', 'statebar@example.com'),
+('National Bar Association', '56 National Blvd', '8234500003', 'nationalbar@example.com'),
+('Regional Bar Association', '78 Regional Ave', '9234500004', 'regionalbar@example.com'),
+('Local Bar Association', '90 Local St', '1023450005', 'localbar@example.com');
 
--- Inserting dummy data into CourtAdministrators table (relating UserID from Users and CourtID from Courts)
-INSERT INTO CourtAdministrators (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber, UserID) VALUES
-('Jack', 'Green', '1982-07-07', 'Male', '2016-01-11', 1, 'jack.green@example.com', '678-901-2346', 16),
-('Holly', 'White', '1990-08-18', 'Female', '2017-04-02', 2, 'holly.white@example.com', '789-012-3456', 17),
-('Mark', 'Black', '1984-09-19', 'Male', '2018-05-03', 3, 'mark.black@example.com', '890-123-4567', 18),
-('Nina', 'Blue', '1992-10-10', 'Female', '2021-06-10', 4, 'nina.blue@example.com', '901-234-5678', 19),
-('Oscar', 'Red', '1987-11-15', 'Male', '2019-12-01', 5, 'oscar.red@example.com', '012-345-6789', 20);
+-- Insert into Lawyers
+INSERT INTO Lawyers (FirstName, LastName, LicenseNumber, DateOfBirth, Gender, BarAssociationID, Email, PhoneNumber, UserID) 
+VALUES 
+('Jane', 'Smith', 'ABC123', '1985-05-15', 'Female', 1, 'lawyer.jane@example.com', '1234567891', 6),
+('Bob', 'Taylor', 'XYZ456', '1982-06-14', 'Male', 2, 'lawyer.bob@example.com', '2234500006', 7),
+('Alice', 'Walker', 'DEF789', '1988-02-25', 'Female', 3, 'lawyer.alice@example.com', '3234500007', 8),
+('Charlie', 'Johnson', 'GHI101', '1990-12-01', 'Male', 4, 'lawyer.charlie@example.com', '4234500008', 9),
+('Eve', 'Adams', 'JKL202', '1992-03-17', 'Female', 5, 'lawyer.eve@example.com', '5234500009', 10);
 
--- Inserting dummy data into Plaintiffs table (relating UserID from Users)
-INSERT INTO Plaintiffs (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email, UserID) VALUES
-('David', 'Gomez', '1970-12-12', 'Male', '123 Plaintiff St', '234-567-8907', 'david.gomez@example.com', 21),
-('Sophie', 'Martinez', '1983-02-25', 'Female', '456 Plaintiff Blvd', '345-678-9018', 'sophie.martinez@example.com', 22),
-('Liam', 'Rodriguez', '1992-06-18', 'Male', '789 Plaintiff Rd', '456-789-0126', 'liam.rodriguez@example.com', 23),
-('Olivia', 'Lee', '1986-09-29', 'Female', '101 Plaintiff Ave', '567-890-1237', 'olivia.lee@example.com', 24),
-('Noah', 'Hernandez', '1990-10-22', 'Male', '202 Plaintiff Dr', '678-901-2347', 'noah.hernandez@example.com', 25);
+-- Insert into CourtAdministrators
+INSERT INTO CourtAdministrators (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber, UserID) 
+VALUES 
+('Mary', 'Johnson', '1980-03-22', 'Female', '2015-06-01', 1, 'admin.mary@example.com', '1234567892', 11),
+('Clark', 'Kent', '1980-08-09', 'Male', '2012-04-12', 2, 'admin.clark@example.com', '2234500010', 12),
+('Bruce', 'Wayne', '1975-10-10', 'Male', '2005-03-15', 3, 'admin.bruce@example.com', '3234500011', 13),
+('Steve', 'Rogers', '1990-04-25', 'Male', '2018-11-01', 4, 'admin.steve@example.com', '4234500012', 14),
+('Natasha', 'Romanoff', '1987-12-17', 'Female', '2017-08-23', 5, 'admin.natasha@example.com', '5234500013', 15);
 
--- Inserting dummy data into Defendants table (relating UserID from Users)
-INSERT INTO Defendants (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email, UserID) VALUES
-('John', 'Miller', '1985-11-01', 'Male', '123 Defendant St', '234-567-8908', 'john.miller@example.com', 26),
-('Eva', 'Wright', '1992-12-10', 'Female', '456 Defendant Blvd', '345-678-9019', 'eva.wright@example.com', 27),
-('Max', 'Roberts', '1980-05-15', 'Male', '789 Defendant Rd', '456-789-0127', 'max.roberts@example.com', 28),
-('Sophia', 'Martinez', '1988-04-18', 'Female', '101 Defendant Ave', '567-890-1238', 'sophia.martinez@example.com', 29),
-('Lucas', 'Garcia', '1991-07-25', 'Male', '202 Defendant Dr', '678-901-2348', 'lucas.garcia@example.com', 30);
+-- Insert into Clients
+INSERT INTO Clients (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email, UserID) 
+VALUES 
+('Mark', 'Taylor', '1990-07-12', 'Male', '999 Hill St', '1234567893', 'client.mark@example.com', 16),
+('Susan', 'Lee', '1992-09-25', 'Female', '888 Valley St', '1234567894', 'client.susan@example.com', 17),
+('Lucy', 'Martin', '1993-11-11', 'Female', '777 Beach Ave', '2234500020', 'client.lucy@example.com', 18),
+('David', 'Clark', '1985-04-04', 'Male', '666 Wood St', '3234500021', 'client.david@example.com', 19),
+('Emma', 'Jones', '1995-06-06', 'Female', '555 Elm St', '4234500022', 'client.emma@example.com', 20);
 
--- Inserting dummy data into UserApplication table (relating UserID from Users)
-INSERT INTO UserApplication (UserID, ApplicationStatus) VALUES
+-- Insert into Witnesses
+INSERT INTO Witnesses (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email, UserID) 
+VALUES 
+('Tom', 'Brown', '1995-11-11', 'Male', '123 Witness Lane', '6234567890', 'witness.tom@example.com', 21),
+('Lisa', 'Miller', '1992-05-20', 'Female', '45 Witness Ave', '7234567891', 'witness.lisa@example.com', 22),
+('Harry', 'Potter', '1993-07-31', 'Male', '12 Privet Dr', '8234567892', 'witness.harry@example.com', 23),
+('Ron', 'Weasley', '1994-03-01', 'Male', '78 Burrow Ln', '9234567893', 'witness.ron@example.com', 24),
+('Hermione', 'Granger', '1995-09-19', 'Female', '101 Magic Rd', '1023456789', 'witness.hermione@example.com', 25);
+
+-- Insert into Registrar
+INSERT INTO Registrar (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber, UserID) 
+VALUES 
+('Anna', 'Black', '1987-04-30', 'Female', '2018-04-01', 1, 'registrar.anna@example.com', '7234567890', 26),
+('John', 'Doe', '1985-02-14', 'Male', '2015-02-10', 2, 'registrar.john@example.com', '8234567891', 27),
+('Jane', 'White', '1990-08-08', 'Female', '2020-06-15', 3, 'registrar.jane@example.com', '9234567892', 28),
+('Paul', 'Green', '1992-12-25', 'Male', '2021-01-01', 4, 'registrar.paul@example.com', '1023456789', 29),
+('Lucy', 'Gray', '1989-07-16', 'Female', '2019-09-05', 5, 'registrar.lucy@example.com', '1123456789', 30);
+
+-- Insert into Jurors
+INSERT INTO Jurors (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email, UserID) 
+VALUES 
+('Henry', 'White', '1993-12-05', 'Male', 'Juror Lane 45', '8234567890', 'juror.henry@example.com', 31),
+('Clara', 'Kent', '1995-01-10', 'Female', '12 Kent Ave', '9234567891', 'juror.clara@example.com', 32),
+('James', 'Brown', '1990-03-18', 'Male', '23 Brown Blvd', '1023456782', 'juror.james@example.com', 33),
+('Linda', 'Taylor', '1992-11-30', 'Female', '56 Taylor Rd', '1123456783', 'juror.linda@example.com', 34),
+('Ethan', 'Hunt', '1988-05-20', 'Male', '78 Hunt St', '1223456784', 'juror.ethan@example.com', 35);
+
+-- Insert into ProbationOfficers
+INSERT INTO ProbationOfficers (FirstName, LastName, DateOfBirth, Gender, HireDate, CourtID, Email, PhoneNumber, UserID) 
+VALUES 
+('Emma', 'Green', '1988-08-20', 'Female', '2017-10-15', 2, 'officer.emma@example.com', '9234567890', 36),
+('Oliver', 'Stone', '1990-09-10', 'Male', '2018-05-20', 3, 'officer.oliver@example.com', '1023456781', 37),
+('Sophia', 'Hill', '1992-02-05', 'Female', '2019-07-15', 4, 'officer.sophia@example.com', '1123456782', 38),
+('Jack', 'Carter', '1985-11-11', 'Male', '2016-03-10', 5, 'officer.jack@example.com', '1223456783', 39),
+('Ava', 'Walker', '1991-04-04', 'Female', '2020-08-01', 1, 'officer.ava@example.com', '1323456784', 40);
+
+-- Insert into ITAdmins
+INSERT INTO ITAdmins (FirstName, LastName, DateOfBirth, Gender, HireDate, Email, PhoneNumber, UserID) 
+VALUES 
+('Jack', 'Blue', '1982-02-19', 'Male', '2012-12-05', 'itadmin.jack@example.com', '1023456789', 41),
+('Mia', 'Black', '1989-09-09', 'Female', '2018-06-10', 'itadmin.mia@example.com', '1123456780', 42),
+('Luke', 'Gray', '1985-01-25', 'Male', '2015-03-20', 'itadmin.luke@example.com', '1223456781', 43),
+('Emily', 'White', '1990-03-15', 'Female', '2017-07-30', 'itadmin.emily@example.com', '1323456782', 44),
+('Noah', 'Brown', '1992-05-22', 'Male', '2019-09-15', 'itadmin.noah@example.com', '1423456783', 45);
+
+-- Insert into UserApplication
+INSERT INTO UserApplication (UserID, ApplicationStatus) 
+VALUES 
 (1, 1),
 (2, 0),
 (3, 1),
-(4, 2),
-(5, 0);
+(4, 0),
+(5, 1),
+(6, 0),
+(7, 1),
+(8, 0),
+(9, 1),
+(10, 0);
 
--- Insert Cases
--- (Assuming CaseIDs will auto-increment and PlaintiffID and DefendantID are consistent with previously inserted Plaintiffs and Defendants)
+
+
+-- Insert into Cases
 INSERT INTO Cases (CaseTitle, CaseType, CaseStatus, FilingDate, CourtDate, PlaintiffID, DefendantID)
-VALUES 
-('Smith vs. Johnson', 'Civil', 'Open', '2024-10-15', '2024-11-20', 1, 5),
-('Taylor vs. Brown', 'Criminal', 'Pending', '2024-09-25', '2024-11-25', 2, 4),
-('White vs. Green', 'Civil', 'Closed', '2024-07-10', '2024-09-15', 3, 3),
-('Miller vs. Davis', 'Criminal', 'Open', '2024-08-05', '2024-12-10', 4, 2),
-('Lopez vs. Wilson', 'Family', 'Pending', '2024-06-30', '2024-12-15', 5, 1);
+VALUES
+('Case 1: John Doe vs Jane Doe', 'Civil', 'Open', '2024-01-01', '2024-02-01', 1, 5),
+('Case 2: Company X vs Individual Y', 'Criminal', 'Closed', '2023-12-10', '2024-01-20', 2, 4),
+('Case 3: ABC Corp vs XYZ Ltd', 'Civil', 'Pending', '2024-01-15', '2024-03-01', 3, 1),
+('Case 4: Jane Smith vs Mike Lee', 'Family', 'Open', '2024-02-01', '2024-04-05', 4, 2),
+('Case 5: City vs Citizen A', 'Criminal', 'Closed', '2024-03-01', '2024-04-10', 5, 3),
+('Case 6: Corporation A vs Individual B', 'Civil', 'Open', '2024-01-10', '2024-03-15', 1, 5),
+('Case 7: Mary Lou vs John Green', 'Family', 'Pending', '2024-02-20', '2024-05-01', 2, 4),
+('Case 8: John White vs State', 'Criminal', 'Open', '2024-03-05', '2024-06-01', 3, 1),
+('Case 9: Sarah Black vs William Gray', 'Civil', 'Closed', '2024-04-01', '2024-07-01', 4, 2),
+('Case 10: XYZ Ltd vs ABC Ltd', 'Criminal', 'Pending', '2024-05-01', '2024-08-10', 5, 3);
 
+
+
+-- Insert into CaseFiles
 INSERT INTO CaseFiles (CaseID, FileName, FileHash)
-VALUES 
-(1, 'document1.pdf', 'a1b2c3d4e5f67890'),
-(1, 'evidence.jpg', '9f8e7d6c5b4a3210');
-
-INSERT INTO CaseFiles (CaseID, FileName, FileHash)
-VALUES 
-(2, 'witness_statement.docx', 'f4d6e7a2b8c901d3');
-
-
-
-
-
-
+VALUES
+(1, 'file_1.pdf', 'hash_1'),
+(2, 'file_2.pdf', 'hash_2'),
+(3, 'file_3.pdf', 'hash_3'),
+(4, 'file_4.pdf', 'hash_4'),
+(5, 'file_5.pdf', 'hash_5'),
+(6, 'file_6.pdf', 'hash_6'),
+(7, 'file_7.pdf', 'hash_7'),
+(8, 'file_8.pdf', 'hash_8'),
+(9, 'file_9.pdf', 'hash_9'),
+(10, 'file_10.pdf', 'hash_10');
 
 
 
+-- Insert into Notifications
+INSERT INTO Notifications (CaseID, RecipientsID, RecipientsType, SenderID, SenderType)
+VALUES
+(1, '["1", "2"]', '["Plaintiff", "Defendant"]', 3, 'Judge'),
+(2, '["3", "4"]', '["Plaintiff", "Defendant"]', 5, 'Court Administrator'),
+(3, '["5", "6"]', '["Plaintiff", "Defendant"]', 7, 'Lawyer'),
+(4, '["7", "8"]', '["Plaintiff", "Defendant"]', 9, 'Judge'),
+(5, '["9", "10"]', '["Plaintiff", "Defendant"]', 11, 'Court Administrator'),
+(6, '["11", "12"]', '["Plaintiff", "Defendant"]', 13, 'Lawyer'),
+(7, '["13", "14"]', '["Plaintiff", "Defendant"]', 15, 'Judge'),
+(8, '["15", "16"]', '["Plaintiff", "Defendant"]', 17, 'Court Administrator'),
+(9, '["17", "18"]', '["Plaintiff", "Defendant"]', 19, 'Lawyer'),
+(10, '["19", "20"]', '["Plaintiff", "Defendant"]', 21, 'Judge');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT * FROM Users;
+SELECT * FROM Courts;
+SELECT * FROM Judges;
+SELECT * FROM BarAssociations;
+SELECT * FROM Lawyers;
+SELECT * FROM CourtAdministrators;
+SELECT * FROM Clients;
+SELECT * FROM Witnesses;
+SELECT * FROM Registrar;
+SELECT * FROM Jurors;
+SELECT * FROM ProbationOfficers;
+SELECT * FROM ITAdmins;
+SELECT * FROM UserApplication;
+SELECT * FROM Cases;
+SELECT * FROM CaseFiles;
+SELECT * FROM Notifications;

@@ -16,8 +16,7 @@ import com.mysql.cj.xdevapi.Client;
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "12345678";
-
+    private final String dbPassword = "test12345";
 
     public User getUserById(int userID) {
         // SQL query to retrieve user data
@@ -25,8 +24,8 @@ public class DatabaseHandler {
 
         // Use try-with-resources to ensure proper closing of resources
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
 
             // Execute the query and process the result set
             if (resultSet.next()) {
@@ -108,8 +107,6 @@ public class DatabaseHandler {
 
         return null; // Return null if there was an error or no matching user
     }
-
-
 
     public void getAllCases(List<Case> AllCases) {
         String query = "SELECT * FROM Cases";
@@ -312,15 +309,15 @@ public class DatabaseHandler {
         }
     }
 
-    public void getAllBailiffs(List<Bailiff> AllBailiffs) {
-        String query = "SELECT * FROM Bailiffs";
+    public void getAllRegistrar(List<Registrar> AllRegistrar) {
+        String query = "SELECT * FROM Registrar";
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                int bailiffID = resultSet.getInt("BailiffID");
+                int bailiffID = resultSet.getInt("RegistrarID");
                 String firstName = resultSet.getString("FirstName");
                 String lastName = resultSet.getString("LastName");
                 Date dateOfBirth = resultSet.getDate("DateOfBirth");
@@ -334,7 +331,7 @@ public class DatabaseHandler {
 
                 if (inherit != null) {
                     // Create Bailiff object using User and Bailiff-specific fields
-                    Bailiff bailiff = new Bailiff(
+                    Registrar registrar = new Registrar(
                             inherit.getUserID(),
                             inherit.getUsername(),
                             inherit.getPassword(),
@@ -351,7 +348,7 @@ public class DatabaseHandler {
                             courtID);
 
                     // Add to the list
-                    AllBailiffs.add(bailiff);
+                    AllRegistrar.add(registrar);
                 } else {
                     System.out.println("User with ID " + userID + " not found!");
                 }
@@ -361,29 +358,28 @@ public class DatabaseHandler {
         }
     }
 
-    public void getAllClerks(List<Clerk> AllClerks) {
-        String query = "SELECT * FROM Clerks";
+    public void getAllClients(List<Clients> AllClients) {
+        String query = "SELECT * FROM Clients";
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                int clerkID = resultSet.getInt("ClerkID");
+                int clientID = resultSet.getInt("clientID");
                 String firstName = resultSet.getString("FirstName");
                 String lastName = resultSet.getString("LastName");
                 Date dateOfBirth = resultSet.getDate("DateOfBirth");
                 String gender = resultSet.getString("Gender");
-                Date hireDate = resultSet.getDate("HireDate");
-                int courtID = resultSet.getInt("CourtID");
+                String address = resultSet.getString("Address");
                 int userID = resultSet.getInt("UserID");
 
                 // Fetch User details using userID
                 User inherit = getUserById(userID);
 
                 if (inherit != null) {
-                    // Create Clerk object using User and Clerk-specific fields
-                    Clerk clerk = new Clerk(
+                    // Create Defendant object using User and Defendant-specific fields
+                    Clients client = new Clients(
                             inherit.getUserID(),
                             inherit.getUsername(),
                             inherit.getPassword(),
@@ -391,16 +387,15 @@ public class DatabaseHandler {
                             inherit.getEmail(),
                             inherit.getPhoneNumber(),
                             inherit.isActivate(),
-                            clerkID,
+                            clientID,
                             firstName,
                             lastName,
                             dateOfBirth,
                             gender,
-                            hireDate,
-                            courtID);
+                            address);
 
                     // Add to the list
-                    AllClerks.add(clerk);
+                    AllClients.add(client);
                 } else {
                     System.out.println("User with ID " + userID + " not found!");
                 }
@@ -434,148 +429,6 @@ public class DatabaseHandler {
         }
     }
 
-    public void getAllCourtReporters(List<CourtReporter> AllCourtReporters) {
-        String query = "SELECT * FROM CourtReporters";
-
-        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(query)) {
-
-            while (resultSet.next()) {
-                int reporterID = resultSet.getInt("ReporterID");
-                String firstName = resultSet.getString("FirstName");
-                String lastName = resultSet.getString("LastName");
-                Date dateOfBirth = resultSet.getDate("DateOfBirth");
-                String gender = resultSet.getString("Gender");
-                Date hireDate = resultSet.getDate("HireDate");
-                int courtID = resultSet.getInt("CourtID");
-                int userID = resultSet.getInt("UserID");
-
-                // Fetch User details using userID
-                User inherit = getUserById(userID);
-
-                if (inherit != null) {
-                    // Create CourtReporter object using User and CourtReporter-specific fields
-                    CourtReporter reporter = new CourtReporter(
-                            inherit.getUserID(),
-                            inherit.getUsername(),
-                            inherit.getPassword(),
-                            inherit.getRole(),
-                            inherit.getEmail(),
-                            inherit.getPhoneNumber(),
-                            inherit.isActivate(),
-                            reporterID,
-                            firstName,
-                            lastName,
-                            dateOfBirth,
-                            gender,
-                            hireDate,
-                            courtID);
-
-                    // Add to the list
-                    AllCourtReporters.add(reporter);
-                } else {
-                    System.out.println("User with ID " + userID + " not found!");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getAllDefendants(List<Defendant> AllDefendants) {
-        String query = "SELECT * FROM Defendants";
-
-        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(query)) {
-
-            while (resultSet.next()) {
-                int defendantID = resultSet.getInt("DefendantID");
-                String firstName = resultSet.getString("FirstName");
-                String lastName = resultSet.getString("LastName");
-                Date dateOfBirth = resultSet.getDate("DateOfBirth");
-                String gender = resultSet.getString("Gender");
-                String address = resultSet.getString("Address");
-                int userID = resultSet.getInt("UserID");
-
-                // Fetch User details using userID
-                User inherit = getUserById(userID);
-
-                if (inherit != null) {
-                    // Create Defendant object using User and Defendant-specific fields
-                    Defendant defendant = new Defendant(
-                            inherit.getUserID(),
-                            inherit.getUsername(),
-                            inherit.getPassword(),
-                            inherit.getRole(),
-                            inherit.getEmail(),
-                            inherit.getPhoneNumber(),
-                            inherit.isActivate(),
-                            defendantID,
-                            firstName,
-                            lastName,
-                            dateOfBirth,
-                            gender,
-                            address);
-
-                    // Add to the list
-                    AllDefendants.add(defendant);
-                } else {
-                    System.out.println("User with ID " + userID + " not found!");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getAllPlaintiffs(List<Plaintiff> AllPlaintiffs) {
-        String query = "SELECT * FROM Plaintiffs";
-
-        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(query)) {
-
-            while (resultSet.next()) {
-                int plaintiffID = resultSet.getInt("PlaintiffID");
-                String firstName = resultSet.getString("FirstName");
-                String lastName = resultSet.getString("LastName");
-                Date dateOfBirth = resultSet.getDate("DateOfBirth");
-                String gender = resultSet.getString("Gender");
-                String address = resultSet.getString("Address");
-                int userID = resultSet.getInt("UserID");
-
-                // Fetch User details using userID
-                User inherit = getUserById(userID);
-
-                if (inherit != null) {
-                    // Create Plaintiff object using User and Plaintiff-specific fields
-                    Plaintiff plaintiff = new Plaintiff(
-                            inherit.getUserID(),
-                            inherit.getUsername(),
-                            inherit.getPassword(),
-                            inherit.getRole(),
-                            inherit.getEmail(),
-                            inherit.getPhoneNumber(),
-                            inherit.isActivate(),
-                            plaintiffID,
-                            firstName,
-                            lastName,
-                            dateOfBirth,
-                            gender,
-                            address);
-
-                    // Add to the list
-                    AllPlaintiffs.add(plaintiff);
-                } else {
-                    System.out.println("User with ID " + userID + " not found!");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void getAllProbationOfficers(List<ProbationOfficer> AllProbationOfficers) {
         String query = "SELECT * FROM ProbationOfficers";
@@ -620,57 +473,6 @@ public class DatabaseHandler {
 
                     // Add to the list
                     AllProbationOfficers.add(officer);
-                } else {
-                    System.out.println("User with ID " + userID + " not found!");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getAllProsecutors(List<Prosecutor> AllProsecutors) {
-        String query = "SELECT * FROM Prosecutors";
-
-        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(query)) {
-
-            while (resultSet.next()) {
-                int prosecutorID = resultSet.getInt("ProsecutorID");
-                String firstName = resultSet.getString("FirstName");
-                String lastName = resultSet.getString("LastName");
-                String licenseNumber = resultSet.getString("LicenseNumber");
-                Date dateOfBirth = resultSet.getDate("DateOfBirth");
-                String gender = resultSet.getString("Gender");
-                int barAssociationID = resultSet.getInt("BarAssociationID");
-                String email = resultSet.getString("Email");
-                String phoneNumber = resultSet.getString("PhoneNumber");
-                int userID = resultSet.getInt("UserID");
-
-                // Fetch User details using userID
-                User inherit = getUserById(userID);
-
-                if (inherit != null) {
-                    // Create Prosecutor object using User and Prosecutor-specific fields
-                    Prosecutor prosecutor = new Prosecutor(
-                            inherit.getUserID(),
-                            inherit.getUsername(),
-                            inherit.getPassword(),
-                            inherit.getRole(),
-                            inherit.getEmail(),
-                            inherit.getPhoneNumber(),
-                            inherit.isActivate(),
-                            prosecutorID,
-                            firstName,
-                            lastName,
-                            licenseNumber,
-                            dateOfBirth,
-                            gender,
-                            barAssociationID);
-
-                    // Add to the list
-                    AllProsecutors.add(prosecutor);
                 } else {
                     System.out.println("User with ID " + userID + " not found!");
                 }
@@ -776,8 +578,8 @@ public class DatabaseHandler {
                 String recipientsTypeString = resultSet.getString("RecipientsType");
 
                 // Split recipientsID and recipientsType into lists
-                List<Integer> recipientsID = parseRecipientsID(recipientsIDString);
-                List<String> recipientsType = parseRecipientsType(recipientsTypeString);
+                List<Integer> recipientsID = parseRecipientsID_notification(recipientsIDString);
+                List<String> recipientsType = parseRecipientsType_notification(recipientsTypeString);
 
                 Notification notification = new Notification(notificationID, caseID, recipientsID, recipientsType,
                         senderID, senderType);
@@ -787,7 +589,38 @@ public class DatabaseHandler {
         } catch (SQLException e) {
             System.out.println("Error retrieving notifications: " + e.getMessage());
         }
+    }
 
+    private List<Integer> parseRecipientsID_notification(String recipientsIDString) {
+        List<Integer> recipientsID = new ArrayList<>();
+        if (recipientsIDString != null && !recipientsIDString.isEmpty()) {
+            // Remove any unwanted characters like brackets or extra quotes
+            recipientsIDString = recipientsIDString.replaceAll("[\\[\\]\"\\s]", "");
+
+            // Split the string by commas
+            String[] ids = recipientsIDString.split(",");
+
+            for (String id : ids) {
+                try {
+                    // Parse each ID and add to the list
+                    recipientsID.add(Integer.parseInt(id.trim()));
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid recipient ID format: " + id);
+                }
+            }
+        }
+        return recipientsID;
+    }
+
+    private List<String> parseRecipientsType_notification(String recipientsTypeString) {
+        List<String> recipientsType = new ArrayList<>();
+        if (recipientsTypeString != null && !recipientsTypeString.isEmpty()) {
+            String[] types = recipientsTypeString.split(",");
+            for (String type : types) {
+                recipientsType.add(type.trim()); // Trim spaces and add to the list
+            }
+        }
+        return recipientsType;
     }
 
     public void getAllUserApplications(List<UserApplication> AllUserApplications) {
@@ -1073,20 +906,6 @@ public class DatabaseHandler {
                     roleStmt.setString(8, phoneNumber);
                     roleStmt.setInt(9, userID);
                     break;
-                case "Clerk":
-                    roleSpecificInsert = "INSERT INTO Clerks (FirstName, LastName, DateOfBirth, Gender,HireDate, CourtID, Email, PhoneNumber, UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
-                    roleStmt = conn.prepareStatement(roleSpecificInsert);
-                    roleStmt.setString(1, firstName);
-                    roleStmt.setString(2, lastName);
-                    roleStmt.setString(3, dateOfBirth);
-                    roleStmt.setString(4, gender);
-                    roleStmt.setString(5, dateOfhiring);
-                    roleStmt.setInt(6, courtID);
-                    roleStmt.setString(7, email);
-                    roleStmt.setString(8, phoneNumber);
-                    roleStmt.setInt(9, userID);
-
-                    break;
 
                 case "Lawyer":
                     roleSpecificInsert = "INSERT INTO Lawyers (FirstName, LastName, LicenseNumber, DateOfBirth, Gender, BarAssociationID, Email, PhoneNumber, UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -1117,21 +936,8 @@ public class DatabaseHandler {
 
                     break;
 
-                case "Plaintiff":
-                    roleSpecificInsert = "INSERT INTO Plaintiffs (FirstName, LastName, DateOfBirth, Gender,Address,PhoneNumber, Email,  UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                    roleStmt = conn.prepareStatement(roleSpecificInsert);
-                    roleStmt.setString(1, firstName);
-                    roleStmt.setString(2, lastName);
-                    roleStmt.setString(3, dateOfBirth);
-                    roleStmt.setString(4, gender);
-                    roleStmt.setString(5, address);
-                    roleStmt.setString(6, phoneNumber);
-                    roleStmt.setString(7, email);
-                    roleStmt.setInt(8, userID);
-                    break;
-
-                case "Defendant":
-                    roleSpecificInsert = "INSERT INTO Defendants (FirstName, LastName, DateOfBirth, Gender,Address,PhoneNumber, Email,  UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                case "Client":
+                    roleSpecificInsert = "INSERT INTO Client (FirstName, LastName, DateOfBirth, Gender,Address,PhoneNumber, Email,  UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                     roleStmt = conn.prepareStatement(roleSpecificInsert);
                     roleStmt.setString(1, firstName);
                     roleStmt.setString(2, lastName);
@@ -1156,8 +962,8 @@ public class DatabaseHandler {
                     roleStmt.setInt(8, userID);
                     break;
 
-                case "Bailiff":
-                    roleSpecificInsert = "INSERT INTO Bailiffs (FirstName, LastName, DateOfBirth, Gender,HireDate,CourtID,Email,PhoneNumber,   UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
+                case "Registrar":
+                    roleSpecificInsert = "INSERT INTO Registrar (FirstName, LastName, DateOfBirth, Gender,HireDate,CourtID,Email,PhoneNumber,   UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
                     roleStmt = conn.prepareStatement(roleSpecificInsert);
                     roleStmt.setString(1, firstName);
                     roleStmt.setString(2, lastName);
@@ -1181,20 +987,6 @@ public class DatabaseHandler {
                     roleStmt.setString(6, phoneNumber);
                     roleStmt.setString(7, email);
                     roleStmt.setInt(8, userID);
-                    break;
-
-                case "Court Reporter":
-                    roleSpecificInsert = "INSERT INTO CourtReporters (FirstName, LastName, DateOfBirth, Gender,HireDate,CourtID,Email,PhoneNumber,   UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
-                    roleStmt = conn.prepareStatement(roleSpecificInsert);
-                    roleStmt.setString(1, firstName);
-                    roleStmt.setString(2, lastName);
-                    roleStmt.setString(3, dateOfBirth);
-                    roleStmt.setString(4, gender);
-                    roleStmt.setString(5, dateOfhiring);
-                    roleStmt.setInt(6, courtID);
-                    roleStmt.setString(7, email);
-                    roleStmt.setString(8, phoneNumber);
-                    roleStmt.setInt(9, userID);
                     break;
 
                 case "Probation Officer":
@@ -1222,20 +1014,6 @@ public class DatabaseHandler {
                     roleStmt.setString(6, email);
                     roleStmt.setString(7, phoneNumber);
                     roleStmt.setInt(8, userID);
-                    break;
-
-                case "Prosecutor":
-                    roleSpecificInsert = "INSERT INTO Prosecutors (FirstName, LastName,LicenseNumber, DateOfBirth, Gender,BarAssociationID,Email,PhoneNumber,   UserID) VALUES ( ?, ?, ?, ?, ?, ?, ?,?,?)";
-                    roleStmt = conn.prepareStatement(roleSpecificInsert);
-                    roleStmt.setString(1, firstName);
-                    roleStmt.setString(2, lastName);
-                    roleStmt.setString(3, license);
-                    roleStmt.setString(4, dateOfBirth);
-                    roleStmt.setString(5, gender);
-                    roleStmt.setInt(6, barAssociationID);
-                    roleStmt.setString(7, email);
-                    roleStmt.setString(8, phoneNumber);
-                    roleStmt.setInt(9, userID);
                     break;
 
                 default:
@@ -1301,13 +1079,13 @@ public class DatabaseHandler {
         System.out.print("Enter phone number: ");
         phoneNumber = scanner.nextLine();
 
-        if (role.equalsIgnoreCase("Judge") || role.equalsIgnoreCase("Clerk")
+        if (role.equalsIgnoreCase("Judge")
                 || role.equalsIgnoreCase("Court Administrator")
-                || role.equalsIgnoreCase("Baliff") || role.equalsIgnoreCase("Court Reporter")
+                || role.equalsIgnoreCase("Registrar")
                 || role.equalsIgnoreCase("Probation Officer")) {
             System.out.print("Enter Court ID: ");
             courtID = Integer.parseInt(scanner.nextLine());
-        } else if (role.equalsIgnoreCase("Lawyer") || role.equalsIgnoreCase("Prosecutor")) {
+        } else if (role.equalsIgnoreCase("Lawyer")) {
             System.out.print("Enter License Number: ");
             license = scanner.nextLine();
             System.out.print("Enter Bar Association ID: ");
@@ -1322,15 +1100,13 @@ public class DatabaseHandler {
 
         }
 
-        if (role.equalsIgnoreCase("Clerk") || role.equalsIgnoreCase("Court Administrator")
-                || role.equalsIgnoreCase("Baliff")
-                || role.equalsIgnoreCase("Probation Officer")) {
+        if (role.equalsIgnoreCase("Registrar") || role.equalsIgnoreCase("Court Administrator")) {
 
             System.out.print("Enter date of hiring (YYYY-MM-DD): ");
             dateOfhiring = scanner.nextLine();
 
         }
-        if (role.equalsIgnoreCase("Plaintiff") || role.equalsIgnoreCase("Defendant")
+        if (role.equalsIgnoreCase("client")
                 || role.equalsIgnoreCase("Witness") || role.equalsIgnoreCase("Juror")) {
             System.out.print("Enter your address: ");
             address = scanner.nextLine();

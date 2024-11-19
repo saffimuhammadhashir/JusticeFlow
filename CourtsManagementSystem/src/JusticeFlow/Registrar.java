@@ -2,39 +2,38 @@ package JusticeFlow;
 
 import java.util.Date;
 
-public class Plaintiff extends User {
-    private int plaintiffID;
+public class Registrar extends User {
+    private int RegistrarID;
     private String firstName;
     private String lastName;
     private Date dateOfBirth;
     private String gender;
-    private String address;
-    private String phoneNumber;
+    private Date hireDate;
+    private int courtID;
     private String email;
+    private String phoneNumber;
     private int userID;
 
-    public Plaintiff(int userID, String username, String password, String role, String email, String phoneNumber,
-            boolean activate,
-            int plaintiffID, String firstName, String lastName, Date dateOfBirth, String gender, String address) {
-        super(userID, username, password, role, email, phoneNumber, activate); // Calling the constructor of User class
+    public Registrar(int userID, String username, String password, String role, String email, String phoneNumber,
+            boolean activate, int RegistrarID, String firstName, String lastName, Date dateOfBirth,
+            String gender, Date hireDate, int courtID) {
+        super(userID, username, password, role, email, phoneNumber, activate); // Call to User class constructor
 
-        this.plaintiffID = plaintiffID;
+        this.RegistrarID = RegistrarID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.userID = userID;
+        this.hireDate = hireDate;
+        this.courtID = courtID;
     }
 
-    public int getPlaintiffID() {
-        return plaintiffID;
+    public int getRegistrarID() {
+        return RegistrarID;
     }
 
-    public void setPlaintiffID(int plaintiffID) {
-        this.plaintiffID = plaintiffID;
+    public void setRegistrarID(int RegistrarID) {
+        this.RegistrarID = RegistrarID;
     }
 
     public String getFirstName() {
@@ -69,20 +68,20 @@ public class Plaintiff extends User {
         this.gender = gender;
     }
 
-    public String getAddress() {
-        return address;
+    public Date getHireDate() {
+        return hireDate;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setHireDate(Date hireDate) {
+        this.hireDate = hireDate;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public int getCourtID() {
+        return courtID;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setCourtID(int courtID) {
+        this.courtID = courtID;
     }
 
     public String getEmail() {
@@ -91,6 +90,14 @@ public class Plaintiff extends User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public int getUserID() {
@@ -103,12 +110,13 @@ public class Plaintiff extends User {
 
     @Override
     public String toString() {
-        return "Plaintiff {" +
-                "judgeID=" + plaintiffID +
+        return "Registrar {" +
+                "judgeID=" + RegistrarID +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", gender='" + gender + '\'' +
+                ", courtID=" + courtID +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", userID=" + userID +
