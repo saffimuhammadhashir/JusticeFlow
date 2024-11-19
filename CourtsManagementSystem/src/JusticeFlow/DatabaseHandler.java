@@ -843,10 +843,9 @@ public class DatabaseHandler {
     // a confirmation message
     // is printed. This method ensures that file data is securely stored and
     // accessible by related cases.
-
-    public void saveFileDetails(int caseID, String fileName, String fileHash) {
+    public void saveFileDetails(int caseID, String fileName, String fileHash, boolean status) {
         // SQL query to insert file details into CaseFiles
-        String insertSQL = "INSERT INTO CaseFiles (CaseID, FileName, FileHash) VALUES (?, ?, ?)";
+        String insertSQL = "INSERT INTO CaseFiles (CaseID, FileName, FileHash, status) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
                 Statement statement = connection.createStatement();
@@ -861,6 +860,12 @@ public class DatabaseHandler {
             insertStatement.setInt(1, caseID);
             insertStatement.setString(2, fileName);
             insertStatement.setString(3, fileHash);
+            if (status){
+                insertStatement.setInt(3, 1);
+            }
+            else{
+                insertStatement.setInt(3, 0);
+            }
 
             // Execute the update to insert the data
             int rowsAffected = insertStatement.executeUpdate();

@@ -470,7 +470,7 @@ public class CourtsManagementSystem {
                         case 4:
                             // Submit Document
                             System.out.println("Submit Document selected.");
-                            SubmitDocument(); // Calling method to submit document
+                            SubmitDocument(scanner); // Calling method to submit document
                             break;
                         case 5:
                             // Re-open Case/Appeal
@@ -509,7 +509,7 @@ public class CourtsManagementSystem {
                         case 2:
                             // Submit Document
                             System.out.println("Submit Document selected.");
-                            SubmitDocument(); // Calling method to submit a document
+                            SubmitDocument(scanner); // Calling method to submit a document
                             break;
                         case 3:
                             // Log Out
@@ -666,9 +666,19 @@ public class CourtsManagementSystem {
         System.out.println("Implement lawyer registration to bar logic here.");
     }
 
-    public void SubmitDocument() {
+    public void SubmitDocument(Scanner scanner) {
         // Method to handle document submission
         System.out.println("Implement document submission logic here.");
+
+        String role = user.getRole();
+
+        if ("Lawyer".equalsIgnoreCase(role)) {
+            Lawyer l = user.getRelevantLawyer(AllLawyers, user);
+            l.SubmitDocument(scanner, AllCases, fileHandler);
+        } else if ("Witness".equalsIgnoreCase(role)) {
+            ProbationOfficer p = user.getRelevantProbationOfficer(AllProbationOfficers, user);
+            p.SubmitDocument(scanner, AllCases, fileHandler);
+        }
     }
 
     public void ReOpenCaseOrAppeal() {
@@ -731,6 +741,8 @@ public class CourtsManagementSystem {
     public static void main(String[] args) {
         CourtsManagementSystem system = new CourtsManagementSystem();
         Scanner scanner = new Scanner(System.in);
+
+        system.printAllObjects();
 
         while (true) {
             System.out.println("----- Welcome to Courts Management System -----");

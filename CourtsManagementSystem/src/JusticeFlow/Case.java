@@ -52,6 +52,10 @@ public class Case {
         this.files = files;
     }
 
+    public Case(){
+
+    }
+
     public int getCaseID() {
         return caseID;
     }
@@ -157,4 +161,34 @@ public class Case {
         return this.Lawyerid;
     }
 
+
+    /**
+     * Checks if a case with the given caseID exists in the AllCases list.
+     *
+     * @param caseID The unique identifier of the case to search for.
+     * @return true if a case with the specified caseID exists; false otherwise.
+     */
+    public boolean doesCaseExist(int caseID,List<Case> AllCases) {
+        // Iterate through the list of all cases
+        for (Case c : AllCases) {
+            // Check if the current case's ID matches the provided caseID
+            if (c.getCaseID() == caseID) {
+                return true; // Case found
+            }
+        }
+        // Case not found after iterating through the list
+        return false;
+    }
+
+    public Case getCasebyID(int caseID,List<Case> AllCases) {
+        // Iterate through the list of all cases
+        for (Case c : AllCases) {
+            // Check if the current case's ID matches the provided caseID
+            if (c.getCaseID() == caseID) {
+                return c; // Case found
+            }
+        }
+        // Case not found after iterating through the list
+        return null;
+    }
 }

@@ -3,6 +3,8 @@ package JusticeFlow;
 import java.util.Date;
 import java.util.List;
 
+import java.util.List;
+
 public class User {
     private int userID;
     private String username;
@@ -133,4 +135,37 @@ public class User {
         return null;
     }
 
+
+    /**
+     * Searches for a lawyer in the provided list based on the given UserID.
+     *
+     * @param AllLawyers The list of all lawyers to search through.
+     * @param UserID     The unique identifier of the lawyer to search for.
+     * @return The Lawyer object with the matching LawyerID, or null if no match is
+     *         found.
+     */
+    public Lawyer getRelevantLawyer(List<Lawyer> AllLawyers, User user) {
+        // Iterate through the list of all lawyers
+        for (Lawyer lawyer : AllLawyers) {
+            // Check if the current lawyer's ID matches the provided UserID
+            if (lawyer.getUserID() == user.getUserID()) {
+                return lawyer; // Return the matched lawyer
+            }
+        }
+        // Return null if no matching lawyer is found
+        return null;
+    }
+
+
+    public ProbationOfficer getRelevantProbationOfficer(List<ProbationOfficer> AllProbationOfficers, User user) {
+        // Iterate through the list of all lawyers
+        for (ProbationOfficer p : AllProbationOfficers) {
+            // Check if the current PO's ID matches the provided UserID
+            if (p.getUserID() == user.getUserID()) {
+                return p; // Return the matched lawyer
+            }
+        }
+        // Return null if no matching lawyer is found
+        return null;
+    }
 }
