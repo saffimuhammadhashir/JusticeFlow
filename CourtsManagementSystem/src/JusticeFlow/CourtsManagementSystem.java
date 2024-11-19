@@ -35,88 +35,6 @@ public class CourtsManagementSystem {
         loadData();
     }
 
-    public class Slot {
-        private int slotID;
-        private String dayName; 
-        private int slotNumber;
-        private Integer caseID;
-        private Integer judgeID;
-        private Integer witnessID;
-    
-        // Constructor
-        public Slot(int slotID, String dayName, int slotNumber, Integer caseID, Integer judgeID, Integer witnessID) {
-            this.slotID = slotID;
-            this.dayName = dayName;
-            this.slotNumber = slotNumber;
-            this.caseID = caseID;
-            this.judgeID = judgeID;
-            this.witnessID = witnessID;
-        }
-    
-        // Getters and Setters
-        public int getSlotID() {
-            return slotID;
-        }
-    
-        public void setSlotID(int slotID) {
-            this.slotID = slotID;
-        }
-    
-        public String getDayName() {
-            return dayName;
-        }
-    
-        public void setDayName(String dayName) {
-            this.dayName = dayName;
-        }
-    
-        public int getSlotNumber() {
-            return slotNumber;
-        }
-    
-        public void setSlotNumber(int slotNumber) {
-            this.slotNumber = slotNumber;
-        }
-    
-        public Integer getCaseID() {
-            return caseID;
-        }
-    
-        public void setCaseID(Integer caseID) {
-            this.caseID = caseID;
-        }
-    
-        public Integer getJudgeID() {
-            return judgeID;
-        }
-    
-        public void setJudgeID(Integer judgeID) {
-            this.judgeID = judgeID;
-        }
-    
-        public Integer getWitnessID() {
-            return witnessID;
-        }
-    
-        public void setWitnessID(Integer witnessID) {
-            this.witnessID = witnessID;
-        }
-    
-        // toString Method
-        @Override
-        public String toString() {
-            return "Slot{" +
-                    "slotID=" + slotID +
-                    ", dayName='" + dayName + '\'' +
-                    ", slotNumber=" + slotNumber +
-                    ", caseID=" + caseID +
-                    ", judgeID=" + judgeID +
-                    ", witnessID=" + witnessID +
-                    '}';
-        }
-    }
-    
-
     public void loadData() {
         if (dbHandler != null) {
             dbHandler.getAllCourts(AllCourts);
@@ -133,6 +51,9 @@ public class CourtsManagementSystem {
             dbHandler.getAllNotifications(AllNotifications);
             dbHandler.getAllUserApplications(AllUserApplications);
             dbHandler.getAllFiles(AllCases);
+            dbHandler.getAllSlots(AllSlot);
+            dbHandler.getWitnessData(AllWitnesses);
+            Slot.manageslot(AllSlot, dbHandler);
 
         } else {
             System.out.println("DatabaseHandler is not initialized!");
@@ -226,6 +147,15 @@ public class CourtsManagementSystem {
             System.out.println(notification.toString());
         }
 
+        // Print Notifications
+        System.out.println("\n Slots:");
+        for (Slot slots : AllSlot) {
+            if (slots == null) {
+                break;
+            }
+            System.out.println(slots.toString());
+        }
+
         System.out.println("---------------------");
     }
 
@@ -244,14 +174,15 @@ public class CourtsManagementSystem {
         Registrar registrar = new Registrar();
         registrar = registrar.getRelevantRegistrar(AllRegistrar, user);
         if (registrar != null) {
-            registrar.ReviewCaseRequest(dbHandler, fileHandler, AllCases, scanner);
+            registrar.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, scanner);
             System.out.println("Case has been successfully created.");
+
         } else {
 
             CourtAdministrator CourtAdmin = new CourtAdministrator();
             CourtAdmin = CourtAdmin.getRelevantCourtAdministrators(AllCourt_Administrators, user);
             if (CourtAdmin != null) {
-                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, scanner);
+                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, scanner);
                 System.out.println("Case has been successfully created.");
             } else {
                 System.out.println("Invalid User!");
@@ -265,7 +196,7 @@ public class CourtsManagementSystem {
     // system.Register();
     // // system.AddNewCase();
     // system.dbHandler.Login();
-    // }    
+    // }
 
     // Main menu displayed after successful login
     // Main menu displayed after successful login
@@ -678,8 +609,7 @@ public class CourtsManagementSystem {
         } else if ("ProbationOfficer".equalsIgnoreCase(role)) {
             ProbationOfficer p = user.getRelevantProbationOfficer(AllProbationOfficers, user);
             p.SubmitDocument(scanner, AllCases, fileHandler);
-        }
-        else if ("Registrar".equalsIgnoreCase(role)) {
+        } else if ("Registrar".equalsIgnoreCase(role)) {
             Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
             r.ApproveDocument(scanner, AllCases, fileHandler);
         }
@@ -746,7 +676,6 @@ public class CourtsManagementSystem {
         CourtsManagementSystem system = new CourtsManagementSystem();
         Scanner scanner = new Scanner(System.in);
 
-        system.loadData();
         system.printAllObjects();
 
         while (true) {

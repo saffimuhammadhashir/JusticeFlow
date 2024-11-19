@@ -166,33 +166,80 @@ public class Registrar extends User {
             System.out.println("No Document To Approve.");
         }
     }
-    public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases, Scanner scanner) {
+
+    public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
+            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, Scanner scanner) {
         List<Case> PendingCases = new ArrayList<>();
         for (Case cases : AllCases) {
             if ("Pending".equalsIgnoreCase(cases.getCaseStatus())) {
                 PendingCases.add(cases);
             }
         }
-        
+
         if (!PendingCases.isEmpty()) {
             for (Case c : PendingCases) {
                 System.out.println(c.toString());
                 System.out.println("\n------------------------------------------- \n");
             }
-            
+
             System.out.print("Select Case: ");
             int caseID = scanner.nextInt();
             scanner.nextLine(); // Consume the newline character left by nextInt()
-    
+
             System.out.print("Select Approve or Reject: ");
             String caseDecision = scanner.nextLine(); // Now this works correctly
-            
+
             Case cases = dbHandler.findCaseByID(AllCases, caseID);
-            
+
             if ("Approve".equalsIgnoreCase(caseDecision)) {
                 cases.setCaseStatus("Opened");
+                List<Slot> possibleSlots = new ArrayList<>();
                 dbHandler.saveOrUpdateCase(cases);
-              
+                for (Witness w : AllWitnesses) {
+                    for (Integer caseid : w.CaseID) {
+                        if (caseid == cases.getCaseID()) {
+                            for (Judge j : AllJudges) {
+                                Slot.PossibleSchedule(AllSlots, j, w, possibleSlots);
+                            }
+                        }
+                    }
+                }
+                int Count = 1;
+                for (Slot s : possibleSlots) {
+                    if (s == null) {
+                        break;
+                    }
+                    System.out.println(Count + ". " + s.toString());
+                    Count++;
+                }
+                System.out.print("\n\nSelect Slot: ");
+                int slotid = scanner.nextInt();
+                scanner.nextLine(); // Consume the newline character left by nextInt()
+                Count = 1;
+                for (Slot s : possibleSlots) {
+                    if (s == null) {
+                        break;
+                    }
+                    if (Count == slotid) {
+                        boolean selected = false;
+                        for (Slot orgs : AllSlots) {
+                            if (orgs.getSlotID() == s.getSlotID()) {
+                                orgs.setCaseID(cases.getCaseID());
+                                orgs.setJudgeID(s.getJudgeID());
+                                orgs.setWitnessID(s.getWitnessID());
+                                selected = true;
+                            }
+                        }
+                        if (selected) {
+                            dbHandler.updateOrInsertSlots(AllSlots);
+                            System.out.println("Slot Selected!");
+                            return;
+                        }
+                    }
+
+                    Count++;
+                }
+
                 // ApproveCase(dbHandler, fileHandler, caseID);
             } else if ("Reject".equalsIgnoreCase(caseDecision)) {
                 cases.setCaseStatus("Not Allowed");
@@ -205,6 +252,5 @@ public class Registrar extends User {
             System.out.println("No Pending Requests!");
         }
     }
-    
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+
 public class CourtAdministrator extends User {
     private int adminID;
     private String firstName;
@@ -15,12 +16,15 @@ public class CourtAdministrator extends User {
     private String email;
     private String phoneNumber;
     private int userID;
-    public CourtAdministrator(){
+
+    public CourtAdministrator() {
         super();
     }
-    public CourtAdministrator(int userID, String username, String password, String role, String email, String phoneNumber, boolean activate,
-                              int adminID, String firstName, String lastName, Date dateOfBirth, String gender, 
-                              Date hireDate, int courtID) {
+
+    public CourtAdministrator(int userID, String username, String password, String role, String email,
+            String phoneNumber, boolean activate,
+            int adminID, String firstName, String lastName, Date dateOfBirth, String gender,
+            Date hireDate, int courtID) {
         super(userID, username, password, role, email, phoneNumber, activate); // Calling the constructor of User class
 
         this.adminID = adminID;
@@ -35,7 +39,6 @@ public class CourtAdministrator extends User {
         this.userID = userID;
     }
 
-    
     public int getAdminID() {
         return adminID;
     }
@@ -115,6 +118,7 @@ public class CourtAdministrator extends User {
     public void setUserID(int userID) {
         this.userID = userID;
     }
+
     @Override
     public String toString() {
         return "Court Admin {" +
@@ -130,32 +134,79 @@ public class CourtAdministrator extends User {
                 '}';
     }
 
-        public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases, Scanner scanner) {
+    public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
+            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, Scanner scanner) {
         List<Case> PendingCases = new ArrayList<>();
         for (Case cases : AllCases) {
             if ("Pending".equalsIgnoreCase(cases.getCaseStatus())) {
                 PendingCases.add(cases);
             }
         }
-        
+
         if (!PendingCases.isEmpty()) {
             for (Case c : PendingCases) {
                 System.out.println(c.toString());
                 System.out.println("\n------------------------------------------- \n");
             }
-            
+
             System.out.print("Select Case: ");
             int caseID = scanner.nextInt();
             scanner.nextLine(); // Consume the newline character left by nextInt()
-    
+
             System.out.print("Select Approve or Reject: ");
             String caseDecision = scanner.nextLine(); // Now this works correctly
-            
+
             Case cases = dbHandler.findCaseByID(AllCases, caseID);
-            
+
             if ("Approve".equalsIgnoreCase(caseDecision)) {
                 cases.setCaseStatus("Opened");
+                List<Slot> possibleSlots = new ArrayList<>();
                 dbHandler.saveOrUpdateCase(cases);
+                for (Witness w : AllWitnesses) {
+                    for (Integer caseid : w.CaseID) {
+                        if (caseid == cases.getCaseID()) {
+                            for (Judge j : AllJudges) {
+                                Slot.PossibleSchedule(AllSlots, j, w, possibleSlots);
+                            }
+                        }
+                    }
+                }
+                int Count = 1;
+                for (Slot s : possibleSlots) {
+                    if (s == null) {
+                        break;
+                    }
+                    System.out.println(Count + ". " + s.toString());
+                    Count++;
+                }
+                System.out.print("\n\nSelect Slot: ");
+                int slotid = scanner.nextInt();
+                scanner.nextLine(); // Consume the newline character left by nextInt()
+                Count = 1;
+                for (Slot s : possibleSlots) {
+                    if (s == null) {
+                        break;
+                    }
+                    if (Count == slotid) {
+                        boolean selected = false;
+                        for (Slot orgs : AllSlots) {
+                            if (orgs.getSlotID() == s.getSlotID()) {
+                                orgs.setCaseID(cases.getCaseID());
+                                orgs.setJudgeID(s.getJudgeID());
+                                orgs.setWitnessID(s.getWitnessID());
+                                selected = true;
+                            }
+                        }
+                        if (selected) {
+                            dbHandler.updateOrInsertSlots(AllSlots);
+                            System.out.println("Slot Selected!");
+                            return;
+                        }
+                    }
+
+                    Count++;
+                }
+
                 // ApproveCase(dbHandler, fileHandler, caseID);
             } else if ("Reject".equalsIgnoreCase(caseDecision)) {
                 cases.setCaseStatus("Not Allowed");
@@ -168,6 +219,5 @@ public class CourtAdministrator extends User {
             System.out.println("No Pending Requests!");
         }
     }
-    
-}
 
+}
