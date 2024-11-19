@@ -95,18 +95,7 @@ public class User {
      * @return The Lawyer object with the matching LawyerID, or null if no match is
      * found.
      */
-    public Lawyer getRelevantLawyer(List<Lawyer> AllLawyers, User user) {
-        // Iterate through the list of all lawyers
-        for (Lawyer lawyer : AllLawyers) {
-            // Check if the current lawyer's ID matches the provided UserID
-            System.out.println(lawyer.getUserID());
-            if (lawyer.getUserID() == user.getUserID()) {
-                return lawyer; // Return the matched lawyer
-            }
-        }
 
-        return null;
-    }
 
     public Registrar getRelevantRegistrar(List<Registrar> AllRegistrar, User user) {
         // Iterate through the list of all lawyers

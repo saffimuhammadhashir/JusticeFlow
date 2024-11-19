@@ -224,10 +224,12 @@ CREATE TABLE CaseFiles (
     CaseID INT,
     FileName VARCHAR(255) NOT NULL,
     FileHash VARCHAR(255) NOT NULL,
-    status TINYINT(1) NOT NULL DEFAULT 0,
+     status TINYINT(1) NOT NULL DEFAULT 0,
     UploadDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (CaseID) REFERENCES Cases(CaseID)
 );
+
+
 
 
 CREATE TABLE Notifications (
@@ -254,6 +256,10 @@ CREATE TABLE Slots (
     CONSTRAINT fk_witness FOREIGN KEY (WitnessID) REFERENCES Witnesses(WitnessID)
         ON DELETE SET NULL ON UPDATE CASCADE
 );
+
+
+UPDATE users SET Activate = 1;
+SET SQL_SAFE_UPDATES = 0;
 
 
 -- Select statements
