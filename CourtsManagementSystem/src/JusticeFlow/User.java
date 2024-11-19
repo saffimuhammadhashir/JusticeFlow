@@ -115,4 +115,18 @@ public class User {
         // Return null if no matching lawyer is found
         return null;
     }
+
+    public Registrar getRelevantRegistrar(List<Registrar> AllRegistrar, User user) {
+        // Iterate through the list of all lawyers
+        for (Registrar r : AllRegistrar) {
+            // Check if the current Registrar's ID matches the provided UserID
+            if (r.getUserID() == user.getUserID()) {
+                return r; // Return the matched lawyer
+            }
+        }
+        // Return null if no matching lawyer is found
+        return null;
+    }
+
+    
 }

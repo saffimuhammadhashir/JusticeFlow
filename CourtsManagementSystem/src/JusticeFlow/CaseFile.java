@@ -34,9 +34,17 @@ public class CaseFile { // Renamed from File to CaseFile
         this.fileHash = fileHash;
     }
 
+    public boolean getStatus(){
+        return this.status;
+    }
+
+    public void setStatus(boolean status){
+        this.status = status;
+    }
+
     // Converts the file details into a readable string format.
     @Override
     public String toString() {
-        return "File Name: " + fileName + ", Hash: " + fileHash;
+        return "File Name: " + fileName + ", Hash: " + fileHash + ", Status: " + (status?"Approved":"Waiting");
     }
 }

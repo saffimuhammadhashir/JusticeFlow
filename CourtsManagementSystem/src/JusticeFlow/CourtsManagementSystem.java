@@ -542,11 +542,11 @@ public class CourtsManagementSystem {
                 } else if ("Registrar".equalsIgnoreCase(role)) {
                     System.out.println("\n----- Main Menu For Registrar -----");
                     System.out.println("1. Case Filing/Scheduling");
-                    System.out.println("2. Track/Manage Updates");
+                    System.out.println("2. Bar Registration");
                     System.out.println("3. Track Case");
                     System.out.println("4. Schedule Hearing/Witness");
-                    System.out.println("5. View IT System Management Schedule");
-                    System.out.println("6. Retrieve Record");
+                    System.out.println("5. Approve Document");
+                    System.out.println("6. Approve Judgement");
                     System.out.println("7. Log Out");
                     System.out.print("Choose an option: ");
 
@@ -562,7 +562,7 @@ public class CourtsManagementSystem {
                         case 2:
                             // Track/Manage Updates
                             System.out.println("Track/Manage Updates selected.");
-                            TrackManageUpdates(); // Calling method to track/manage updates
+                            RegisterToBar(); // Calling method to monitor Bar Registration
                             break;
                         case 3:
                             // Track Case
@@ -576,13 +576,13 @@ public class CourtsManagementSystem {
                             break;
                         case 5:
                             // View IT System Management Schedule
-                            System.out.println("View IT System Management Schedule selected.");
-                            ViewITSystemManagementSchedule(); // Calling method to view IT system management schedule
+                            System.out.println("Approve Document selected.");
+                            SubmitDocument(scanner); // Calling method to approve document
                             break;
                         case 6:
                             // Retrieve Record
                             System.out.println("Retrieve Record selected.");
-                            RetrieveRecord(); // Calling method to retrieve a record
+                            ReviewDocumentLogJudgment(); // Calling method to approve Judgement
                             break;
                         case 7:
                             // Log Out
@@ -645,9 +645,13 @@ public class CourtsManagementSystem {
         if ("Lawyer".equalsIgnoreCase(role)) {
             Lawyer l = user.getRelevantLawyer(AllLawyers, user);
             l.SubmitDocument(scanner, AllCases, fileHandler);
-        } else if ("Witness".equalsIgnoreCase(role)) {
+        } else if ("ProbationOfficer".equalsIgnoreCase(role)) {
             ProbationOfficer p = user.getRelevantProbationOfficer(AllProbationOfficers, user);
             p.SubmitDocument(scanner, AllCases, fileHandler);
+        }
+        else if ("Registrar".equalsIgnoreCase(role)) {
+            Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
+            r.ApproveDocument(scanner, AllCases, fileHandler);
         }
     }
 
@@ -712,6 +716,7 @@ public class CourtsManagementSystem {
         CourtsManagementSystem system = new CourtsManagementSystem();
         Scanner scanner = new Scanner(System.in);
 
+        system.loadData();
         system.printAllObjects();
 
         while (true) {

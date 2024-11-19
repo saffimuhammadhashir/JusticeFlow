@@ -1,6 +1,8 @@
 package JusticeFlow;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 
 public class Registrar extends User {
     private int RegistrarID;
@@ -26,6 +28,7 @@ public class Registrar extends User {
         this.gender = gender;
         this.hireDate = hireDate;
         this.courtID = courtID;
+        this.userID = userID;
     }
 
     public int getRegistrarID() {
@@ -121,5 +124,39 @@ public class Registrar extends User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", userID=" + userID +
                 '}';
+    }
+
+    public void ApproveDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler) {
+        // Print
+        boolean exists = false;
+        System.out.println("\nCases:");
+        for (Case caseObj : AllCases) {
+            if (caseObj.getFiles() != null) {
+                for (CaseFile fileObj : caseObj.getFiles()) {
+                    if (!fileObj.getStatus()) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (exists) {
+                    break;
+                }
+            }
+        }
+
+        if (exists) {
+            System.out.println("\nCases:");
+            for (Case caseObj : AllCases) {
+                if (caseObj.getFiles() != null) {
+                    for (CaseFile fileObj : caseObj.getFiles()) {
+                        if (!fileObj.getStatus()) {
+                            System.out.println(fileObj.toString());
+                        }
+                    }
+                }
+            }
+        } else {
+            System.out.println("No Document To Approve.");
+        }
     }
 }

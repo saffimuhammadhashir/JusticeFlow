@@ -813,10 +813,10 @@ public class DatabaseHandler {
             insertStatement.setString(2, fileName);
             insertStatement.setString(3, fileHash);
             if (status){
-                insertStatement.setInt(3, 1);
+                insertStatement.setInt(4, 1);
             }
             else{
-                insertStatement.setInt(3, 0);
+                insertStatement.setInt(4, 0);
             }
 
             // Execute the update to insert the data

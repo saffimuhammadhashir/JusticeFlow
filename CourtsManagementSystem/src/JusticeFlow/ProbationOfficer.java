@@ -160,7 +160,7 @@ public class ProbationOfficer extends User {
                     DatabaseHandler d = new DatabaseHandler();
                     d.saveFileDetails(c.getCaseID(),selectedFile.getAbsolutePath(),fileHash,false);
                     System.out.println("File Added in Database.");
-                    
+                    return;
 
                     // Perform further actions if needed
                 } catch (IOException | NoSuchAlgorithmException e) {
