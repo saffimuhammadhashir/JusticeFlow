@@ -12,11 +12,16 @@ public class FileHandler {
 
     // Constructor where the DatabaseHandler is injected
 
+    public FileHandler() {
+
+    }
+
     public FileHandler(DatabaseHandler dbHandler) {
         this.dbHandler = dbHandler;
     }
 
-    // Saves a selected file for a given case, including hashing the file, copying it to a
+    // Saves a selected file for a given case, including hashing the file, copying
+    // it to a
     // dedicated storage directory, and adding file details to the case's file list.
     public void saveFileForCase(Case caseObj) {
         File selectedFile = openFileDialog();
@@ -40,8 +45,8 @@ public class FileHandler {
                 File destinationFile = new File(caseDirectory, selectedFile.getName());
                 copyFile(filePath, destinationFile.getAbsolutePath());
 
-                CaseFile file = new CaseFile(selectedFile.getName(), fileHash);  // Changed to CaseFile
-                dbHandler.saveFileDetails(caseObj.getCaseID(), selectedFile.getName(), fileHash);
+                CaseFile file = new CaseFile(selectedFile.getName(), fileHash); // Changed to CaseFile
+                dbHandler.saveFileDetails(caseObj.getCaseID(), selectedFile.getName(), fileHash, false);
                 caseObj.addFile(file);
 
                 System.out.println("File saved and hash generated successfully!");
@@ -52,9 +57,10 @@ public class FileHandler {
         }
     }
 
-    // Opens a native file selection dialog for the user to select a file, returning the chosen file
+    // Opens a native file selection dialog for the user to select a file, returning
+    // the chosen file
     // or null if the user cancels the selection.
-    private File openFileDialog() {
+    public File openFileDialog() {
         FileDialog fileDialog = new FileDialog((Frame) null, "Select a File", FileDialog.LOAD);
         fileDialog.setVisible(true);
 
@@ -68,9 +74,10 @@ public class FileHandler {
         }
     }
 
-    // Computes and returns the SHA-256 hash of a file specified by its path, generating a
+    // Computes and returns the SHA-256 hash of a file specified by its path,
+    // generating a
     // hexadecimal string representation of the hash.
-    private String getFileHash(String filePath) throws IOException, NoSuchAlgorithmException {
+    public String getFileHash(String filePath) throws IOException, NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         try (InputStream is = Files.newInputStream(Paths.get(filePath))) {
             byte[] byteArray = new byte[1024];
@@ -88,7 +95,8 @@ public class FileHandler {
         return hexString.toString();
     }
 
-    // Copies a file from a specified source path to a destination path, replacing the existing
+    // Copies a file from a specified source path to a destination path, replacing
+    // the existing
     // file if it already exists.
     private void copyFile(String sourcePath, String destinationPath) throws IOException {
         Path source = Paths.get(sourcePath);

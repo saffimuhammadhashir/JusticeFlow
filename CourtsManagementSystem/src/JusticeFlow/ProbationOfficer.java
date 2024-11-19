@@ -1,6 +1,11 @@
 package JusticeFlow;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 
 public class ProbationOfficer extends User {
     private int officerID;
@@ -125,5 +130,48 @@ public class ProbationOfficer extends User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", userID=" + userID +
                 '}';
+    }
+
+    public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler) {
+        Case c = new Case();
+
+        // Prompt for Case ID
+        System.out.print("Enter Case ID: ");
+        int caseID = scanner.nextInt();
+
+        // Check if case exists
+        if (c.doesCaseExist(caseID, AllCases)) {
+            c = c.getCasebyID(caseID, AllCases);
+
+            // Open file dialog to select a file
+            File selectedFile = fileHandler.openFileDialog();
+            if (selectedFile != null) {
+                try {
+                    // Generate file hash
+                    String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
+                    // System.out.println("File hash: " + fileHash);
+
+                    CaseFile my_file = new CaseFile(selectedFile.getAbsolutePath(), fileHash);
+                    c.addFile(my_file);
+                    System.out.println("File added to case, waiting for Registrar to approve.");
+
+                    System.out.println(c.toString());
+
+                    DatabaseHandler d = new DatabaseHandler();
+                    d.saveFileDetails(c.getCaseID(),selectedFile.getAbsolutePath(),fileHash,false);
+                    System.out.println("File Added in Database.");
+                    
+
+                    // Perform further actions if needed
+                } catch (IOException | NoSuchAlgorithmException e) {
+                    System.err.println("Error while processing the file: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("No file selected.");
+            }
+        } else {
+            System.out.println("Case with this ID does not exist.");
+        }
     }
 }

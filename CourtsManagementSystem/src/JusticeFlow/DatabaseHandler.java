@@ -16,7 +16,7 @@ import com.mysql.cj.xdevapi.Client;
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "test12345";
+    private final String dbPassword = "12345678";
 
     public User getUserById(int userID) {
         // SQL query to retrieve user data
@@ -795,23 +795,40 @@ public class DatabaseHandler {
     // a confirmation message
     // is printed. This method ensures that file data is securely stored and
     // accessible by related cases.
-    public void saveFileDetails(int caseID, String fileName, String fileHash) {
-        String insertSQL = "INSERT INTO CaseFiles (CaseID, FileName, FileHash) VALUES (?, ?, ?)";
+    public void saveFileDetails(int caseID, String fileName, String fileHash, boolean status) {
+        // SQL query to insert file details into CaseFiles
+        String insertSQL = "INSERT INTO CaseFiles (CaseID, FileName, FileHash, status) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-                PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
+                Statement statement = connection.createStatement();
+                PreparedStatement insertStatement = connection.prepareStatement(insertSQL)) {
 
-            preparedStatement.setInt(1, caseID);
-            preparedStatement.setString(2, fileName);
-            preparedStatement.setString(3, fileHash);
+            // Check if connection is valid (optional step to verify the connection)
+            if (connection != null) {
+                System.out.println("Connection successful!");
+            }
 
-            int rowsAffected = preparedStatement.executeUpdate();
+            // Set the values for the prepared statement
+            insertStatement.setInt(1, caseID);
+            insertStatement.setString(2, fileName);
+            insertStatement.setString(3, fileHash);
+            if (status){
+                insertStatement.setInt(3, 1);
+            }
+            else{
+                insertStatement.setInt(3, 0);
+            }
 
+            // Execute the update to insert the data
+            int rowsAffected = insertStatement.executeUpdate();
+
+            // Check if the insert was successful
             if (rowsAffected > 0) {
                 System.out.println("File details saved successfully!");
             } else {
                 System.out.println("Failed to save file details.");
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -221,6 +221,7 @@ CREATE TABLE CaseFiles (
     CaseID INT,
     FileName VARCHAR(255) NOT NULL,
     FileHash VARCHAR(255) NOT NULL,
+    status TINYINT(1) NOT NULL DEFAULT 0,
     UploadDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (CaseID) REFERENCES Cases(CaseID)
 );
@@ -236,10 +237,6 @@ CREATE TABLE Notifications (
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp when the notification is created
 );
 
-
-
-UPDATE users SET Activate = 1;
-SET SQL_SAFE_UPDATES = 0;
 
 
 -- Select statements
