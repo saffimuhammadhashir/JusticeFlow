@@ -15,8 +15,9 @@ public class CourtsManagementSystem {
     List<Case> AllCases = new ArrayList<>();
     List<Registrar> AllRegistrar = new ArrayList<>();
     List<ProbationOfficer> AllProbationOfficers = new ArrayList<>();
-    List<Clients> AllClients=new ArrayList<>();
+    List<Clients> AllClients = new ArrayList<>();
     List<Witness> AllWitnesses = new ArrayList<>();
+    List<Slot> AllSlot = new ArrayList<>();
     List<BarAssociation> AllBarAssociations = new ArrayList<>();
     List<Court> AllCourts = new ArrayList<>();
     List<UserApplication> AllUserApplications = new ArrayList<>();
@@ -34,6 +35,88 @@ public class CourtsManagementSystem {
         loadData();
     }
 
+    public class Slot {
+        private int slotID;
+        private String dayName; 
+        private int slotNumber;
+        private Integer caseID;
+        private Integer judgeID;
+        private Integer witnessID;
+    
+        // Constructor
+        public Slot(int slotID, String dayName, int slotNumber, Integer caseID, Integer judgeID, Integer witnessID) {
+            this.slotID = slotID;
+            this.dayName = dayName;
+            this.slotNumber = slotNumber;
+            this.caseID = caseID;
+            this.judgeID = judgeID;
+            this.witnessID = witnessID;
+        }
+    
+        // Getters and Setters
+        public int getSlotID() {
+            return slotID;
+        }
+    
+        public void setSlotID(int slotID) {
+            this.slotID = slotID;
+        }
+    
+        public String getDayName() {
+            return dayName;
+        }
+    
+        public void setDayName(String dayName) {
+            this.dayName = dayName;
+        }
+    
+        public int getSlotNumber() {
+            return slotNumber;
+        }
+    
+        public void setSlotNumber(int slotNumber) {
+            this.slotNumber = slotNumber;
+        }
+    
+        public Integer getCaseID() {
+            return caseID;
+        }
+    
+        public void setCaseID(Integer caseID) {
+            this.caseID = caseID;
+        }
+    
+        public Integer getJudgeID() {
+            return judgeID;
+        }
+    
+        public void setJudgeID(Integer judgeID) {
+            this.judgeID = judgeID;
+        }
+    
+        public Integer getWitnessID() {
+            return witnessID;
+        }
+    
+        public void setWitnessID(Integer witnessID) {
+            this.witnessID = witnessID;
+        }
+    
+        // toString Method
+        @Override
+        public String toString() {
+            return "Slot{" +
+                    "slotID=" + slotID +
+                    ", dayName='" + dayName + '\'' +
+                    ", slotNumber=" + slotNumber +
+                    ", caseID=" + caseID +
+                    ", judgeID=" + judgeID +
+                    ", witnessID=" + witnessID +
+                    '}';
+        }
+    }
+    
+
     public void loadData() {
         if (dbHandler != null) {
             dbHandler.getAllCourts(AllCourts);
@@ -49,6 +132,7 @@ public class CourtsManagementSystem {
             dbHandler.getAllBarAssociations(AllBarAssociations);
             dbHandler.getAllNotifications(AllNotifications);
             dbHandler.getAllUserApplications(AllUserApplications);
+            dbHandler.getAllFiles(AllCases);
 
         } else {
             System.out.println("DatabaseHandler is not initialized!");
@@ -88,7 +172,6 @@ public class CourtsManagementSystem {
             System.out.println(admin.toString());
         }
 
-
         // Print Defendants
         System.out.println("\nDefendants:");
         for (Clients client : AllClients) {
@@ -113,22 +196,17 @@ public class CourtsManagementSystem {
             System.out.println(caseObj.toString());
         }
 
-
         // Print Courts
         System.out.println("\nCourts:");
         for (Court court : AllCourts) {
             System.out.println(court.toString());
         }
 
-
-
         // Print Probation Officers
         System.out.println("\nProbation Officers:");
         for (ProbationOfficer officer : AllProbationOfficers) {
             System.out.println(officer.toString());
         }
-
-
 
         // Print User Applications
         System.out.println("\nUser Applications:");
@@ -152,102 +230,48 @@ public class CourtsManagementSystem {
     }
 
     public void AddNewCase() {
-        Scanner scanner = new Scanner(System.in);
-
-        // Case Title
-        System.out.print("Enter case title: ");
-        String caseTitle = scanner.nextLine();
-        if (caseTitle.isEmpty()) {
-            caseTitle = "Default Case Title"; // default value if skipped
-        }
-
-        // Case Type
-        System.out.print("Enter case type (Civil/Criminal/Family/Other) or press Enter to skip: ");
-        String caseType = scanner.nextLine();
-        if (caseType.isEmpty()) {
-            caseType = "Civil"; // default value if skipped
-        }
-
-        // Case Status
-        System.out.print("Enter case status (Pending/Closed/In Progress) or press Enter to skip: ");
-        String caseStatus = scanner.nextLine();
-        if (caseStatus.isEmpty()) {
-            caseStatus = "Pending"; // default value if skipped
-        }
-
-        // Filing Date
-        System.out.print("Enter filing date (yyyy-MM-dd) or press Enter to skip: ");
-        String filingDateInput = scanner.nextLine();
-        Date filingDate = null;
-        if (!filingDateInput.isEmpty()) {
-            try {
-                filingDate = java.sql.Date.valueOf(filingDateInput);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid date format. Defaulting to current date.");
-                filingDate = new Date(); // default to current date if invalid input
-            }
+        Lawyer lawyer = new Lawyer();
+        lawyer = lawyer.getRelevantLawyer(AllLawyers, user);
+        if (lawyer != null) {
+            lawyer.FileNewCase(dbHandler, fileHandler, AllCases);
+            System.out.println("Case has been successfully created.");
         } else {
-            filingDate = new Date(); // default to current date
+            System.out.println("Lawyer Not Found!");
         }
-
-        // Court Date
-        System.out.print("Enter court date (yyyy-MM-dd) or press Enter to skip: ");
-        String courtDateInput = scanner.nextLine();
-        Date courtDate = null;
-        if (!courtDateInput.isEmpty()) {
-            try {
-                courtDate = java.sql.Date.valueOf(courtDateInput);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid date format. Defaulting to current date.");
-                courtDate = new Date(); // default to current date if invalid input
-            }
-        } else {
-            courtDate = new Date(); // default to current date
-        }
-
-        // Plaintiff ID
-        System.out.print("Enter Plaintiff ID (or press Enter to skip): ");
-        String plaintiffIDInput = scanner.nextLine();
-        int plaintiffID = plaintiffIDInput.isEmpty() ? 0 : Integer.parseInt(plaintiffIDInput); // 0 for default value
-
-        // Defendant ID
-        System.out.print("Enter Defendant ID (or press Enter to skip): ");
-        String defendantIDInput = scanner.nextLine();
-        int defendantID = defendantIDInput.isEmpty() ? 0 : Integer.parseInt(defendantIDInput); // 0 for default value
-
-        // Case Files (Optional - Skip if no files are to be added)
-
-        // Create the new Case object
-        Case newCase = new Case(
-                0, // Assuming ID will be auto-generated
-                caseTitle,
-                caseType,
-                caseStatus,
-                filingDate,
-                courtDate,
-                plaintiffID,
-                defendantID);
-        newCase.updateCaseFiles(fileHandler, dbHandler);
-
-        // Save or update the case in the database
-        dbHandler.saveOrUpdateCase(newCase);
-        AllCases.add(newCase);
-        // Confirmation
-        System.out.println("Case has been successfully created.");
     }
 
+    public void ReviewUpcomingCaseRequests(Scanner scanner) {
+        Registrar registrar = new Registrar();
+        registrar = registrar.getRelevantRegistrar(AllRegistrar, user);
+        if (registrar != null) {
+            registrar.ReviewCaseRequest(dbHandler, fileHandler, AllCases, scanner);
+            System.out.println("Case has been successfully created.");
+        } else {
+
+            CourtAdministrator CourtAdmin = new CourtAdministrator();
+            CourtAdmin = CourtAdmin.getRelevantCourtAdministrators(AllCourt_Administrators, user);
+            if (CourtAdmin != null) {
+                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, scanner);
+                System.out.println("Case has been successfully created.");
+            } else {
+                System.out.println("Invalid User!");
+            }
+
+        }
+    }
     // public static void main(String[] args) {
     // // Scanner scanner = new Scanner(System.in);
     // CourtsManagementSystem system = new CourtsManagementSystem();
     // system.Register();
     // // system.AddNewCase();
     // system.dbHandler.Login();
-    // }
+    // }    
 
     // Main menu displayed after successful login
     // Main menu displayed after successful login
 
     public void Login(Scanner scanner) {
+
         loggedinID = dbHandler.Login(scanner); // Assuming this retrieves the user ID after login
         System.out.println("Login status: " + loggedinID);
         if (loggedinID != null) {
@@ -292,7 +316,7 @@ public class CourtsManagementSystem {
                         case 1:
                             // Case Filing/Scheduling
                             System.out.println("Case Filing/Scheduling selected.");
-                            AddNewCase(); // Calling method to add new case
+                            ReviewUpcomingCaseRequests(this.scanner); // Calling method to add new case
                             break;
                         case 2:
                             // Track/Manage Updates
@@ -430,8 +454,8 @@ public class CourtsManagementSystem {
                     switch (choice) {
                         case 1:
                             // Case Filing/Scheduling
-                            System.out.println("Case Filing/Scheduling selected.");
-                            CaseFilingScheduling(); // Calling method for case filing and scheduling
+                            System.out.println("Case Filing.");
+                            AddNewCase(); // Calling method for case filing and scheduling
                             break;
                         case 2:
                             // Track Updates
@@ -563,7 +587,7 @@ public class CourtsManagementSystem {
                         case 1:
                             // Case Filing/Scheduling
                             System.out.println("Case Filing/Scheduling selected.");
-                            CaseFilingScheduling(); // Calling method for case filing/scheduling
+                            ReviewUpcomingCaseRequests(this.scanner); // Calling method for case filing/scheduling
                             break;
                         case 2:
                             // Track/Manage Updates

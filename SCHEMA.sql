@@ -210,8 +210,11 @@ CREATE TABLE Cases (
     CaseStatus VARCHAR(100),
     FilingDate DATE,
     CourtDate DATE,
-    PlaintiffID INT  ,
-    DefendantID INT  ,	
+    PlaintiffID INT,
+    DefendantID INT,
+    CaseState ENUM('Pending', 'Filed','Closed','Opened','Not Allowed') DEFAULT 'Pending',  -- New column for case state
+    LawyerId INT,
+    FOREIGN KEY (LawyerId) REFERENCES Lawyers(LawyerID),
     FOREIGN KEY (PlaintiffID) REFERENCES Clients(clientID),
     FOREIGN KEY (DefendantID) REFERENCES Clients(clientID)
 );
@@ -236,6 +239,20 @@ CREATE TABLE Notifications (
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp when the notification is created
 );
 
+CREATE TABLE Slots (
+    SlotID INT AUTO_INCREMENT PRIMARY KEY,
+    DayName DATE NOT NULL,
+    SlotNumber INT NOT NULL,
+    CaseID INT,
+    JudgeID INT,
+    WitnessID INT,
+    CONSTRAINT fk_case FOREIGN KEY (CaseID) REFERENCES Cases(CaseID)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_judge FOREIGN KEY (JudgeID) REFERENCES Judges(JudgeID)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_witness FOREIGN KEY (WitnessID) REFERENCES Witnesses(WitnessID)
+        ON DELETE SET NULL ON UPDATE CASCADE
+);
 
 
 UPDATE users SET Activate = 1;
@@ -256,6 +273,7 @@ SELECT * FROM Clients;
 SELECT * FROM Registrar;
 SELECT * FROM ProbationOfficers;
 SELECT * FROM ITAdmins;
+SELECT * FROM Slots;
 
 
 

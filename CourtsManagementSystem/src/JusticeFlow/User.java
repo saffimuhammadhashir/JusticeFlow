@@ -1,6 +1,8 @@
 package JusticeFlow;
 
 import java.util.Date;
+import java.util.List;
+
 public class User {
     private int userID;
     private String username;
@@ -9,8 +11,13 @@ public class User {
     private String email;
     private String phoneNumber;
     private boolean activate;
-    
-    public User(int userID, String username, String password, String role, String email, String phoneNumber, boolean activate) {
+
+    public User() {
+
+    }
+
+    public User(int userID, String username, String password, String role, String email, String phoneNumber,
+            boolean activate) {
         this.userID = userID;
         this.username = username;
         this.password = password;
@@ -19,7 +26,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.activate = activate;
     }
-    
 
     public int getUserID() {
         return userID;
@@ -76,4 +82,55 @@ public class User {
     public void setActivate(boolean activate) {
         this.activate = activate;
     }
+
+    /*
+     * Searches for a lawyer in the provided list based on the given UserID.
+     *
+     * @param AllLawyers The list of all lawyers to search through.
+     * 
+     * @param UserID The unique identifier of the lawyer to search for.
+     * 
+     * @return The Lawyer object with the matching LawyerID, or null if no match is
+     * found.
+     */
+    public Lawyer getRelevantLawyer(List<Lawyer> AllLawyers, User user) {
+        // Iterate through the list of all lawyers
+        for (Lawyer lawyer : AllLawyers) {
+            // Check if the current lawyer's ID matches the provided UserID
+            System.out.println(lawyer.getUserID());
+            if (lawyer.getUserID() == user.getUserID()) {
+                return lawyer; // Return the matched lawyer
+            }
+        }
+
+        return null;
+    }
+
+    public Registrar getRelevantRegistrar(List<Registrar> AllRegistrar, User user) {
+        // Iterate through the list of all lawyers
+        for (Registrar registrar : AllRegistrar) {
+            // Check if the current lawyer's ID matches the provided UserID
+            System.out.println(registrar.getUserID());
+            if (registrar.getUserID() == user.getUserID()) {
+                return registrar; // Return the matched lawyer
+            }
+        }
+
+        return null;
+    }
+
+    public CourtAdministrator getRelevantCourtAdministrators(List<CourtAdministrator> AllCourt_Administrators,
+            User user) {
+        // Iterate through the list of all lawyers
+        for (CourtAdministrator CourtAdmin : AllCourt_Administrators) {
+            // Check if the current lawyer's ID matches the provided UserID
+            System.out.println(CourtAdmin.getUserID());
+            if (CourtAdmin.getUserID() == user.getUserID()) {
+                return CourtAdmin; // Return the matched lawyer
+            }
+        }
+
+        return null;
+    }
+
 }

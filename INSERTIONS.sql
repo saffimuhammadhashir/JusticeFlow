@@ -13,7 +13,7 @@ VALUES
 ('lawyer_jack', 'password123', 'Lawyer', 'lawyer.jack@example.com', '2234567895', 1),
 ('lawyer_henry', 'password123', 'Lawyer', 'lawyer.henry@example.com', '3234567896', 1),
 ('lawyer_clara', 'password123', 'Lawyer', 'lawyer.clara@example.com', '4234567897', 1),
-('lawyer_oliver', 'password123', 'Lawyer', 'lawyer.oliver@example.com', '5234567898', 1),
+('saffi', '123', 'Lawyer', 'lawyer.oliver@example.com', '5234567898', 1),
 
 -- Administrators
 ('admin_mary', 'password123', 'Court Administrator', 'admin.mary@example.com', '1234567892', 1),
@@ -190,18 +190,18 @@ VALUES
 
 
 -- Insert into Cases
-INSERT INTO Cases (CaseTitle, CaseType, CaseStatus, FilingDate, CourtDate, PlaintiffID, DefendantID)
+INSERT INTO Cases (CaseTitle, CaseType, CaseStatus, FilingDate, CourtDate, PlaintiffID, DefendantID, CaseState)
 VALUES
-('Case 1: John Doe vs Jane Doe', 'Civil', 'Open', '2024-01-01', '2024-02-01', 1, 5),
-('Case 2: Company X vs Individual Y', 'Criminal', 'Closed', '2023-12-10', '2024-01-20', 2, 4),
-('Case 3: ABC Corp vs XYZ Ltd', 'Civil', 'Pending', '2024-01-15', '2024-03-01', 3, 1),
-('Case 4: Jane Smith vs Mike Lee', 'Family', 'Open', '2024-02-01', '2024-04-05', 4, 2),
-('Case 5: City vs Citizen A', 'Criminal', 'Closed', '2024-03-01', '2024-04-10', 5, 3),
-('Case 6: Corporation A vs Individual B', 'Civil', 'Open', '2024-01-10', '2024-03-15', 1, 5),
-('Case 7: Mary Lou vs John Green', 'Family', 'Pending', '2024-02-20', '2024-05-01', 2, 4),
-('Case 8: John White vs State', 'Criminal', 'Open', '2024-03-05', '2024-06-01', 3, 1),
-('Case 9: Sarah Black vs William Gray', 'Civil', 'Closed', '2024-04-01', '2024-07-01', 4, 2),
-('Case 10: XYZ Ltd vs ABC Ltd', 'Criminal', 'Pending', '2024-05-01', '2024-08-10', 5, 3);
+('Case 1: John Doe vs Jane Doe', 'Civil', 'Open', '2024-01-01', '2024-02-01', 1, 5, 'Pending'),
+('Case 2: Company X vs Individual Y', 'Criminal', 'Closed', '2023-12-10', '2024-01-20', 2, 4, 'Filed'),
+('Case 3: ABC Corp vs XYZ Ltd', 'Civil', 'Pending', '2024-01-15', '2024-03-01', 3, 1, 'Pending'),
+('Case 4: Jane Smith vs Mike Lee', 'Family', 'Open', '2024-02-01', '2024-04-05', 4, 2, 'Filed'),
+('Case 5: City vs Citizen A', 'Criminal', 'Closed', '2024-03-01', '2024-04-10', 5, 3, 'Filed'),
+('Case 6: Corporation A vs Individual B', 'Civil', 'Open', '2024-01-10', '2024-03-15', 1, 5, 'Pending'),
+('Case 7: Mary Lou vs John Green', 'Family', 'Pending', '2024-02-20', '2024-05-01', 2, 4, 'Pending'),
+('Case 8: John White vs State', 'Criminal', 'Open', '2024-03-05', '2024-06-01', 3, 1, 'Pending'),
+('Case 9: Sarah Black vs William Gray', 'Civil', 'Closed', '2024-04-01', '2024-07-01', 4, 2, 'Filed'),
+('Case 10: XYZ Ltd vs ABC Ltd', 'Criminal', 'Pending', '2024-05-01', '2024-08-10', 5, 3, 'Pending');
 
 
 

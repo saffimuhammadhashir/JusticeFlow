@@ -1,5 +1,8 @@
 package JusticeFlow;
 
+import java.util.List;
+import java.util.Scanner;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Registrar extends User {
@@ -14,6 +17,10 @@ public class Registrar extends User {
     private String phoneNumber;
     private int userID;
 
+    public Registrar() {
+        super();
+    }
+
     public Registrar(int userID, String username, String password, String role, String email, String phoneNumber,
             boolean activate, int RegistrarID, String firstName, String lastName, Date dateOfBirth,
             String gender, Date hireDate, int courtID) {
@@ -26,6 +33,7 @@ public class Registrar extends User {
         this.gender = gender;
         this.hireDate = hireDate;
         this.courtID = courtID;
+        this.userID=userID;
     }
 
     public int getRegistrarID() {
@@ -122,4 +130,46 @@ public class Registrar extends User {
                 ", userID=" + userID +
                 '}';
     }
+
+    public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases, Scanner scanner) {
+        List<Case> PendingCases = new ArrayList<>();
+        for (Case cases : AllCases) {
+            if ("Pending".equalsIgnoreCase(cases.getCaseStatus())) {
+                PendingCases.add(cases);
+            }
+        }
+        
+        if (!PendingCases.isEmpty()) {
+            for (Case c : PendingCases) {
+                System.out.println(c.toString());
+                System.out.println("\n------------------------------------------- \n");
+            }
+            
+            System.out.print("Select Case: ");
+            int caseID = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character left by nextInt()
+    
+            System.out.print("Select Approve or Reject: ");
+            String caseDecision = scanner.nextLine(); // Now this works correctly
+            
+            Case cases = dbHandler.findCaseByID(AllCases, caseID);
+            
+            if ("Approve".equalsIgnoreCase(caseDecision)) {
+                cases.setCaseStatus("Opened");
+                dbHandler.saveOrUpdateCase(cases);
+              
+                // ApproveCase(dbHandler, fileHandler, caseID);
+            } else if ("Reject".equalsIgnoreCase(caseDecision)) {
+                cases.setCaseStatus("Not Allowed");
+                dbHandler.saveOrUpdateCase(cases);
+                // RejectCase(dbHandler, fileHandler, caseID);
+            } else {
+                System.out.println("Invalid Input!");
+            }
+        } else {
+            System.out.println("No Pending Requests!");
+        }
+    }
+    
+
 }

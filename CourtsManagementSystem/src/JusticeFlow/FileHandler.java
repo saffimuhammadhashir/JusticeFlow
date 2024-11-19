@@ -41,7 +41,7 @@ public class FileHandler {
                 copyFile(filePath, destinationFile.getAbsolutePath());
 
                 CaseFile file = new CaseFile(selectedFile.getName(), fileHash);  // Changed to CaseFile
-                dbHandler.saveFileDetails(caseObj.getCaseID(), selectedFile.getName(), fileHash);
+                dbHandler.saveFileDetails(caseObj.getCaseID(), selectedFile.getAbsolutePath(), fileHash);
                 caseObj.addFile(file);
 
                 System.out.println("File saved and hash generated successfully!");

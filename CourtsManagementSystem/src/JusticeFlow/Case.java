@@ -14,17 +14,33 @@ public class Case {
     private Date courtDate;
     private int plaintiffID;
     private int defendantID;
-    private List<CaseFile> files;  // Changed to CaseFile from File
+    private List<CaseFile> files;
+    private int Lawyerid;
+    // Changed to CaseFile from File
+    // New attribute for CaseState (e.g., Pending, Filed)
 
-    // Constructor initializes all attributes of a case, including details like case title,
-    // type, status, filing and court dates, IDs of plaintiff and defendant, and associated files.
-    public Case(int caseID, String caseTitle, String caseType, String caseStatus,
-                Date filingDate, Date courtDate, int plaintiffID, int defendantID) {
-        this(caseID, caseTitle, caseType, caseStatus, filingDate, courtDate, plaintiffID, defendantID, new ArrayList<>());
+    // Constructor initializes all attributes of a case, including details like case
+    // title,
+    // type, status, filing and court dates, IDs of plaintiff and defendant,
+    // associated files, and case state.
+    public Case(int caseID, String caseTitle, String caseType,
+            Date filingDate, Date courtDate, int plaintiffID, int defendantID, String caseState) {
+
+        this(caseID, caseTitle, caseType, caseState, filingDate, courtDate, plaintiffID, defendantID,
+                new ArrayList<>());
     }
 
+    public Case(int caseID, String caseTitle, String caseType,
+            Date filingDate, Date courtDate, int plaintiffID, int defendantID, String caseState, int Lawyerid) {
+
+        this(caseID, caseTitle, caseType, caseState, filingDate, courtDate, plaintiffID, defendantID,
+                new ArrayList<>());
+        this.Lawyerid = Lawyerid;
+    }
+
+    // Constructor with files and caseState
     public Case(int caseID, String caseTitle, String caseType, String caseStatus,
-                Date filingDate, Date courtDate, int plaintiffID, int defendantID, List<CaseFile> files) {
+            Date filingDate, Date courtDate, int plaintiffID, int defendantID, List<CaseFile> files) {
         this.caseID = caseID;
         this.caseTitle = caseTitle;
         this.caseType = caseType;
@@ -65,6 +81,7 @@ public class Case {
     }
 
     public void setCaseStatus(String caseStatus) {
+        this.caseStatus = caseStatus;
         this.caseStatus = caseStatus;
     }
 
@@ -108,7 +125,8 @@ public class Case {
         this.files = files;
     }
 
-    // Adds a new file to the case's list of files, representing a document or item associated with the case.
+    // Adds a new file to the case's list of files, representing a document or item
+    // associated with the case.
     public void addFile(CaseFile file) {
         this.files.add(file);
     }
@@ -116,11 +134,12 @@ public class Case {
     // Updates case files by first saving the files through the FileHandler,
     // then saving or updating the case record through DatabaseHandler.
     public void updateCaseFiles(FileHandler filehandler, DatabaseHandler dbHandler) {
-        // filehandler.saveFileForCase(this);
+        filehandler.saveFileForCase(this);
         dbHandler.saveOrUpdateCase(this);
     }
 
-    // Converts the case details, including associated file details, into a readable string format.
+    // Converts the case details, including associated file details, into a readable
+    // string format.
     @Override
     public String toString() {
         StringBuilder fileDetails = new StringBuilder();
@@ -130,7 +149,12 @@ public class Case {
 
         return "Case ID: " + caseID + "\nTitle: " + caseTitle + "\nType: " + caseType +
                 "\nStatus: " + caseStatus + "\nFiled On: " + filingDate + "\nCourt Date: " + courtDate +
-                "\nPlaintiff ID: " + plaintiffID + "\nDefendant ID: " + defendantID +
+                "\nPlaintiff ID: " + plaintiffID + "\nDefendant ID: " + defendantID + "\nLawyer Id"+ Lawyerid +
                 "\nAssociated Files: " + fileDetails.toString();
     }
+
+    public int getLawyerId(){
+        return this.Lawyerid;
+    }
+
 }
