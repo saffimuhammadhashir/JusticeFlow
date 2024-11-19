@@ -16,8 +16,51 @@ import com.mysql.cj.xdevapi.Client;
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "12345678";
+    private final String dbPassword = "test12345";
 
+
+    public void getAllFiles(List<Case> AllCases) {
+        // SQL query to retrieve all case files
+        String selectSQL = "SELECT CaseID, FileName, FileHash FROM CaseFiles";
+    
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(selectSQL)) {
+    
+            // Iterate through each result from the database
+            while (resultSet.next()) {
+                int caseID = resultSet.getInt("CaseID");
+                String fileName = resultSet.getString("FileName");
+                String fileHash = resultSet.getString("FileHash");
+    
+                // Find the corresponding case in the AllCases list by CaseID
+                Case caseToUpdate = findCaseByID(AllCases, caseID);
+    
+                if (caseToUpdate != null) {
+
+                    CaseFile Filedata=new CaseFile(fileName, fileHash);
+                    caseToUpdate.addFile(Filedata);
+                    System.out.println("Case " + caseID + " updated with file: " + fileName);
+                } else {
+                    System.out.println("No case found with CaseID: " + caseID);
+                }
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public Case findCaseByID(List<Case> allCases, int caseID) {
+        // Iterate through all cases to find the one with the matching CaseID
+        for (Case caseObj : allCases) {
+            if (caseObj.getCaseID() == caseID) {
+                return caseObj;
+            }
+        }
+        return null;  // Return null if no matching CaseID is found
+    }
+    
     public User getUserById(int userID) {
         // SQL query to retrieve user data
         String query = "SELECT * FROM Users WHERE UserID = " + userID;
@@ -123,10 +166,9 @@ public class DatabaseHandler {
                 Date courtDate = resultSet.getDate("CourtDate");
                 int plaintiffID = resultSet.getInt("PlaintiffID");
                 int defendantID = resultSet.getInt("DefendantID");
-
-                // Create Case object and add it to AllCases
-                Case newCase = new Case(caseID, caseTitle, caseType, caseStatus, filingDate, courtDate, plaintiffID,
-                        defendantID);
+                int lawyerid = resultSet.getInt("Lawyerid");
+                Case newCase = new Case(caseID, caseTitle, caseType, filingDate, courtDate, plaintiffID,
+                        defendantID, caseStatus,lawyerid);
                 AllCases.add(newCase);
             }
         } catch (SQLException e) {
@@ -149,7 +191,7 @@ public class DatabaseHandler {
                 String gender = resultSet.getString("Gender");
                 int barAssociationID = resultSet.getInt("BarAssociationID");
                 int userID = resultSet.getInt("UserID");
-
+                System.out.println(userID);
                 // Fetch User details
                 User inherit = getUserById(userID);
                 if (inherit != null) {
@@ -429,7 +471,6 @@ public class DatabaseHandler {
         }
     }
 
-
     public void getAllProbationOfficers(List<ProbationOfficer> AllProbationOfficers) {
         String query = "SELECT * FROM ProbationOfficers";
 
@@ -703,8 +744,10 @@ public class DatabaseHandler {
     // otherwise, it inserts a new record. If a new case is created, the generated
     // CaseID is set on the
     // case object to maintain the ID for any further references or associations.
+
     public void saveOrUpdateCase(Case caseObj) {
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
+            // Check if the case exists
             String checkSQL = "SELECT COUNT(*) FROM Cases WHERE CaseID = ?";
             try (PreparedStatement checkStatement = connection.prepareStatement(checkSQL)) {
                 checkStatement.setInt(1, caseObj.getCaseID());
@@ -713,13 +756,14 @@ public class DatabaseHandler {
                 if (resultSet.next() && resultSet.getInt(1) > 0) {
                     // Case exists, update it
                     String updateSQL = "UPDATE Cases SET CaseTitle = ?, CaseType = ?, CaseStatus = ?, " +
-                            "FilingDate = ?, CourtDate = ?, PlaintiffID = ?, DefendantID = ? WHERE CaseID = ?";
+                            "FilingDate = ?, CourtDate = ?, PlaintiffID = ?, DefendantID = ?,Lawyerid = ? WHERE CaseID = ?";
                     try (PreparedStatement updateStatement = connection.prepareStatement(updateSQL)) {
                         updateStatement.setString(1, caseObj.getCaseTitle());
                         updateStatement.setString(2, caseObj.getCaseType());
                         updateStatement.setString(3, caseObj.getCaseStatus());
                         updateStatement.setDate(4, new java.sql.Date(caseObj.getFilingDate().getTime()));
                         updateStatement.setDate(5, new java.sql.Date(caseObj.getCourtDate().getTime()));
+                        updateStatement.setInt(8, caseObj.getLawyerId());
 
                         // Check if PlaintiffID or DefendantID is provided, if not, set to NULL
                         if (caseObj.getPlaintiffID() == 0) {
@@ -734,7 +778,9 @@ public class DatabaseHandler {
                             updateStatement.setInt(7, caseObj.getDefendantID());
                         }
 
-                        updateStatement.setInt(8, caseObj.getCaseID());
+
+
+                        updateStatement.setInt(9, caseObj.getCaseID());
 
                         int rowsUpdated = updateStatement.executeUpdate();
                         if (rowsUpdated > 0) {
@@ -769,6 +815,8 @@ public class DatabaseHandler {
                             insertStatement.setInt(7, caseObj.getDefendantID());
                         }
 
+                   
+                    
                         int rowsInserted = insertStatement.executeUpdate();
                         if (rowsInserted > 0) {
                             System.out.println("New case saved successfully.");
