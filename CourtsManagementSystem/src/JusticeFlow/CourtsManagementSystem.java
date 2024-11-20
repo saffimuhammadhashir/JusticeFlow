@@ -174,7 +174,8 @@ public class CourtsManagementSystem {
         Registrar registrar = new Registrar();
         registrar = registrar.getRelevantRegistrar(AllRegistrar, user);
         if (registrar != null) {
-            registrar.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, scanner);
+            registrar.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
+                    scanner);
             System.out.println("Case has been successfully created.");
 
         } else {
@@ -182,7 +183,8 @@ public class CourtsManagementSystem {
             CourtAdministrator CourtAdmin = new CourtAdministrator();
             CourtAdmin = CourtAdmin.getRelevantCourtAdministrators(AllCourt_Administrators, user);
             if (CourtAdmin != null) {
-                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, scanner);
+                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses,
+                        AllCourts, scanner);
                 System.out.println("Case has been successfully created.");
             } else {
                 System.out.println("Invalid User!");
@@ -637,12 +639,10 @@ public class CourtsManagementSystem {
         if ("Judge".equalsIgnoreCase(role)) {
             Judge jud = user.getRelevantJudge(AllJudges, user);
             jud.LogJudgement(scanner, AllCases, fileHandler);
-        }
-         else if ("Juror".equalsIgnoreCase(role)) {
+        } else if ("Juror".equalsIgnoreCase(role)) {
             Juror jur = user.getRelevantJuror(AllJurors, user);
             jur.LogJudgement(scanner, AllCases, fileHandler);
-        }
-        else if ("Registrar".equalsIgnoreCase(role)) {
+        } else if ("Registrar".equalsIgnoreCase(role)) {
             Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
             r.ApproveJudgement(scanner, AllCases, fileHandler);
         }

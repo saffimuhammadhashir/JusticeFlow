@@ -206,19 +206,18 @@ VALUES
 
 
 -- Insert into CaseFiles
-INSERT INTO CaseFiles (CaseID, FileName, FileHash)
+INSERT INTO CaseFiles (CaseID, FileName, FileHash, status)
 VALUES
-(1, 'file_1.pdf', 'hash_1'),
-(2, 'file_2.pdf', 'hash_2'),
-(3, 'file_3.pdf', 'hash_3'),
-(4, 'file_4.pdf', 'hash_4'),
-(5, 'file_5.pdf', 'hash_5'),
-(6, 'file_6.pdf', 'hash_6'),
-(7, 'file_7.pdf', 'hash_7'),
-(8, 'file_8.pdf', 'hash_8'),
-(9, 'file_9.pdf', 'hash_9'),
-(10, 'file_10.pdf', 'hash_10');
-
+(1, 'file_1.pdf', 'hash_1', 1),
+(2, 'file_2.pdf', 'hash_2', 1),
+(3, 'file_3.pdf', 'hash_3', 1),
+(4, 'file_4.pdf', 'hash_4', 1),
+(5, 'file_5.pdf', 'hash_5', 1),
+(6, 'file_6.pdf', 'hash_6', 1),
+(7, 'file_7.pdf', 'hash_7', 1),
+(8, 'file_8.pdf', 'hash_8', 1),
+(9, 'file_9.pdf', 'hash_9', 1),
+(10, 'file_10.pdf', 'hash_10', 1);
 
 
 -- Insert into Notifications
@@ -239,13 +238,13 @@ VALUES
 
 
 
-INSERT INTO WitnessTable (CaseId, WitnessID)
-VALUES 
-    (1, 1),
-    (2, 2),
-    (3, 3),
-    (4, 4),
-    (5, 5);
+-- INSERT INTO WitnessTable (CaseId, WitnessID)
+-- VALUES 
+--     (11, 1),
+--     (11, 2),
+--     (11, 3),
+--     (11, 4),
+--     (11, 5);
 
 
 
@@ -268,3 +267,5 @@ SELECT * FROM Cases;
 SELECT * FROM CaseFiles;
 SELECT * FROM Notifications;
 
+Drop table slots;
+ update cases set casestatus='Pending' where caseid>10;

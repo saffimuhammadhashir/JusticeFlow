@@ -248,9 +248,12 @@ CREATE TABLE Slots (
     startTime time Not Null,
     EndTime time Not Null,
     SlotNumber INT NOT NULL,
+    CourtId INT,
     CaseID INT,
     JudgeID INT,
     WitnessID INT,
+	CONSTRAINT fk_courts FOREIGN KEY (CourtId) REFERENCES Courts(CourtID)
+        ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_case FOREIGN KEY (CaseID) REFERENCES Cases(CaseID)
         ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_judge FOREIGN KEY (JudgeID) REFERENCES Judges(JudgeID)

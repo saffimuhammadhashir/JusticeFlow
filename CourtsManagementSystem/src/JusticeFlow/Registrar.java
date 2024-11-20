@@ -140,7 +140,7 @@ public class Registrar extends User {
         for (Case caseObj : AllCases) {
             if (caseObj.getFiles() != null) {
                 for (CaseFile fileObj : caseObj.getFiles()) {
-                    if (fileObj.getStatus()==0) {
+                    if (fileObj.getStatus() == 0) {
                         exists = true;
                         break;
                     }
@@ -181,10 +181,10 @@ public class Registrar extends User {
             count = 1;
             for (CaseFile file : files) {
                 if (id == count) {
-                    if (file.getStatus()==0) {
+                    if (file.getStatus() == 0) {
                         file.setStatus(1);
                         DatabaseHandler d = new DatabaseHandler();
-                        d.updateFileDetails(c.getCaseID(), file.getFileName(), file.getFileHash(), false,true);
+                        d.updateFileDetails(c.getCaseID(), file.getFileName(), file.getFileHash(), false, true);
                         System.out.println("File Status updated in Database.");
                         return;
                     }
@@ -205,7 +205,7 @@ public class Registrar extends User {
         for (Case caseObj : AllCases) {
             if (caseObj.getJudgements() != null) {
                 for (CaseFile fileObj : caseObj.getJudgements()) {
-                    if (fileObj.getStatus()==2) {
+                    if (fileObj.getStatus() == 2) {
                         exists = true;
                         break;
                     }
@@ -246,10 +246,10 @@ public class Registrar extends User {
             count = 1;
             for (CaseFile judgement : judgements) {
                 if (id == count) {
-                    if (judgement.getStatus()==2) {
+                    if (judgement.getStatus() == 2) {
                         judgement.setStatus(3);
                         DatabaseHandler d = new DatabaseHandler();
-                        d.updateJudgementDetails(c.getCaseID(), judgement.getFileName(), judgement.getFileHash(), 2,3);
+                        d.updateJudgementDetails(c.getCaseID(), judgement.getFileName(), judgement.getFileHash(), 2, 3);
                         System.out.println("File Status updated in Database.");
                         return;
                     }
@@ -263,9 +263,9 @@ public class Registrar extends User {
         }
     }
 
-    
     public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
-            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, Scanner scanner) {
+            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, List<Court> AllCourts,
+            Scanner scanner) {
         List<Case> PendingCases = new ArrayList<>();
         for (Case cases : AllCases) {
             if ("Pending".equalsIgnoreCase(cases.getCaseStatus())) {
@@ -294,13 +294,31 @@ public class Registrar extends User {
                 dbHandler.saveOrUpdateCase(cases);
                 for (Witness w : AllWitnesses) {
                     for (Integer caseid : w.CaseID) {
-                        if (caseid == cases.getCaseID()) {
+                        if (caseid.equals(cases.getCaseID())) {
                             for (Judge j : AllJudges) {
-                                Slot.PossibleSchedule(AllSlots, j, w, possibleSlots);
+                                for (Court c : AllCourts) {
+
+                                    Slot.PossibleSchedule(AllSlots, j, w, c, possibleSlots);
+
+                                }
                             }
                         }
                     }
                 }
+                if(possibleSlots.isEmpty()){
+                    for (Judge j : AllJudges) {
+                        for (Court c : AllCourts) {
+
+                            Slot.PossibleSchedule(AllSlots, j, null, c, possibleSlots);
+
+                        }
+                    }
+                }
+                while (possibleSlots.size() > 50) {
+                    Slot lastSlot = Slot.getLastSlotAtFarthestTime(possibleSlots);
+                    Slot.removeSlotsWithSameIDOneByOne(lastSlot, possibleSlots);
+                }
+                System.out.println("\n\n\n********************************************************\n\n\n");
                 int Count = 1;
                 for (Slot s : possibleSlots) {
                     if (s == null) {
@@ -324,6 +342,7 @@ public class Registrar extends User {
                                 orgs.setCaseID(cases.getCaseID());
                                 orgs.setJudgeID(s.getJudgeID());
                                 orgs.setWitnessID(s.getWitnessID());
+                                orgs.setCourtId(s.getCourtId());
                                 selected = true;
                             }
                         }

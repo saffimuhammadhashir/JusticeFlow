@@ -135,7 +135,7 @@ public class CourtAdministrator extends User {
     }
 
     public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
-            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, Scanner scanner) {
+            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses,List<Court> AllCourts, Scanner scanner) {
         List<Case> PendingCases = new ArrayList<>();
         for (Case cases : AllCases) {
             if ("Pending".equalsIgnoreCase(cases.getCaseStatus())) {
@@ -164,13 +164,31 @@ public class CourtAdministrator extends User {
                 dbHandler.saveOrUpdateCase(cases);
                 for (Witness w : AllWitnesses) {
                     for (Integer caseid : w.CaseID) {
-                        if (caseid == cases.getCaseID()) {
+                        if (caseid.equals(cases.getCaseID())) { 
                             for (Judge j : AllJudges) {
-                                Slot.PossibleSchedule(AllSlots, j, w, possibleSlots);
+                                for (Court c : AllCourts) {
+                                   
+                                        Slot.PossibleSchedule(AllSlots, j, w, c, possibleSlots);
+                                    
+                                }
                             }
                         }
                     }
                 }
+                if(possibleSlots.isEmpty()){
+                    for (Judge j : AllJudges) {
+                        for (Court c : AllCourts) {
+
+                            Slot.PossibleSchedule(AllSlots, j, null, c, possibleSlots);
+
+                        }
+                    }
+                }
+                while (possibleSlots.size()>50) {
+                    Slot lastSlot = Slot.getLastSlotAtFarthestTime(possibleSlots);
+                    Slot.removeSlotsWithSameIDOneByOne(lastSlot, possibleSlots);
+                }
+                System.out.println("\n\n\n********************************************************\n\n\n");
                 int Count = 1;
                 for (Slot s : possibleSlots) {
                     if (s == null) {
@@ -194,6 +212,7 @@ public class CourtAdministrator extends User {
                                 orgs.setCaseID(cases.getCaseID());
                                 orgs.setJudgeID(s.getJudgeID());
                                 orgs.setWitnessID(s.getWitnessID());
+                                orgs.setCourtId(s.getCourtId());
                                 selected = true;
                             }
                         }
