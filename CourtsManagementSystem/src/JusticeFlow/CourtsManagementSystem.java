@@ -33,6 +33,7 @@ public class CourtsManagementSystem {
 
     CourtsManagementSystem() {
         loadData();
+        // ITAdmin.CaseReport(AllCases, AllSlot);
     }
 
     public void loadData() {
@@ -294,9 +295,11 @@ public class CourtsManagementSystem {
 
                 } else if ("IT Admin".equalsIgnoreCase(role)) {
                     System.out.println("\n----- Main Menu For IT Administrator -----");
-                    System.out.println("1. Schedule IT System Maintenance");
+                    System.out.println("1. Generate Report of Cases");
                     System.out.println("2. Display Notifications");
-                    System.out.println("3. Log Out");
+                    System.out.println("3. Generate Report for Lawyers");
+                    System.out.println("4. Generate Report for Judges");
+                    System.out.println("5. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -312,8 +315,16 @@ public class CourtsManagementSystem {
                             System.out.println("Display Notifications");
                             viewMyNotifications();
                             break;
-
                         case 3:
+                            System.out.println("Generate Report for Lawyers selected");
+                            LawyerReport(scanner);
+                            break;
+                        case 4:
+                            System.out.println("Generate Report for Judges selected");
+                            JudgeReport(scanner);
+                            break;
+
+                        case 5:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -710,7 +721,21 @@ public class CourtsManagementSystem {
         // Method to handle scheduling IT system maintenance
 
         ITAdmin i = new ITAdmin();
-        // i.CaseReport(scanner, AllCases, fileHandler, dbHandler);
+        i.CaseReport(AllCases, AllSlot);
+    }
+
+    public void LawyerReport(Scanner scanner) {
+        // Method to handle scheduling IT system maintenance
+
+        ITAdmin i = new ITAdmin();
+        i.LawyerReport(AllCases, AllSlot, AllLawyers);
+    }
+
+    public void JudgeReport(Scanner scanner) {
+        // Method to handle scheduling IT system maintenance
+
+        ITAdmin i = new ITAdmin();
+        i.JudgeReport(AllCases, AllSlot, AllJudges);
     }
 
     /////////////////////////////////////// Court
