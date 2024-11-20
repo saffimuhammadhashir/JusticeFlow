@@ -1,5 +1,7 @@
 package JusticeFlow;
+
 import java.util.List;
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -13,7 +15,7 @@ public class Witness extends User {
     private String phoneNumber;
     private String email;
     private int userID;
-    public List<Integer> CaseID=new ArrayList<>(); 
+    public List<Integer> CaseID = new ArrayList<>();
 
     public Witness(int userID, String username, String password, String role, String email, String phoneNumber,
             boolean activate,
@@ -29,10 +31,10 @@ public class Witness extends User {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.userID = userID;
-        
+
     }
 
-    public void addCaseID(int i){
+    public void addCaseID(int i) {
         CaseID.add(i);
     }
 
@@ -106,5 +108,34 @@ public class Witness extends User {
 
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+
+    private boolean hasCase(int num) {
+        for (int i : CaseID) {
+            if (i == num) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void viewCases(Scanner scanner, List<Case> AllCases, FileHandler fileHandler) {
+        boolean exists = false;
+        for (Case caseObj : AllCases) {
+                if (hasCase(caseObj.getCaseID())) {
+                    exists = true;
+                }
+        }
+
+        if (exists) {
+            System.out.println("\nCases:");
+            for (Case caseObj : AllCases) {
+                if (caseObj != null) {
+                    if (hasCase(caseObj.getCaseID())) {
+                        System.out.println(caseObj.toString());
+                    }
+                }
+            }
+        }
     }
 }

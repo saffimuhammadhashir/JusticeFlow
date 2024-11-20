@@ -280,4 +280,84 @@ public class Lawyer extends User {
             System.out.println("Case with this ID does not exist.");
         }
     }
+
+    public void scheduleWitness(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
+            List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
+            DatabaseHandler databaseHandler) {
+
+        boolean scheduled = false;
+        for (Case caseObj : AllCases) {
+            if (caseObj != null) {
+                if (caseObj.getLawyerId() == lawyerID) {
+                    scheduled = true;
+                }
+            }
+        }
+
+        if (scheduled) {
+            System.out.println("\nYour Cases:");
+            for (Case caseObj : AllCases) {
+                if (caseObj != null) {
+                    if (caseObj.getLawyerId() == lawyerID) {
+                        System.out.println(caseObj.toString());
+                    }
+                }
+            }
+
+            System.out.print("Enter Case ID: ");
+            int cid = scanner.nextInt();
+
+            Slot s = new Slot();
+            boolean scheduled1 = false;
+            for (Slot slotObj : AllSlots) {
+                if (slotObj != null) {
+                    if (slotObj.getCaseID() != null) {
+                        if (slotObj.getCaseID() == cid) {
+                            s = slotObj;
+                            scheduled1 = true;
+                        }
+                    }
+                }
+            }
+
+            if (scheduled1) {
+                Witness w;
+
+                System.out.println("\nExisting Witnesses:");
+                int count=1;
+                for (Witness caseObj : AllWitnesses) {
+                    System.out.println(count + ". " + caseObj.toString());
+                    count++;
+                }
+                System.out.print("\nEnter WitnessID: ");
+                int wid = scanner.nextInt();
+
+                
+
+                for (Witness caseObj : AllWitnesses) {
+                    if (caseObj != null) {
+                        if (caseObj.getWitnessID() == wid) {
+                            w = caseObj;
+                            System.out.println("Selected Witness with witnessID " + w.getWitnessID());
+                            s.setWitnessID(w.getWitnessID());
+                            w.addCaseID(cid);
+                            databaseHandler.updateWitness(w, s);
+                            databaseHandler.updateOrInsertSlots(AllSlots);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                System.out.println("No cases scheduled.");
+            }
+        } else {
+            System.out.println("No cases for you.");
+        }
+
+        // }
+
+        // } else {
+        // System.out.println("Case not Sheduled.");
+        // }
+    }
 }

@@ -236,7 +236,7 @@ public class CourtsManagementSystem {
                     System.out.println("1. Case Filing/Scheduling");
                     System.out.println("2. Track/Manage Updates");
                     System.out.println("3. Track Case");
-                    System.out.println("4. Schedule Hearing/Witness");
+                    System.out.println("4. Schedule Hearing");
                     System.out.println("5. View IT System Maintenance Schedule");
                     System.out.println("6. Retrieve Record");
                     System.out.println("7. Log Out");
@@ -263,7 +263,7 @@ public class CourtsManagementSystem {
                             break;
                         case 4:
                             // Schedule Hearing/Witness
-                            System.out.println("Schedule Hearing/Witness selected.");
+                            System.out.println("Schedule Hearing selected.");
                             ScheduleHearingWitness(scanner); // Calling method to schedule hearings or witnesses
                             break;
                         case 5:
@@ -286,7 +286,7 @@ public class CourtsManagementSystem {
 
                 } else if ("IT Admin".equalsIgnoreCase(role)) {
                     System.out.println("\n----- Main Menu For IT Administrator -----");
-                    System.out.println("1. Schedule IT System Maintenance");
+                    System.out.println("1. Generate Report of Cases.");
                     System.out.println("2. Log Out");
                     System.out.print("Choose an option: ");
 
@@ -296,8 +296,8 @@ public class CourtsManagementSystem {
                     switch (choice) {
                         case 1:
                             // Schedule IT System Maintenance
-                            System.out.println("Schedule IT System Maintenance selected.");
-                            ScheduleITSystemMaintenance(); // Calling method to schedule maintenance
+                            System.out.println("Generate Report of Cases selected.");
+                            CaseReport(scanner); // Calling method to schedule maintenance
                             break;
                         case 2:
                             // Log Out
@@ -372,7 +372,8 @@ public class CourtsManagementSystem {
                     System.out.println("4. Submit Document");
                     System.out.println("5. Re-open Case/Appeal");
                     System.out.println("6. Request to Retrieve Record");
-                    System.out.println("7. Log Out");
+                    System.out.println("7. Add Witness to Case");
+                    System.out.println("8. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -410,6 +411,11 @@ public class CourtsManagementSystem {
                             RequestToRetrieveRecord(); // Calling method to request record retrieval
                             break;
                         case 7:
+                            // Request to Retrieve Record
+                            System.out.println("Add Witness to Case selected.");
+                            ScheduleHearingWitness(scanner); // Calling method to add Witness
+                            break;
+                        case 8:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -459,7 +465,7 @@ public class CourtsManagementSystem {
                         case 1:
                             // View Case Details
                             System.out.println("View Case Details selected.");
-                            ViewCaseDetails(); // Calling method to view case details
+                            ViewCaseDetails(scanner); // Calling method to view case details
                             break;
                         case 2:
                             // Log Out
@@ -501,7 +507,7 @@ public class CourtsManagementSystem {
                     System.out.println("1. Case Filing/Scheduling");
                     System.out.println("2. Bar Registration");
                     System.out.println("3. Track Case");
-                    System.out.println("4. Schedule Hearing/Witness");
+                    System.out.println("4. Schedule Hearing");
                     System.out.println("5. Approve Document");
                     System.out.println("6. Approve Judgement");
                     System.out.println("7. Log Out");
@@ -528,7 +534,7 @@ public class CourtsManagementSystem {
                             break;
                         case 4:
                             // Schedule Hearing/Witness
-                            System.out.println("Schedule Hearing/Witness selected.");
+                            System.out.println("Schedule Hearing selected.");
                             ScheduleHearingWitness(scanner); // Calling method for scheduling hearing or witness
                             break;
                         case 5:
@@ -575,9 +581,11 @@ public class CourtsManagementSystem {
     /////////////////////////////////////// ////////////////////////////////////////////////////////////////////////////////
 
     // Sample method prototypes for Witness menu options
-    public void ViewCaseDetails() {
+    public void ViewCaseDetails(Scanner scanner) {
         // Method to handle viewing case details
-        System.out.println("Implement logic to view case details here.");
+        Witness w = user.getRelevantWitness(AllWitnesses, user);
+        // w.viewCases(scanner, AllCases, fileHandler);
+        w.viewCases(scanner, AllCases, fileHandler);
     }
 
     /////////////////////////////////////// Lawyer
@@ -645,9 +653,11 @@ public class CourtsManagementSystem {
     /////////////////////////////////////// IT
     /////////////////////////////////////// Administrator/////////////////////////////////////////
 
-    public void ScheduleITSystemMaintenance() {
+    public void CaseReport(Scanner scanner) {
         // Method to handle scheduling IT system maintenance
-        System.out.println("Implement scheduling of IT system maintenance here.");
+
+        ITAdmin i = new ITAdmin();
+        // i.CaseReport(scanner, AllCases, fileHandler, dbHandler);
     }
 
     /////////////////////////////////////// Court
@@ -666,14 +676,18 @@ public class CourtsManagementSystem {
         // Method to handle scheduling hearings or witnesses
         String role = user.getRole();
 
-        if ("Course Administrator".equalsIgnoreCase(role)) {
+        if ("Court Administrator".equalsIgnoreCase(role)) {
             CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
-            c.scheduleHearingWitness(scanner, AllCases, AllSlot, AllJudges, AllWitnesses, fileHandler, dbHandler);
+            c.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler);
         }
-        //  else if ("Witness".equalsIgnoreCase(role)) {
-        //     Witness w = user.getRelevantWitness(AllWitnesses, user);
-        //     w.viewHearingSchedule(scanner, AllCases, fileHandler);
-        // }
+         else if ("Lawyer".equalsIgnoreCase(role)) {
+            Lawyer l = user.getRelevantLawyer(AllLawyers, user);
+            l.scheduleWitness(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler);
+        }
+        else if ("Registrar".equalsIgnoreCase(role)) {
+            Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
+            r.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler);
+        }
     }
 
     public void ViewITMaintenanceSchedule() {

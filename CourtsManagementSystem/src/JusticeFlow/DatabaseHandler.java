@@ -17,7 +17,7 @@ import com.mysql.cj.xdevapi.Client;
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "test12345";
+    private final String dbPassword = "12345678";
 
     public void getAllFiles(List<Case> AllCases) {
         // SQL query to retrieve all case files
@@ -1131,8 +1131,38 @@ public class DatabaseHandler {
         }
     }
 
+    public void addWitness(Witness w){
+        String updateSQL = "INSERT INTO Witnesses (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email, UserID) VALUES (?,?,?,?,?,?,?,?)";
+    
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                PreparedStatement updateStatement = connection.prepareStatement(updateSQL)) {
+
+            // Check if the connection is valid (optional)
+            if (connection != null) {
+                System.out.println("Connection successful!");
+            }
+
+            // Set the values for the prepared statement
+            updateStatement.setString(1, w.getFirstName()); // CaseID
+            updateStatement.setString(2, w.getLastName()); // WitnessID
+
+            // Execute the update query
+            int rowsAffected = updateStatement.executeUpdate();
+
+            // Check if the update was successful
+            if (rowsAffected > 0) {
+                System.out.println("Witness's Cases updated successfully!");
+            } else {
+                System.out.println("No matching record found to update.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void updateWitness(Witness w, Slot s){
-        String updateSQL = "UPDATE Slot SET WitnessID = ? WHERE CaseID = ?";
+        String updateSQL = "INSERT INTO WitnessTable (CaseId, WitnessID) VALUES (?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
                 PreparedStatement updateStatement = connection.prepareStatement(updateSQL)) {
@@ -1143,15 +1173,15 @@ public class DatabaseHandler {
             }
 
             // Set the values for the prepared statement
-            updateStatement.setInt(1, w.getWitnessID()); // WitnessID
-            updateStatement.setInt(2, s.getCaseID()); // CaseID
+            updateStatement.setInt(1, s.getCaseID()); // CaseID
+            updateStatement.setInt(2, s.getWitnessID()); // WitnessID
 
             // Execute the update query
             int rowsAffected = updateStatement.executeUpdate();
 
             // Check if the update was successful
             if (rowsAffected > 0) {
-                System.out.println("Case's Witness updated successfully!");
+                System.out.println("Witness's Cases updated successfully!");
             } else {
                 System.out.println("No matching record found to update.");
             }

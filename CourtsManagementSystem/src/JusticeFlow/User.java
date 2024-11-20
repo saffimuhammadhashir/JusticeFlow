@@ -145,6 +145,17 @@ public class User {
         return null;
     }
 
+    public Witness getRelevantWitness(List<Witness> AllWitnesses, User user) {
+        // Iterate through the list of all lawyers
+        for (Witness witness : AllWitnesses) {
+            // Check if the current lawyer's ID matches the provided UserID
+            if (witness.getUserID() == user.getUserID()) {
+                return witness; // Return the matched lawyer
+            }
+        }
+        // Return null if no matching lawyer is found
+        return null;
+    }
 
     public ProbationOfficer getRelevantProbationOfficer(List<ProbationOfficer> AllProbationOfficers, User user) {
         // Iterate through the list of all lawyers

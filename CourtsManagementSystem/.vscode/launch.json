@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+        "type": "java",
+        "name": "CourtsManagementSystem",
+        "request": "launch",
+        "mainClass": "JusticeFlow.CourtsManagementSystem",
+        "projectName": "CourtsManagementSystem_b36d908f"
+    },
+    {
+        "type": "java",
+        "name": "Run CourtsManagementSystem",
+        "request": "launch",
+        "mainClass": "CourtsManagementSystem",
+        "classpath": [
+            "bin",
+            "lib\\pdfbox-app-3.0.3.jar"
+        ]
+    },
+    {
+        "name": "C/C++ Runner: Debug Session",
+        "type": "cppdbg",
+        "request": "launch",
+        "args": [],
+        "stopAtEntry": false,
+        "externalConsole": true,
+        "cwd": "d:/Github/JusticeFlow/CourtsManagementSystem/bin/JusticeFlow",
+        "program": "d:/Github/JusticeFlow/CourtsManagementSystem/bin/JusticeFlow/build/Debug/outDebug",
+        "MIMode": "gdb",
+        "miDebuggerPath": "gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            }
+        ]
+    }
+]
+}

@@ -263,6 +263,59 @@ public class Registrar extends User {
         }
     }
 
+    public void scheduleHearing(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
+            List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
+            DatabaseHandler databaseHandler) {
+
+        System.out.println("\nCases:");
+        for (Case caseObj : AllCases) {
+            System.out.println(caseObj.toString());
+        }
+
+        System.out.print("\nEnter CaseID: ");
+        int cid = scanner.nextInt();
+
+        System.out.println("\nSlots:");
+        for (Slot slotObj : AllSlots) {
+            System.out.println(slotObj.toString());
+        }
+
+        System.out.print("\nEnter SlotID: ");
+        int sid = scanner.nextInt();
+        scanner.nextLine();
+
+        Slot s = new Slot();
+        for (Slot slotObj : AllSlots) {
+            if (slotObj.getSlotID() == sid) {
+                s = slotObj;
+            }
+        }
+
+        if (s.getJudgeID() == null) {
+            int jid;
+            int courtid;
+            for (Slot slotObj : AllSlots) {
+                if (slotObj != null) {
+                    if (slotObj.getCaseID() != null) {
+                        if (slotObj.getCaseID() == cid) {
+                            jid = slotObj.getJudgeID();
+                            courtid = slotObj.getCourtId();
+                            s.setJudgeID(jid);
+                            s.setCourtId(courtid);
+                        }
+                    }
+                }
+            }
+
+            s.setCaseID(cid);
+
+            databaseHandler.updateOrInsertSlots(AllSlots);
+            System.out.println("Hearing Scheduled for Slot " + s.getSlotID());
+        } else {
+            System.out.println("Slot not free.");
+        }
+    }
+
     public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
             List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, List<Court> AllCourts,
             Scanner scanner) {

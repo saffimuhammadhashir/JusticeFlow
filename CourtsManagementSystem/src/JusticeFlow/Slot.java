@@ -138,7 +138,7 @@ public class Slot {
                 ", slotNumber=" + slotNumber +
                 ", caseID=" + caseID +
                 ", judgeID=" + judgeID +
-                ", witnessID=" + witnessID +
+                ", witnessID=" + witnessID + ", CourtId=" + CourtID +
                 "}\n\n------------------------------------------\n";
     }
 

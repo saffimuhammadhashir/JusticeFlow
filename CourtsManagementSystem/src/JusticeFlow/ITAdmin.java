@@ -1,7 +1,18 @@
 package JusticeFlow;
 
 import java.util.Date;
-public class ITAdmin extends User{
+import java.util.List;
+import java.util.Scanner;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+import java.io.File;
+import java.io.IOException;
+
+public class ITAdmin extends User {
     private int adminID;
     private String firstName;
     private String lastName;
@@ -11,10 +22,15 @@ public class ITAdmin extends User{
     private String email;
     private String phoneNumber;
     private int userID;
-    
-    public ITAdmin(int userID, String username, String password, String role, String email, String phoneNumber, boolean activate,
-                   int adminID, String firstName, String lastName, Date dateOfBirth, String gender, Date hireDate,
-                   String emailAddress, String phoneNum) {
+
+    public ITAdmin() {
+
+    }
+
+    public ITAdmin(int userID, String username, String password, String role, String email, String phoneNumber,
+            boolean activate,
+            int adminID, String firstName, String lastName, Date dateOfBirth, String gender, Date hireDate,
+            String emailAddress, String phoneNum) {
         super(userID, username, password, role, email, phoneNumber, activate); // Calling the constructor of User class
 
         this.adminID = adminID;
@@ -99,6 +115,7 @@ public class ITAdmin extends User{
     public void setUserID(int userID) {
         this.userID = userID;
     }
+
     @Override
     public String toString() {
         return "IT Admin {" +
@@ -112,4 +129,90 @@ public class ITAdmin extends User{
                 ", userID=" + userID +
                 '}';
     }
+
+    // public void CaseReport(Scanner scanner, List<Case> AllCases, FileHandler
+    // fileHandler, DatabaseHandler dbHandler){
+    // String outputFilePath = "VariableTextPDF.pdf";
+
+    // // Text content
+    // String shortText = "This is a short piece of text.";
+    // String longText = "This is a much longer piece of text that will
+    // automatically wrap into multiple lines if it exceeds the page width.";
+    // String dynamicText = "Dynamic text handling is great for creating reports,
+    // invoices, and documents with varying content lengths.";
+
+    // try (PDDocument document = new PDDocument()) {
+    // // Add a blank page
+    // PDPage page = new PDPage();
+    // document.addPage(page);
+
+    // // Prepare to write content
+    // try (PDPageContentStream contentStream = new PDPageContentStream(document,
+    // page)) {
+    // // Set font and font size
+    // contentStream.setFont(PDType1Font.HELVETICA, 12);
+
+    // // Begin the text block
+    // contentStream.beginText();
+    // contentStream.setLeading(14.5f); // Line spacing
+    // contentStream.newLineAtOffset(50, 700); // Start position (x: 50, y: 700)
+
+    // // Write text with wrapping
+    // addWrappedText(contentStream, shortText, 500);
+    // contentStream.newLine();
+    // addWrappedText(contentStream, longText, 500);
+    // contentStream.newLine();
+    // addWrappedText(contentStream, dynamicText, 500);
+
+    // // End the text block
+    // contentStream.endText();
+    // }
+
+    // // Save the document
+    // document.save(outputFilePath);
+    // System.out.println("PDF created successfully at " + outputFilePath);
+    // } catch (IOException e) {
+    // System.err.println("Error while creating the PDF: " + e.getMessage());
+    // }
+    // }
+
+    // private static void addWrappedText(PDPageContentStream contentStream, String
+    // text, float maxWidth) throws IOException {
+    // float currentWidth = 0;
+    // for (String word : text.split(" ")) {
+    // float wordWidth = PDType1Font.HELVETICA.getStringWidth(word + " ") / 1000 *
+    // 12;
+    // if (currentWidth + wordWidth > maxWidth) {
+    // contentStream.newLine();
+    // currentWidth = 0;
+    // }
+    // contentStream.showText(word + " ");
+    // currentWidth += wordWidth;
+    // }
+    // }
+
+    public static void CaseReport() {
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            // Load the custom font
+            File fontFile = new File("lib/fonts/Roboto-Black.ttf");
+            PDType0Font font = PDType0Font.load(document, fontFile);
+
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                contentStream.setFont(font, 12);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(50, 700);
+                contentStream.showText("PDFBox with PDType0Font!");
+                contentStream.endText();
+            }
+
+            document.save("CaseReport.pdf");
+            System.out.println("PDF created successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
