@@ -640,38 +640,29 @@ public class DatabaseHandler {
 
     }
 
-    public void getAllNotifications(List<Notification> AllNotifications) {
-
-        String query = "SELECT * FROM Notifications"; // Modify table name if necessary
-
+    public void getAllNotifications(List<Notification> allNotifications) {
+        String query = "SELECT * FROM Notifications";
+    
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(query)) {
-
-            // Loop through the result set and create Notification objects
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+    
             while (resultSet.next()) {
                 int notificationID = resultSet.getInt("NotificationID");
                 int caseID = resultSet.getInt("CaseID");
+                int recipientsID = resultSet.getInt("RecipientsID"); // Read as int
                 int senderID = resultSet.getInt("SenderID");
                 String senderType = resultSet.getString("SenderType");
-
-                // For recipients, assuming they are stored as comma-separated values
-                String recipientsIDString = resultSet.getString("RecipientsID");
-                String recipientsTypeString = resultSet.getString("RecipientsType");
-
-                // Split recipientsID and recipientsType into lists
-                List<Integer> recipientsID = parseRecipientsID_notification(recipientsIDString);
-                List<String> recipientsType = parseRecipientsType_notification(recipientsTypeString);
-
-                Notification notification = new Notification(notificationID, caseID, recipientsID, recipientsType,
-                        senderID, senderType);
-
-                AllNotifications.add(notification);
+                String notification = resultSet.getString("Notification");
+    
+                Notification notif = new Notification(notificationID, caseID, recipientsID, senderID, senderType, notification);
+                allNotifications.add(notif);
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving notifications: " + e.getMessage());
         }
     }
+    
 
     private List<Integer> parseRecipientsID_notification(String recipientsIDString) {
         List<Integer> recipientsID = new ArrayList<>();
@@ -752,16 +743,16 @@ public class DatabaseHandler {
         }
         return recipientsType;
     }
-   
+
     public void updateOrInsertSlots(List<Slot> allSlots) {
         // SQL queries for update and insert
         String updateQuery = "UPDATE slots SET dayName = ?, startTime = ?, endTime = ?, slotNumber = ?, caseID = ?, judgeID = ?, witnessID = ?, CourtId = ? WHERE slotID = ?";
         String insertQuery = "INSERT INTO slots (slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID, CourtId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
+
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-             PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
-             PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
-    
+                PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
+                PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+
             // Iterate through all slots to either update or insert
             for (Slot slot : allSlots) {
                 // Check if the slot already exists (based on slotID)
@@ -772,7 +763,7 @@ public class DatabaseHandler {
                     updateStmt.setTime(3, slot.getEndTime());
                     updateStmt.setInt(4, slot.getSlotNumber());
                     updateStmt.setObject(5, slot.getCaseID());
-    
+
                     // If the caseID is null, set the other values to null
                     if (slot.getCaseID() == null) {
                         updateStmt.setObject(6, null); // Set JudgeID as null
@@ -783,7 +774,7 @@ public class DatabaseHandler {
                         updateStmt.setObject(7, slot.getWitnessID() != null ? slot.getWitnessID() : null);
                         updateStmt.setObject(8, slot.getCourtId());
                     }
-    
+
                     updateStmt.setInt(9, slot.getSlotID()); // Set slotID for update
                     updateStmt.executeUpdate(); // Execute the update statement
                 } else {
@@ -794,7 +785,7 @@ public class DatabaseHandler {
                     insertStmt.setTime(4, slot.getEndTime());
                     insertStmt.setInt(5, slot.getSlotNumber());
                     insertStmt.setObject(6, slot.getCaseID());
-    
+
                     // If the caseID is null, set the other values to null
                     if (slot.getCaseID() == null) {
                         insertStmt.setObject(7, null); // Set JudgeID as null
@@ -805,7 +796,7 @@ public class DatabaseHandler {
                         insertStmt.setObject(8, slot.getWitnessID() != null ? slot.getWitnessID() : null);
                         insertStmt.setObject(9, slot.getCourtId());
                     }
-    
+
                     insertStmt.executeUpdate(); // Execute the insert statement
                 }
             }
@@ -813,7 +804,7 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
-    
+
     private boolean doesSlotExist(int slotID, Connection connection) {
         String checkQuery = "SELECT 1 FROM slots WHERE slotID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(checkQuery)) {
@@ -1131,7 +1122,7 @@ public class DatabaseHandler {
         }
     }
 
-    public void updateWitness(Witness w, Slot s){
+    public void updateWitness(Witness w, Slot s) {
         String updateSQL = "UPDATE Slot SET WitnessID = ? WHERE CaseID = ?";
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
@@ -1159,6 +1150,60 @@ public class DatabaseHandler {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateOrCreateNotification(Notification notification) {
+        String checkQuery = "SELECT COUNT(*) AS count FROM Notifications WHERE NotificationID = ?";
+        String updateQuery = "UPDATE Notifications SET CaseID = ?, RecipientsID = ?, SenderID = ?, SenderType = ?, Notification = ? WHERE NotificationID = ?";
+        String insertQuery = "INSERT INTO Notifications (NotificationID, CaseID, RecipientsID, SenderID, SenderType, Notification) VALUES (?, ?, ?, ?, ?, ?)";
+    
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
+            boolean exists;
+    
+            // Check if the notification exists
+            try (PreparedStatement checkStatement = connection.prepareStatement(checkQuery)) {
+                checkStatement.setInt(1, notification.getNotificationID());
+                try (ResultSet resultSet = checkStatement.executeQuery()) {
+                    resultSet.next();
+                    exists = resultSet.getInt("count") > 0;
+                }
+            }
+    
+            if (exists) {
+                // Update existing notification
+                try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                    updateStatement.setInt(1, notification.getCaseID());
+                    updateStatement.setInt(2, notification.getRecipientsID());
+                    updateStatement.setInt(3, notification.getSenderID());
+                    updateStatement.setString(4, notification.getSenderType());
+                    updateStatement.setString(5, notification.getNotification());
+                    updateStatement.setInt(6, notification.getNotificationID());
+                    updateStatement.executeUpdate();
+                }
+            } else {
+                // Insert new notification
+                try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+                    insertStatement.setInt(1, notification.getNotificationID());
+                    insertStatement.setInt(2, notification.getCaseID());
+                    insertStatement.setInt(3, notification.getRecipientsID());
+                    insertStatement.setInt(4, notification.getSenderID());
+                    insertStatement.setString(5, notification.getSenderType());
+                    insertStatement.setString(6, notification.getNotification());
+                    insertStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error updating or creating notification: " + e.getMessage());
+        }
+    }
+    
+    // Helper method to convert List<Integer> to List<String> for joining
+    private List<String> convertRecipientsToString(List<Integer> recipientsID) {
+        List<String> recipientsString = new ArrayList<>();
+        for (Integer id : recipientsID) {
+            recipientsString.add(String.valueOf(id));
+        }
+        return recipientsString;
     }
 
     /**

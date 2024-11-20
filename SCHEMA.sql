@@ -235,10 +235,10 @@ CREATE TABLE CaseFiles (
 CREATE TABLE Notifications (
     NotificationID INT AUTO_INCREMENT PRIMARY KEY, -- Unique ID for each notification
     CaseID INT,                                   -- Associated case ID
-    RecipientsID JSON,                            -- List of recipient IDs (stored as JSON)
-    RecipientsType JSON,                          -- List of recipient types (stored as JSON)
+    RecipientsID Int,                            -- List of recipient IDs (stored as JSON)
     SenderID INT,                                 -- Sender ID
     SenderType VARCHAR(255),                      -- Sender type
+    Notification VARCHAR(255),
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp when the notification is created
 );
 

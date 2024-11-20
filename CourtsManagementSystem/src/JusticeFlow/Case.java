@@ -12,11 +12,11 @@ public class Case {
     private String caseStatus;
     private Date filingDate;
     private Date courtDate;
-    private int plaintiffID;
-    private int defendantID;
+    private int plaintiffID = 0;
+    private int defendantID = 0;
     private List<CaseFile> files;
     private List<CaseFile> judgements;
-    private int Lawyerid;
+    private int Lawyerid=0;
     // Changed to CaseFile from File
     // New attribute for CaseState (e.g., Pending, Filed)
 
@@ -170,13 +170,13 @@ public class Case {
         StringBuilder judgementDetails = new StringBuilder();
         if (judgements != null) {
             judgementDetails.append("\nAssociated Judgements: ");
-            boolean exists=false;
+            boolean exists = false;
             for (CaseFile judgement : judgements) {
                 judgementDetails.append("\n").append(judgement.toString());
-                exists=true;
+                exists = true;
             }
 
-            if (exists==false){
+            if (exists == false) {
                 judgementDetails.append("NONE\n");
             }
         } else {
@@ -186,7 +186,8 @@ public class Case {
         return "Case ID: " + caseID + "\nTitle: " + caseTitle + "\nType: " + caseType +
                 "\nStatus: " + caseStatus + "\nFiled On: " + filingDate + "\nCourt Date: " + courtDate +
                 "\nPlaintiff ID: " + plaintiffID + "\nDefendant ID: " + defendantID + "\nLawyer Id" + Lawyerid +
-                "\nAssociated Files: " + fileDetails.toString() + judgementDetails.toString() + "\n\n--------------------------------\n";
+                "\nAssociated Files: " + fileDetails.toString() + judgementDetails.toString()
+                + "\n\n--------------------------------\n";
     }
 
     public int getLawyerId() {
@@ -221,5 +222,40 @@ public class Case {
         }
         // Case not found after iterating through the list
         return null;
+    }
+
+    public List<Integer> getStakeholders(List<Clients> AllClients, List<Slot> AllSlots,List<Judge> AllJudges,List<Lawyer> AllLawyers) {
+        List<Integer> output = new ArrayList<>();
+        
+        for (Clients c : AllClients) {
+
+            if (plaintiffID != 0 && this.plaintiffID == c.getclientID()) {
+                output.add(c.getUserID());
+            }
+            if (defendantID != 0 && this.defendantID == c.getclientID()) {
+                output.add(c.getUserID());
+            }
+        }
+        for (Lawyer l : AllLawyers) {
+
+            if (Lawyerid != 0 && this.Lawyerid == l.getLawyerID()) {
+                output.add(l.getUserID());
+                break;
+            }
+
+        }
+        for(Slot s: AllSlots){
+            if(s.getJudgeID()!=null && s.getCaseID()==this.caseID){
+                for(Judge j:AllJudges){
+                    if(s.getJudgeID().equals(j.getJudgeID())){
+                        output.add(j.getUserID());
+                        return output;
+                    }
+                }
+            }
+        }
+
+
+        return output;
     }
 }

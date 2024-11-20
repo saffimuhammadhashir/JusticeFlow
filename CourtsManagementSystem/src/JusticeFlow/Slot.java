@@ -138,7 +138,7 @@ public class Slot {
                 ", slotNumber=" + slotNumber +
                 ", caseID=" + caseID +
                 ", judgeID=" + judgeID +
-                ", witnessID=" + witnessID +
+                ", witnessID=" + witnessID + ", CourtID="+CourtID+
                 "}\n\n------------------------------------------\n";
     }
 
@@ -325,5 +325,28 @@ public class Slot {
         return LocalDateTime.parse(fullDateTimeString, formatter);
     }
 
-
+    public static void removeprevious(List<Slot> AllSlot, Case cases, Slot replaced) {
+        for (Slot s : AllSlot) {
+            if (s.getCaseID() != null && s.getCaseID().equals(cases.getCaseID())) {
+                // Swap the values between 's' and 'replaced'
+                Integer tempCaseID = replaced.getCaseID();
+                Integer tempCourtID = replaced.getCourtId();
+                Integer tempJudgeID = replaced.getJudgeID();
+                Integer tempWitnessID = replaced.getWitnessID();
+    
+                // Set replaced slot values from 's'
+                replaced.setCaseID(s.getCaseID());
+                replaced.setCourtId(s.getCourtId());
+                replaced.setJudgeID(s.getJudgeID());
+                replaced.setWitnessID(s.getWitnessID());
+    
+                // Set 's' slot values from the 'replaced' temporary values
+                s.setCaseID(tempCaseID);
+                s.setCourtId(tempCourtID);
+                s.setJudgeID(tempJudgeID);
+                s.setWitnessID(tempWitnessID);
+            }
+        }
+    }
+    
 }

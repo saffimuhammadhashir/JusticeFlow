@@ -220,21 +220,6 @@ VALUES
 (10, 'file_10.pdf', 'hash_10', 1);
 
 
--- Insert into Notifications
-INSERT INTO Notifications (CaseID, RecipientsID, RecipientsType, SenderID, SenderType)
-VALUES
-(1, '["1", "2"]', '["Plaintiff", "Defendant"]', 3, 'Judge'),
-(2, '["3", "4"]', '["Plaintiff", "Defendant"]', 5, 'Court Administrator'),
-(3, '["5", "6"]', '["Plaintiff", "Defendant"]', 7, 'Lawyer'),
-(4, '["7", "8"]', '["Plaintiff", "Defendant"]', 9, 'Judge'),
-(5, '["9", "10"]', '["Plaintiff", "Defendant"]', 11, 'Court Administrator'),
-(6, '["11", "12"]', '["Plaintiff", "Defendant"]', 13, 'Lawyer'),
-(7, '["13", "14"]', '["Plaintiff", "Defendant"]', 15, 'Judge'),
-(8, '["15", "16"]', '["Plaintiff", "Defendant"]', 17, 'Court Administrator'),
-(9, '["17", "18"]', '["Plaintiff", "Defendant"]', 19, 'Lawyer'),
-(10, '["19", "20"]', '["Plaintiff", "Defendant"]', 21, 'Judge');
-
--- Insert 10 dummy entries into the Slots table
 
 
 
@@ -267,5 +252,3 @@ SELECT * FROM Cases;
 SELECT * FROM CaseFiles;
 SELECT * FROM Notifications;
 
-Drop table slots;
- update cases set casestatus='Pending' where caseid>10;

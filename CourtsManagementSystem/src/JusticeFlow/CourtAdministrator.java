@@ -138,7 +138,8 @@ public class CourtAdministrator extends User {
     }
 
     public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
-            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses,List<Court> AllCourts, Scanner scanner) {
+            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, List<Court> AllCourts,
+            Scanner scanner) {
         List<Case> PendingCases = new ArrayList<>();
         for (Case cases : AllCases) {
             if ("Pending".equalsIgnoreCase(cases.getCaseStatus())) {
@@ -167,18 +168,18 @@ public class CourtAdministrator extends User {
                 dbHandler.saveOrUpdateCase(cases);
                 for (Witness w : AllWitnesses) {
                     for (Integer caseid : w.CaseID) {
-                        if (caseid.equals(cases.getCaseID())) { 
+                        if (caseid.equals(cases.getCaseID())) {
                             for (Judge j : AllJudges) {
                                 for (Court c : AllCourts) {
-                                   
-                                        Slot.PossibleSchedule(AllSlots, j, w, c, possibleSlots);
-                                    
+
+                                    Slot.PossibleSchedule(AllSlots, j, w, c, possibleSlots);
+
                                 }
                             }
                         }
                     }
                 }
-                if(possibleSlots.isEmpty()){
+                if (possibleSlots.isEmpty()) {
                     for (Judge j : AllJudges) {
                         for (Court c : AllCourts) {
 
@@ -187,7 +188,7 @@ public class CourtAdministrator extends User {
                         }
                     }
                 }
-                while (possibleSlots.size()>50) {
+                while (possibleSlots.size() > 50) {
                     Slot lastSlot = Slot.getLastSlotAtFarthestTime(possibleSlots);
                     Slot.removeSlotsWithSameIDOneByOne(lastSlot, possibleSlots);
                 }
@@ -313,77 +314,77 @@ public class CourtAdministrator extends User {
 
                 Witness w;
                 // if (choice2 == 1) {
-                    System.out.print("Enter User ID: ");
-                    int userID = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline left-over
+                System.out.print("Enter User ID: ");
+                int userID = scanner.nextInt();
+                scanner.nextLine(); // Consume newline left-over
 
-                    System.out.print("Enter Username: ");
-                    String username = scanner.nextLine();
+                System.out.print("Enter Username: ");
+                String username = scanner.nextLine();
 
-                    System.out.print("Enter Password: ");
-                    String password = scanner.nextLine();
+                System.out.print("Enter Password: ");
+                String password = scanner.nextLine();
 
-                    System.out.print("Enter Role: ");
-                    String role = scanner.nextLine();
+                System.out.print("Enter Role: ");
+                String role = scanner.nextLine();
 
-                    System.out.print("Enter Email: ");
-                    String email = scanner.nextLine();
+                System.out.print("Enter Email: ");
+                String email = scanner.nextLine();
 
-                    System.out.print("Enter Phone Number: ");
-                    String phoneNumber = scanner.nextLine();
+                System.out.print("Enter Phone Number: ");
+                String phoneNumber = scanner.nextLine();
 
-                    System.out.print("Is the account activated? (true/false): ");
-                    boolean activate = scanner.nextBoolean();
-                    scanner.nextLine(); // Consume newline left-over
+                System.out.print("Is the account activated? (true/false): ");
+                boolean activate = scanner.nextBoolean();
+                scanner.nextLine(); // Consume newline left-over
 
-                    // Taking user input for Witness-specific fields
-                    System.out.print("Enter Witness ID: ");
-                    int witnessID = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline left-over
+                // Taking user input for Witness-specific fields
+                System.out.print("Enter Witness ID: ");
+                int witnessID = scanner.nextInt();
+                scanner.nextLine(); // Consume newline left-over
 
-                    System.out.print("Enter First Name: ");
-                    String firstName = scanner.nextLine();
+                System.out.print("Enter First Name: ");
+                String firstName = scanner.nextLine();
 
-                    System.out.print("Enter Last Name: ");
-                    String lastName = scanner.nextLine();
+                System.out.print("Enter Last Name: ");
+                String lastName = scanner.nextLine();
 
-                    Date dateOfBirth = null;
+                Date dateOfBirth = null;
 
-                    while (dateOfBirth == null) {
-                        System.out.print("Enter Date of Birth (year-month-day): ");
-                        String dobInput = scanner.nextLine();
-                        try {
-                            dateOfBirth = java.sql.Date.valueOf(dobInput); // Convert String to Date
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("Invalid date format. Please enter the date in the format YYYY-MM-DD.");
-                        }
+                while (dateOfBirth == null) {
+                    System.out.print("Enter Date of Birth (year-month-day): ");
+                    String dobInput = scanner.nextLine();
+                    try {
+                        dateOfBirth = java.sql.Date.valueOf(dobInput); // Convert String to Date
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Invalid date format. Please enter the date in the format YYYY-MM-DD.");
                     }
+                }
 
-                    System.out.print("Enter Gender: ");
-                    String gender = scanner.nextLine();
+                System.out.print("Enter Gender: ");
+                String gender = scanner.nextLine();
 
-                    System.out.print("Enter Address: ");
-                    String address = scanner.nextLine();
+                System.out.print("Enter Address: ");
+                String address = scanner.nextLine();
 
-                    // Creating Witness object
-                    w = new Witness(
-                            userID,
-                            username,
-                            password,
-                            role,
-                            email,
-                            phoneNumber,
-                            activate,
-                            witnessID,
-                            firstName,
-                            lastName,
-                            dateOfBirth,
-                            gender,
-                            address);
+                // Creating Witness object
+                w = new Witness(
+                        userID,
+                        username,
+                        password,
+                        role,
+                        email,
+                        phoneNumber,
+                        activate,
+                        witnessID,
+                        firstName,
+                        lastName,
+                        dateOfBirth,
+                        gender,
+                        address);
 
-                    AllWitnesses.add(w);
-                    System.out.println("New Witness created with witnessID " + w.getWitnessID());
-                // } 
+                AllWitnesses.add(w);
+                System.out.println("New Witness created with witnessID " + w.getWitnessID());
+                // }
                 if (choice2 == 2) {
                     System.out.println("\nExisting Witnesses:");
                     for (Witness caseObj : AllWitnesses) {
@@ -399,7 +400,7 @@ public class CourtAdministrator extends User {
                             System.out.println("Selected Witness with witnessID " + w.getWitnessID());
                             s.setWitnessID(w.getWitnessID());
                             w.addCaseID(cid);
-                            databaseHandler.updateWitness(w,s);
+                            databaseHandler.updateWitness(w, s);
                             break;
                         }
                     }
@@ -412,6 +413,86 @@ public class CourtAdministrator extends User {
             System.out.println("You didn't enter a valid choice.");
         }
 
+    }
+
+    public void TrackAndManageUpdates(List<Case> Allcases, List<Slot> AllSlots, List<Judge> AllJudges,
+            List<Lawyer> AllLawyers, List<Clients> AllClients, List<Notification> AllNotifications,
+            DatabaseHandler dbHandler, Scanner scanner) {
+        for (Case c : Allcases) {
+            print(c.toString());
+        }
+        print("Select Any Case From Above");
+        Object val1 = GetInput(scanner);
+        print((int) val1);
+
+        Case tempcase = dbHandler.findCaseByID(Allcases, (Integer) val1);
+        if (tempcase != null) {
+            print("Input Notification Msg:");
+            Object notification = GetInput(scanner);
+            String message = (String) notification;
+            print(message);
+            List<Integer> case_stakeholders = tempcase.getStakeholders(AllClients, AllSlots, AllJudges, AllLawyers);
+
+            int count = 1;
+            for (Notification n : AllNotifications) {
+                count++;
+            }
+            if (case_stakeholders.size() > 0) {
+                for (Integer i : case_stakeholders) {
+                    Notification newnotification = new Notification(count, tempcase.getCaseID(), i, this.getUserID(),
+                            "Courts Administrator", message);
+                    AllNotifications.add(newnotification);
+                    dbHandler.updateOrCreateNotification(newnotification);
+                    count++;
+                }
+            }
+
+        } else {
+            print("Invalid Case id!");
+        }
+    }
+
+    public void UpdateCase(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
+            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, List<Court> AllCourts,
+            Scanner scanner) {
+
+        if (!AllCases.isEmpty()) {
+            for (Case c : AllCases) {
+                System.out.println(c.toString());
+                System.out.println("\n------------------------------------------- \n");
+            }
+
+            System.out.print("Select Case: ");
+            int caseID = scanner.nextInt();
+            scanner.nextLine();
+
+            Case cases = dbHandler.findCaseByID(AllCases, caseID);
+
+            if (cases != null) {
+                for (Slot s : AllSlots) {
+                    print(s.toString());
+                }
+                System.out.print("Select Slot Id: ");
+                int slotID = scanner.nextInt();
+                scanner.nextLine();
+            
+                for (Slot s : AllSlots) {
+                    if (s.getSlotID() == slotID) {
+                        
+                        print(s.toString());
+                        Slot.removeprevious(AllSlots, cases, s);
+                        dbHandler.updateOrInsertSlots(AllSlots);
+                        System.out.println("Slot Selected!");
+                        return;
+                    }
+                }
+
+            } else {
+                System.out.println("Invalid Input!");
+            }
+        } else {
+            System.out.println("No Pending Requests!");
+        }
     }
 
 }

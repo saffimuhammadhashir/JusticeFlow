@@ -229,9 +229,11 @@ public class CourtsManagementSystem {
 
         void startmenu() {
             String role = user.getRole();
+
             while (true && user.isActivate()) {
 
                 if ("Court Administrator".equalsIgnoreCase(role)) {
+
                     System.out.println("\n----- Main Menu For Court Administrator -----");
                     System.out.println("1. Case Filing/Scheduling");
                     System.out.println("2. Track/Manage Updates");
@@ -239,7 +241,8 @@ public class CourtsManagementSystem {
                     System.out.println("4. Schedule Hearing/Witness");
                     System.out.println("5. View IT System Maintenance Schedule");
                     System.out.println("6. Retrieve Record");
-                    System.out.println("7. Log Out");
+                    System.out.println("7. Display Notifications");
+                    System.out.println("8. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -254,12 +257,12 @@ public class CourtsManagementSystem {
                         case 2:
                             // Track/Manage Updates
                             System.out.println("Track/Manage Updates selected.");
-                            TrackManageUpdates(); // Calling method to track/manage updates
+                            TrackManageUpdates(scanner); // Calling method to track/manage updates
                             break;
                         case 3:
                             // Track Case
                             System.out.println("Track Case selected.");
-                            TrackCase(); // Calling method to track a case
+                            TrackCase(scanner); // Calling method to track a case
                             break;
                         case 4:
                             // Schedule Hearing/Witness
@@ -276,7 +279,12 @@ public class CourtsManagementSystem {
                             System.out.println("Retrieve Record selected.");
                             RetrieveRecord(); // Calling method to retrieve records
                             break;
+
                         case 7:
+                            System.out.println("Display Notifications");
+                            viewMyNotifications();
+                            break;
+                        case 8:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -287,7 +295,8 @@ public class CourtsManagementSystem {
                 } else if ("IT Admin".equalsIgnoreCase(role)) {
                     System.out.println("\n----- Main Menu For IT Administrator -----");
                     System.out.println("1. Schedule IT System Maintenance");
-                    System.out.println("2. Log Out");
+                    System.out.println("2. Display Notifications");
+                    System.out.println("3. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -300,6 +309,11 @@ public class CourtsManagementSystem {
                             ScheduleITSystemMaintenance(); // Calling method to schedule maintenance
                             break;
                         case 2:
+                            System.out.println("Display Notifications");
+                            viewMyNotifications();
+                            break;
+
+                        case 3:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -311,7 +325,8 @@ public class CourtsManagementSystem {
                     System.out.println("1. Track Updates");
                     System.out.println("2. Track Case");
                     System.out.println("3. Review Document/Log Judgment");
-                    System.out.println("4. Log Out");
+                    System.out.println("4. Display Notifications");
+                    System.out.println("5. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -326,7 +341,7 @@ public class CourtsManagementSystem {
                         case 2:
                             // Track Case
                             System.out.println("Track Case selected.");
-                            TrackCase(); // Calling method to track a case
+                            TrackCase(scanner); // Calling method to track a case
                             break;
                         case 3:
                             // Review Document/Log Judgment
@@ -334,6 +349,10 @@ public class CourtsManagementSystem {
                             ReviewDocumentLogJudgment(scanner); // Calling method to review documents and log judgments
                             break;
                         case 4:
+                            System.out.println("Display Notifications");
+                           viewMyNotifications();
+                           break;
+                        case 5:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -344,7 +363,8 @@ public class CourtsManagementSystem {
                 } else if ("Juror".equalsIgnoreCase(role)) {
                     System.out.println("\n----- Main Menu For Juror -----");
                     System.out.println("1. Review Document/Log Judgment");
-                    System.out.println("2. Log Out");
+                    System.out.println("2. Display Notifications");
+                    System.out.println("3. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -357,6 +377,10 @@ public class CourtsManagementSystem {
                             ReviewDocumentLogJudgment(scanner); // Calling method to review documents and log judgments
                             break;
                         case 2:
+                            System.out.println("Display Notifications");
+                           viewMyNotifications();
+                           break;
+                       case 3:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -372,7 +396,8 @@ public class CourtsManagementSystem {
                     System.out.println("4. Submit Document");
                     System.out.println("5. Re-open Case/Appeal");
                     System.out.println("6. Request to Retrieve Record");
-                    System.out.println("7. Log Out");
+                    System.out.println("7. Display Notifications");
+                    System.out.println("8. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -410,6 +435,10 @@ public class CourtsManagementSystem {
                             RequestToRetrieveRecord(); // Calling method to request record retrieval
                             break;
                         case 7:
+                            System.out.println("Display Notifications");
+                           viewMyNotifications();
+                           break;
+                       case 8:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -421,7 +450,8 @@ public class CourtsManagementSystem {
                     System.out.println("\n----- Main Menu For Probation Officer -----");
                     System.out.println("1. Track Case");
                     System.out.println("2. Submit Document");
-                    System.out.println("3. Log Out");
+                    System.out.println("3. Display Notifications");
+                    System.out.println("4. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -431,7 +461,7 @@ public class CourtsManagementSystem {
                         case 1:
                             // Track Case
                             System.out.println("Track Case selected.");
-                            TrackCase(); // Calling method to track a case
+                            TrackCase(scanner); // Calling method to track a case
                             break;
                         case 2:
                             // Submit Document
@@ -439,6 +469,10 @@ public class CourtsManagementSystem {
                             SubmitDocument(scanner); // Calling method to submit a document
                             break;
                         case 3:
+                            System.out.println("Display Notifications");
+                           viewMyNotifications();
+                           break;
+                        case 4:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -449,7 +483,8 @@ public class CourtsManagementSystem {
                 } else if ("Witness".equalsIgnoreCase(role)) {
                     System.out.println("\n----- Main Menu For Witness -----");
                     System.out.println("1. View Case Details");
-                    System.out.println("2. Log Out");
+                    System.out.println("2. Display Notifications");
+                    System.out.println("3. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -462,6 +497,10 @@ public class CourtsManagementSystem {
                             ViewCaseDetails(); // Calling method to view case details
                             break;
                         case 2:
+                            System.out.println("Display Notifications");
+                           viewMyNotifications();
+                           break;
+                       case 3:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -472,7 +511,8 @@ public class CourtsManagementSystem {
                     System.out.println("\n----- Main Menu For Client -----");
                     System.out.println("1. Track Updates");
                     System.out.println("2. Request for Case Re-Opening/Appeal");
-                    System.out.println("3. Log Out");
+                    System.out.println("3. Display Notifications");
+                    System.out.println("4. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -490,6 +530,10 @@ public class CourtsManagementSystem {
                             RequestCaseReopeningOrAppeal(); // Calling method for case reopening/appeal
                             break;
                         case 3:
+                            System.out.println("Display Notifications");
+                           viewMyNotifications();
+                           break;
+                        case 4:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -504,7 +548,8 @@ public class CourtsManagementSystem {
                     System.out.println("4. Schedule Hearing/Witness");
                     System.out.println("5. Approve Document");
                     System.out.println("6. Approve Judgement");
-                    System.out.println("7. Log Out");
+                    System.out.println("7. Display Notifications");
+                    System.out.println("8. Log Out");
                     System.out.print("Choose an option: ");
 
                     int choice = scanner.nextInt();
@@ -518,13 +563,13 @@ public class CourtsManagementSystem {
                             break;
                         case 2:
                             // Track/Manage Updates
-                            System.out.println("Track/Manage Updates selected.");
+                            System.out.println("Bar Registration");
                             RegisterToBar(); // Calling method to monitor Bar Registration
                             break;
                         case 3:
                             // Track Case
                             System.out.println("Track Case selected.");
-                            TrackCase(); // Calling method to track a case
+                            TrackCase(scanner); // Calling method to track a case
                             break;
                         case 4:
                             // Schedule Hearing/Witness
@@ -542,6 +587,9 @@ public class CourtsManagementSystem {
                             ReviewDocumentLogJudgment(scanner); // Calling method to approve Judgement
                             break;
                         case 7:
+                            viewMyNotifications();
+                            break;
+                        case 8:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -553,6 +601,10 @@ public class CourtsManagementSystem {
             }
         }
 
+    }
+
+    public void viewMyNotifications() {
+        user.viewMyNotifications(AllNotifications, AllCases, dbHandler);
     }
 
     /////////////////////////////////////// Registrar
@@ -624,6 +676,7 @@ public class CourtsManagementSystem {
     public void TrackUpdates() {
         // Method to handle tracking updates
         System.out.println("Implement tracking updates logic here.");
+       
     }
 
     public void ReviewDocumentLogJudgment(Scanner scanner) {
@@ -652,14 +705,42 @@ public class CourtsManagementSystem {
 
     /////////////////////////////////////// Court
     /////////////////////////////////////// Administrator/////////////////////////////////////////
-    public void TrackManageUpdates() {
+    public void TrackManageUpdates(Scanner scanner) {
         // Method to handle tracking and managing updates
-        System.out.println("Implement tracking/managing updates logic here.");
+
+        CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
+        if (c != null) {
+            System.out.println("Implement tracking/managing updates logic here.");
+            c.TrackAndManageUpdates(AllCases, AllSlot, AllJudges, AllLawyers, AllClients, AllNotifications, dbHandler,
+                    scanner);
+        } else {
+            System.out.println("Invalid User!");
+        }
     }
 
-    public void TrackCase() {
+    public void TrackCase(Scanner scanner) {
         // Method to handle tracking a specific case
         System.out.println("Implement case tracking logic here.");
+        Registrar registrar = new Registrar();
+        registrar = registrar.getRelevantRegistrar(AllRegistrar, user);
+        if (registrar != null) {
+            registrar.UpdateCase(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
+                    scanner);
+            System.out.println("Case has been successfully updated.");
+
+        } else {
+
+            CourtAdministrator CourtAdmin = new CourtAdministrator();
+            CourtAdmin = CourtAdmin.getRelevantCourtAdministrators(AllCourt_Administrators, user);
+            if (CourtAdmin != null) {
+                CourtAdmin.UpdateCase(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses,
+                        AllCourts, scanner);
+                System.out.println("Case has been successfully updated.");
+            } else {
+                System.out.println("Invalid User!");
+            }
+
+        }
     }
 
     public void ScheduleHearingWitness(Scanner scanner) {
@@ -670,9 +751,9 @@ public class CourtsManagementSystem {
             CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
             c.scheduleHearingWitness(scanner, AllCases, AllSlot, AllJudges, AllWitnesses, fileHandler, dbHandler);
         }
-        //  else if ("Witness".equalsIgnoreCase(role)) {
-        //     Witness w = user.getRelevantWitness(AllWitnesses, user);
-        //     w.viewHearingSchedule(scanner, AllCases, fileHandler);
+        // else if ("Witness".equalsIgnoreCase(role)) {
+        // Witness w = user.getRelevantWitness(AllWitnesses, user);
+        // w.viewHearingSchedule(scanner, AllCases, fileHandler);
         // }
     }
 
