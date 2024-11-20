@@ -18,6 +18,10 @@ public class Slot {
     private Integer witnessID;
 
     // Constructor
+    public Slot() {
+
+    }
+
     public Slot(int slotID, String dayName, Time startTime, Time endTime, int slotNumber,
             Integer caseID, Integer judgeID, Integer witnessID) {
         this.slotID = slotID;
@@ -107,7 +111,7 @@ public class Slot {
                 ", caseID=" + caseID +
                 ", judgeID=" + judgeID +
                 ", witnessID=" + witnessID +
-                '}';
+                "}\n\n------------------------------------------\n";
     }
 
     public static void manageslot(List<Slot> AllSlot, DatabaseHandler dbHandler) {
@@ -201,7 +205,7 @@ public class Slot {
                     break;
                 }
                 if (s.getCaseID() == null && s.getJudgeID() == null && s.getWitnessID() == null) {
-                    Slot new_s=s;
+                    Slot new_s = s;
                     new_s.setJudgeID(judge.getJudgeID());
                     new_s.setWitnessID(witness.getWitnessID());
                     possibleSlots.add(new_s);

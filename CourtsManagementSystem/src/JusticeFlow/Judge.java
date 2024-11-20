@@ -19,6 +19,10 @@ public class Judge extends User {
     private String phoneNumber;
     private int userID;
 
+    public Judge(){
+
+    }
+    
     public Judge(int userID, String username, String password, String role, String email, String phoneNumber,
             boolean activate,
             int judgeID, String firstName, String lastName, Date dateOfBirth, String gender,

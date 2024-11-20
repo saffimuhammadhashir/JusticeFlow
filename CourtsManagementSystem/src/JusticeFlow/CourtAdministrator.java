@@ -1,5 +1,8 @@
 package JusticeFlow;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -218,6 +221,178 @@ public class CourtAdministrator extends User {
         } else {
             System.out.println("No Pending Requests!");
         }
+    }
+
+    public void scheduleHearingWitness(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
+            List<Witness> AllWitnesses, FileHandler fileHandler, DatabaseHandler databaseHandler) {
+
+        System.out.println("1. Schedule Hearing");
+        System.out.println("2. Schedule Witness");
+        int choice = scanner.nextInt();
+
+        if (choice == 1) {
+            System.out.println("\nCases:");
+            for (Case caseObj : AllCases) {
+                System.out.println(caseObj.toString());
+            }
+
+            System.out.print("\nEnter CaseID: ");
+            int cid = scanner.nextInt();
+
+            System.out.println("\nSlots:");
+            for (Slot slotObj : AllSlots) {
+                System.out.println(slotObj.toString());
+            }
+
+            System.out.print("\nEnter SlotID: ");
+            int sid = scanner.nextInt();
+
+            Slot s = new Slot();
+            for (Slot slotObj : AllSlots) {
+                if (slotObj.getSlotID() == sid) {
+                    s = slotObj;
+                }
+            }
+
+            Case c = new Case();
+            for (Case caseObj : AllCases) {
+                if (caseObj.getCaseID() == cid) {
+                    c = caseObj;
+                }
+            }
+
+            if (s.getJudgeID() == null) {
+                s.setCaseID(cid);
+                // s.setJudgeID(c.get)
+
+                databaseHandler.updateOrInsertSlots(AllSlots);
+            } else {
+                System.out.println("Slot not free.");
+            }
+        } else if (choice == 2) {
+            System.out.println("\nCases:");
+            for (Case caseObj : AllCases) {
+                System.out.println(caseObj.toString());
+            }
+
+            System.out.print("\nEnter CaseID: ");
+            int cid = scanner.nextInt();
+
+            Slot s = new Slot();
+            boolean scheduled = false;
+            for (Slot slotObj : AllSlots) {
+                if (slotObj.getCaseID() == cid) {
+                    s = slotObj;
+                    scheduled = true;
+                }
+            }
+
+            if (scheduled) {
+                System.out.println("1. Add a new Witness.");
+                System.out.println("2. Add from an existing Witness.");
+                int choice2 = scanner.nextInt();
+
+                Witness w;
+                // if (choice2 == 1) {
+                    System.out.print("Enter User ID: ");
+                    int userID = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline left-over
+
+                    System.out.print("Enter Username: ");
+                    String username = scanner.nextLine();
+
+                    System.out.print("Enter Password: ");
+                    String password = scanner.nextLine();
+
+                    System.out.print("Enter Role: ");
+                    String role = scanner.nextLine();
+
+                    System.out.print("Enter Email: ");
+                    String email = scanner.nextLine();
+
+                    System.out.print("Enter Phone Number: ");
+                    String phoneNumber = scanner.nextLine();
+
+                    System.out.print("Is the account activated? (true/false): ");
+                    boolean activate = scanner.nextBoolean();
+                    scanner.nextLine(); // Consume newline left-over
+
+                    // Taking user input for Witness-specific fields
+                    System.out.print("Enter Witness ID: ");
+                    int witnessID = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline left-over
+
+                    System.out.print("Enter First Name: ");
+                    String firstName = scanner.nextLine();
+
+                    System.out.print("Enter Last Name: ");
+                    String lastName = scanner.nextLine();
+
+                    Date dateOfBirth = null;
+
+                    while (dateOfBirth == null) {
+                        System.out.print("Enter Date of Birth (year-month-day): ");
+                        String dobInput = scanner.nextLine();
+                        try {
+                            dateOfBirth = java.sql.Date.valueOf(dobInput); // Convert String to Date
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Invalid date format. Please enter the date in the format YYYY-MM-DD.");
+                        }
+                    }
+
+                    System.out.print("Enter Gender: ");
+                    String gender = scanner.nextLine();
+
+                    System.out.print("Enter Address: ");
+                    String address = scanner.nextLine();
+
+                    // Creating Witness object
+                    w = new Witness(
+                            userID,
+                            username,
+                            password,
+                            role,
+                            email,
+                            phoneNumber,
+                            activate,
+                            witnessID,
+                            firstName,
+                            lastName,
+                            dateOfBirth,
+                            gender,
+                            address);
+
+                    AllWitnesses.add(w);
+                    System.out.println("New Witness created with witnessID " + w.getWitnessID());
+                // } 
+                if (choice2 == 2) {
+                    System.out.println("\nExisting Witnesses:");
+                    for (Witness caseObj : AllWitnesses) {
+                        System.out.println(caseObj.toString());
+                    }
+
+                    System.out.print("\nEnter WitnessID: ");
+                    int wid = scanner.nextInt();
+
+                    for (Witness caseObj : AllWitnesses) {
+                        if (caseObj.getWitnessID() == wid) {
+                            w = caseObj;
+                            System.out.println("Selected Witness with witnessID " + w.getWitnessID());
+                            s.setWitnessID(w.getWitnessID());
+                            w.addCaseID(cid);
+                            databaseHandler.updateWitness(w,s);
+                            break;
+                        }
+                    }
+                }
+
+            } else {
+                System.out.println("Case not Sheduled.");
+            }
+        } else {
+            System.out.println("You didn't enter a valid choice.");
+        }
+
     }
 
 }

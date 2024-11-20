@@ -32,6 +32,10 @@ public class Witness extends User {
         
     }
 
+    public void addCaseID(int i){
+        CaseID.add(i);
+    }
+
     public int getWitnessID() {
         return witnessID;
     }

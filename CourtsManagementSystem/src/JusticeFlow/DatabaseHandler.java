@@ -1123,6 +1123,36 @@ public class DatabaseHandler {
         }
     }
 
+    public void updateWitness(Witness w, Slot s){
+        String updateSQL = "UPDATE Slot SET WitnessID = ? WHERE CaseID = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                PreparedStatement updateStatement = connection.prepareStatement(updateSQL)) {
+
+            // Check if the connection is valid (optional)
+            if (connection != null) {
+                System.out.println("Connection successful!");
+            }
+
+            // Set the values for the prepared statement
+            updateStatement.setInt(1, w.getWitnessID()); // WitnessID
+            updateStatement.setInt(2, s.getCaseID()); // CaseID
+
+            // Execute the update query
+            int rowsAffected = updateStatement.executeUpdate();
+
+            // Check if the update was successful
+            if (rowsAffected > 0) {
+                System.out.println("Case's Witness updated successfully!");
+            } else {
+                System.out.println("No matching record found to update.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * This method creates a user entry in the Users table and inserts additional
      * role-specific data into a designated table based on the user's role.
