@@ -140,8 +140,6 @@ public class Lawyer extends User {
         this.userID = userID;
     }
 
-
-
     @Override
     public String toString() {
         return "Lawyer {" +
@@ -227,15 +225,14 @@ public class Lawyer extends User {
                 defendantID,
                 caseStatus,
                 lawyerID);
-                
-                // Save or update the case in the database
+
+        // Save or update the case in the database
         dbHandler.saveOrUpdateCase(newCase);
         newCase.updateCaseFiles(fileHandler, dbHandler);
         AllCases.add(newCase);
         // Confirmation
         System.out.println("Case has been successfully created.");
     }
-
 
     public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler) {
         Case c = new Case();
@@ -248,6 +245,7 @@ public class Lawyer extends User {
         if (c.doesCaseExist(caseID, AllCases)) {
             c = c.getCasebyID(caseID, AllCases);
 
+            // if (c.getLawyerId() == lawyerID) {
             // Open file dialog to select a file
             File selectedFile = fileHandler.openFileDialog();
             if (selectedFile != null) {
@@ -263,10 +261,9 @@ public class Lawyer extends User {
                     System.out.println(c.toString());
 
                     DatabaseHandler d = new DatabaseHandler();
-                    d.saveFileDetails(c.getCaseID(),selectedFile.getAbsolutePath(),fileHash,false);
+                    d.saveFileDetails(c.getCaseID(), selectedFile.getAbsolutePath(), fileHash, false);
                     System.out.println("File Added in Database.");
                     return;
-                    
 
                     // Perform further actions if needed
                 } catch (IOException | NoSuchAlgorithmException e) {
@@ -276,6 +273,9 @@ public class Lawyer extends User {
             } else {
                 System.out.println("No file selected.");
             }
+            // } else {
+            // System.out.println("You are not the authorised lawyer of this case.");
+            // }
         } else {
             System.out.println("Case with this ID does not exist.");
         }

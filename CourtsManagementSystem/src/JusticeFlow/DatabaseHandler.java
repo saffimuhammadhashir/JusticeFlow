@@ -16,41 +16,53 @@ import com.mysql.cj.xdevapi.Client;
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "test12345";
-
+    private final String dbPassword = "12345678";
 
     public void getAllFiles(List<Case> AllCases) {
         // SQL query to retrieve all case files
-        String selectSQL = "SELECT CaseID, FileName, FileHash FROM CaseFiles";
-    
+        String selectSQL = "SELECT CaseID, FileName, FileHash, status FROM CaseFiles";
+
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(selectSQL)) {
-    
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(selectSQL)) {
+
             // Iterate through each result from the database
             while (resultSet.next()) {
                 int caseID = resultSet.getInt("CaseID");
                 String fileName = resultSet.getString("FileName");
                 String fileHash = resultSet.getString("FileHash");
-    
+                int status = resultSet.getInt("status");
+
+                // boolean status;
+                // if(status_num==0){
+                // status=false;
+                // }
+                // else{
+                // status=true;
+                // }
                 // Find the corresponding case in the AllCases list by CaseID
                 Case caseToUpdate = findCaseByID(AllCases, caseID);
-    
+
                 if (caseToUpdate != null) {
 
-                    CaseFile Filedata=new CaseFile(fileName, fileHash);
-                    caseToUpdate.addFile(Filedata);
-                    System.out.println("Case " + caseID + " updated with file: " + fileName);
+                    CaseFile Filedata = new CaseFile(fileName, fileHash, status);
+                    if (status < 2) {
+                        caseToUpdate.addFile(Filedata);
+                        System.out.println("Case " + caseID + " updated with file: " + fileName);
+                    } else if (status >= 2) {
+                        caseToUpdate.addJudgement(Filedata);
+                        System.out.println("Case " + caseID + " updated with judgement: " + fileName);
+                    }
                 } else {
                     System.out.println("No case found with CaseID: " + caseID);
                 }
             }
-    
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
+
     public Case findCaseByID(List<Case> allCases, int caseID) {
         // Iterate through all cases to find the one with the matching CaseID
         for (Case caseObj : allCases) {
@@ -58,9 +70,9 @@ public class DatabaseHandler {
                 return caseObj;
             }
         }
-        return null;  // Return null if no matching CaseID is found
+        return null; // Return null if no matching CaseID is found
     }
-    
+
     public User getUserById(int userID) {
         // SQL query to retrieve user data
         String query = "SELECT * FROM Users WHERE UserID = " + userID;
@@ -168,7 +180,7 @@ public class DatabaseHandler {
                 int defendantID = resultSet.getInt("DefendantID");
                 int lawyerid = resultSet.getInt("Lawyerid");
                 Case newCase = new Case(caseID, caseTitle, caseType, filingDate, courtDate, plaintiffID,
-                        defendantID, caseStatus,lawyerid);
+                        defendantID, caseStatus, lawyerid);
                 AllCases.add(newCase);
             }
         } catch (SQLException e) {
@@ -778,8 +790,6 @@ public class DatabaseHandler {
                             updateStatement.setInt(7, caseObj.getDefendantID());
                         }
 
-
-
                         updateStatement.setInt(9, caseObj.getCaseID());
 
                         int rowsUpdated = updateStatement.executeUpdate();
@@ -815,8 +825,6 @@ public class DatabaseHandler {
                             insertStatement.setInt(7, caseObj.getDefendantID());
                         }
 
-                   
-                    
                         int rowsInserted = insertStatement.executeUpdate();
                         if (rowsInserted > 0) {
                             System.out.println("New case saved successfully.");
@@ -860,10 +868,9 @@ public class DatabaseHandler {
             insertStatement.setInt(1, caseID);
             insertStatement.setString(2, fileName);
             insertStatement.setString(3, fileHash);
-            if (status){
+            if (status) {
                 insertStatement.setInt(4, 1);
-            }
-            else{
+            } else {
                 insertStatement.setInt(4, 0);
             }
 
@@ -875,6 +882,108 @@ public class DatabaseHandler {
                 System.out.println("File details saved successfully!");
             } else {
                 System.out.println("Failed to save file details.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateFileDetails(int caseID, String fileName, String fileHash, boolean oldStatus, boolean newStatus) {
+        // SQL query to update the status in CaseFiles
+        String updateSQL = "UPDATE CaseFiles SET status = ? WHERE CaseID = ? AND FileName = ? AND FileHash = ? AND status = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                PreparedStatement updateStatement = connection.prepareStatement(updateSQL)) {
+
+            // Check if the connection is valid (optional)
+            if (connection != null) {
+                System.out.println("Connection successful!");
+            }
+
+            // Set the values for the prepared statement
+            updateStatement.setInt(1, newStatus ? 1 : 0); // New status
+            updateStatement.setInt(2, caseID); // CaseID
+            updateStatement.setString(3, fileName); // FileName
+            updateStatement.setString(4, fileHash); // FileHash
+            updateStatement.setInt(5, oldStatus ? 1 : 0); // Old status
+
+            // Execute the update query
+            int rowsAffected = updateStatement.executeUpdate();
+
+            // Check if the update was successful
+            if (rowsAffected > 0) {
+                System.out.println("File status updated successfully!");
+            } else {
+                System.out.println("No matching record found to update.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addJudgement(int caseID, String fileName, String fileHash, int status) {
+        // SQL query to insert file details into CaseFiles
+        String insertSQL = "INSERT INTO CaseFiles (CaseID, FileName, FileHash, status) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                PreparedStatement insertStatement = connection.prepareStatement(insertSQL)) {
+
+            // Check if connection is valid (optional step to verify the connection)
+            if (connection != null) {
+                System.out.println("Connection successful!");
+            }
+
+            // Set the values for the prepared statement
+            insertStatement.setInt(1, caseID);
+            insertStatement.setString(2, fileName);
+            insertStatement.setString(3, fileHash);
+            insertStatement.setInt(4, status);
+
+            // Execute the update to insert the data
+            int rowsAffected = insertStatement.executeUpdate();
+
+            // Check if the insert was successful
+            if (rowsAffected > 0) {
+                System.out.println("Judgement details saved successfully!");
+            } else {
+                System.out.println("Failed to save file details.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateJudgementDetails(int caseID, String fileName, String fileHash, int oldStatus, int newStatus) {
+        // SQL query to update the status in CaseFiles
+        String updateSQL = "UPDATE CaseFiles SET status = ? WHERE CaseID = ? AND FileName = ? AND FileHash = ? AND status = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                PreparedStatement updateStatement = connection.prepareStatement(updateSQL)) {
+
+            // Check if the connection is valid (optional)
+            if (connection != null) {
+                System.out.println("Connection successful!");
+            }
+
+            // Set the values for the prepared statement
+            updateStatement.setInt(1, newStatus); // New status
+            updateStatement.setInt(2, caseID); // CaseID
+            updateStatement.setString(3, fileName); // FileName
+            updateStatement.setString(4, fileHash); // FileHash
+            updateStatement.setInt(5, oldStatus); // Old status
+
+            // Execute the update query
+            int rowsAffected = updateStatement.executeUpdate();
+
+            // Check if the update was successful
+            if (rowsAffected > 0) {
+                System.out.println("Judgement status updated successfully!");
+            } else {
+                System.out.println("No matching record found to update.");
             }
 
         } catch (SQLException e) {

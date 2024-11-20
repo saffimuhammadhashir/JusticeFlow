@@ -3,16 +3,17 @@ package JusticeFlow;
 public class CaseFile { // Renamed from File to CaseFile
     private String fileName;
     private String fileHash;
-    private boolean status; // 0 for pending, 1 for approved
+    private int status; // 0 for pending, 1 for approved, 2 for judgement(unapproved), 3 for
+                        // judgement(approved)
 
     // Constructor initializes the file with its name and hash value.
     public CaseFile(String fileName, String fileHash) {
         this.fileName = fileName;
         this.fileHash = fileHash;
-        this.status = false;
+        this.status = 0;
     }
 
-    public CaseFile(String fileName, String fileHash, boolean status) {
+    public CaseFile(String fileName, String fileHash, int status) {
         this.fileName = fileName;
         this.fileHash = fileHash;
         this.status = status;
@@ -34,17 +35,27 @@ public class CaseFile { // Renamed from File to CaseFile
         this.fileHash = fileHash;
     }
 
-    public boolean getStatus(){
+    public int getStatus() {
         return this.status;
     }
 
-    public void setStatus(boolean status){
+    public void setStatus(int status) {
         this.status = status;
     }
 
     // Converts the file details into a readable string format.
     @Override
     public String toString() {
-        return "File Name: " + fileName + ", Hash: " + fileHash + ", Status: " + (status?"Approved":"Waiting");
+        String status_String;
+        if (status == 1) {
+            status_String = "Document (Approved)";
+        } else if (status == 0) {
+            status_String = "Document (Waiting)";
+        } else if (status == 2) {
+            status_String = "Judgement (Waiting)";
+        } else {
+            status_String = "Judgement (Approved)";
+        }
+        return "File Name: " + fileName + ", Hash: " + fileHash + ", Status: " + status_String;
     }
 }

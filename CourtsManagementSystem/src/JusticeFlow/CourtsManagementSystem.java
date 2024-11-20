@@ -404,7 +404,7 @@ public class CourtsManagementSystem {
                         case 4:
                             // Review Document/Log Judgment
                             System.out.println("Review Document/Log Judgment selected.");
-                            ReviewDocumentLogJudgment(); // Calling method to review documents and log judgments
+                            ReviewDocumentLogJudgment(scanner); // Calling method to review documents and log judgments
                             break;
                         case 5:
                             // Log Out
@@ -427,7 +427,7 @@ public class CourtsManagementSystem {
                         case 1:
                             // Review Document/Log Judgment
                             System.out.println("Review Document/Log Judgment selected.");
-                            ReviewDocumentLogJudgment(); // Calling method to review documents and log judgments
+                            ReviewDocumentLogJudgment(scanner); // Calling method to review documents and log judgments
                             break;
                         case 2:
                             // Log Out
@@ -612,7 +612,7 @@ public class CourtsManagementSystem {
                         case 6:
                             // Retrieve Record
                             System.out.println("Retrieve Record selected.");
-                            ReviewDocumentLogJudgment(); // Calling method to approve Judgement
+                            ReviewDocumentLogJudgment(scanner); // Calling method to approve Judgement
                             break;
                         case 7:
                             // Log Out
@@ -668,14 +668,12 @@ public class CourtsManagementSystem {
 
     public void SubmitDocument(Scanner scanner) {
         // Method to handle document submission
-        System.out.println("Implement document submission logic here.");
-
         String role = user.getRole();
 
         if ("Lawyer".equalsIgnoreCase(role)) {
             Lawyer l = user.getRelevantLawyer(AllLawyers, user);
             l.SubmitDocument(scanner, AllCases, fileHandler);
-        } else if ("ProbationOfficer".equalsIgnoreCase(role)) {
+        } else if ("Probation Officer".equalsIgnoreCase(role)) {
             ProbationOfficer p = user.getRelevantProbationOfficer(AllProbationOfficers, user);
             p.SubmitDocument(scanner, AllCases, fileHandler);
         }
@@ -702,9 +700,22 @@ public class CourtsManagementSystem {
         System.out.println("Implement tracking updates logic here.");
     }
 
-    public void ReviewDocumentLogJudgment() {
+    public void ReviewDocumentLogJudgment(Scanner scanner) {
         // Method to handle reviewing documents or logging judgments
-        System.out.println("Implement reviewing documents/logging judgment logic here.");
+        String role = user.getRole();
+
+        if ("Judge".equalsIgnoreCase(role)) {
+            Judge jud = user.getRelevantJudge(AllJudges, user);
+            jud.LogJudgement(scanner, AllCases, fileHandler);
+        }
+         else if ("Juror".equalsIgnoreCase(role)) {
+            Juror jur = user.getRelevantJuror(AllJurors, user);
+            jur.LogJudgement(scanner, AllCases, fileHandler);
+        }
+        else if ("Registrar".equalsIgnoreCase(role)) {
+            Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
+            r.ApproveJudgement(scanner, AllCases, fileHandler);
+        }
     }
 
     /////////////////////////////////////// IT
@@ -746,7 +757,7 @@ public class CourtsManagementSystem {
         CourtsManagementSystem system = new CourtsManagementSystem();
         Scanner scanner = new Scanner(System.in);
 
-        system.loadData();
+
         system.printAllObjects();
 
         while (true) {

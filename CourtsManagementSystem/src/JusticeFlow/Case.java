@@ -15,6 +15,7 @@ public class Case {
     private int plaintiffID;
     private int defendantID;
     private List<CaseFile> files;
+    private List<CaseFile> judgements;
     private int Lawyerid;
     // Changed to CaseFile from File
     // New attribute for CaseState (e.g., Pending, Filed)
@@ -28,6 +29,7 @@ public class Case {
 
         this(caseID, caseTitle, caseType, caseState, filingDate, courtDate, plaintiffID, defendantID,
                 new ArrayList<>());
+        this.judgements = new ArrayList<>();
     }
 
     public Case(int caseID, String caseTitle, String caseType,
@@ -36,6 +38,7 @@ public class Case {
         this(caseID, caseTitle, caseType, caseState, filingDate, courtDate, plaintiffID, defendantID,
                 new ArrayList<>());
         this.Lawyerid = Lawyerid;
+        this.judgements = new ArrayList<>();
     }
 
     // Constructor with files and caseState
@@ -50,9 +53,10 @@ public class Case {
         this.plaintiffID = plaintiffID;
         this.defendantID = defendantID;
         this.files = files;
+        this.judgements = new ArrayList<>();
     }
 
-    public Case(){
+    public Case() {
 
     }
 
@@ -129,6 +133,18 @@ public class Case {
         this.files = files;
     }
 
+    public List<CaseFile> getJudgements() {
+        return judgements;
+    }
+
+    public void setJudgements(List<CaseFile> judgements) {
+        this.judgements = judgements;
+    }
+
+    public void addJudgement(CaseFile file) {
+        this.judgements.add(file);
+    }
+
     // Adds a new file to the case's list of files, representing a document or item
     // associated with the case.
     public void addFile(CaseFile file) {
@@ -151,16 +167,31 @@ public class Case {
             fileDetails.append("\n").append(file.toString());
         }
 
+        StringBuilder judgementDetails = new StringBuilder();
+        if (judgements != null) {
+            judgementDetails.append("\nAssociated Judgements: ");
+            boolean exists=false;
+            for (CaseFile judgement : judgements) {
+                judgementDetails.append("\n").append(judgement.toString());
+                exists=true;
+            }
+
+            if (exists==false){
+                judgementDetails.append("NONE\n");
+            }
+        } else {
+            judgementDetails.append("");
+        }
+
         return "Case ID: " + caseID + "\nTitle: " + caseTitle + "\nType: " + caseType +
                 "\nStatus: " + caseStatus + "\nFiled On: " + filingDate + "\nCourt Date: " + courtDate +
-                "\nPlaintiff ID: " + plaintiffID + "\nDefendant ID: " + defendantID + "\nLawyer Id"+ Lawyerid +
-                "\nAssociated Files: " + fileDetails.toString();
+                "\nPlaintiff ID: " + plaintiffID + "\nDefendant ID: " + defendantID + "\nLawyer Id" + Lawyerid +
+                "\nAssociated Files: " + fileDetails.toString() + judgementDetails.toString() + "\n\n--------------------------------\n";
     }
 
-    public int getLawyerId(){
+    public int getLawyerId() {
         return this.Lawyerid;
     }
-
 
     /**
      * Checks if a case with the given caseID exists in the AllCases list.
@@ -168,7 +199,7 @@ public class Case {
      * @param caseID The unique identifier of the case to search for.
      * @return true if a case with the specified caseID exists; false otherwise.
      */
-    public boolean doesCaseExist(int caseID,List<Case> AllCases) {
+    public boolean doesCaseExist(int caseID, List<Case> AllCases) {
         // Iterate through the list of all cases
         for (Case c : AllCases) {
             // Check if the current case's ID matches the provided caseID
@@ -180,7 +211,7 @@ public class Case {
         return false;
     }
 
-    public Case getCasebyID(int caseID,List<Case> AllCases) {
+    public Case getCasebyID(int caseID, List<Case> AllCases) {
         // Iterate through the list of all cases
         for (Case c : AllCases) {
             // Check if the current case's ID matches the provided caseID
