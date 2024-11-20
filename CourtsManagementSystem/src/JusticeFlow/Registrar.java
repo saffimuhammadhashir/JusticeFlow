@@ -263,8 +263,9 @@ public class Registrar extends User {
         }
     }
 
+    
     public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
-            Scanner scanner) {
+            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, Scanner scanner) {
         List<Case> PendingCases = new ArrayList<>();
         for (Case cases : AllCases) {
             if ("Pending".equalsIgnoreCase(cases.getCaseStatus())) {
@@ -289,7 +290,52 @@ public class Registrar extends User {
 
             if ("Approve".equalsIgnoreCase(caseDecision)) {
                 cases.setCaseStatus("Opened");
+                List<Slot> possibleSlots = new ArrayList<>();
                 dbHandler.saveOrUpdateCase(cases);
+                for (Witness w : AllWitnesses) {
+                    for (Integer caseid : w.CaseID) {
+                        if (caseid == cases.getCaseID()) {
+                            for (Judge j : AllJudges) {
+                                Slot.PossibleSchedule(AllSlots, j, w, possibleSlots);
+                            }
+                        }
+                    }
+                }
+                int Count = 1;
+                for (Slot s : possibleSlots) {
+                    if (s == null) {
+                        break;
+                    }
+                    System.out.println(Count + ". " + s.toString());
+                    Count++;
+                }
+                System.out.print("\n\nSelect Slot: ");
+                int slotid = scanner.nextInt();
+                scanner.nextLine(); // Consume the newline character left by nextInt()
+                Count = 1;
+                for (Slot s : possibleSlots) {
+                    if (s == null) {
+                        break;
+                    }
+                    if (Count == slotid) {
+                        boolean selected = false;
+                        for (Slot orgs : AllSlots) {
+                            if (orgs.getSlotID() == s.getSlotID()) {
+                                orgs.setCaseID(cases.getCaseID());
+                                orgs.setJudgeID(s.getJudgeID());
+                                orgs.setWitnessID(s.getWitnessID());
+                                selected = true;
+                            }
+                        }
+                        if (selected) {
+                            dbHandler.updateOrInsertSlots(AllSlots);
+                            System.out.println("Slot Selected!");
+                            return;
+                        }
+                    }
+
+                    Count++;
+                }
 
                 // ApproveCase(dbHandler, fileHandler, caseID);
             } else if ("Reject".equalsIgnoreCase(caseDecision)) {

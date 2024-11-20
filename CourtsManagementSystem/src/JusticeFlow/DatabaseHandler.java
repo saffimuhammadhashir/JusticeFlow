@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -161,6 +162,32 @@ public class DatabaseHandler {
         }
 
         return null; // Return null if there was an error or no matching user
+    }
+
+    public void getAllSlots(List<Slot> allSlots) {
+        String query = "SELECT * FROM Slots";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int slotID = resultSet.getInt("SlotID");
+                String dayName = resultSet.getString("DayName");
+                Time startTime = resultSet.getTime("startTime");
+                Time endTime = resultSet.getTime("endTime");
+                int slotNumber = resultSet.getInt("SlotNumber");
+                Integer caseID = resultSet.getObject("CaseID") != null ? resultSet.getInt("CaseID") : null;
+                Integer judgeID = resultSet.getObject("JudgeID") != null ? resultSet.getInt("JudgeID") : null;
+                Integer witnessID = resultSet.getObject("WitnessID") != null ? resultSet.getInt("WitnessID") : null;
+
+                Slot slot = new Slot(slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID);
+                allSlots.add(slot);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void getAllCases(List<Case> AllCases) {
@@ -722,6 +749,111 @@ public class DatabaseHandler {
             }
         }
         return recipientsType;
+    }
+
+    public void updateOrInsertSlots(List<Slot> allSlots) {
+        // SQL queries for update and insert
+        String updateQuery = "UPDATE slots SET dayName = ?, startTime = ?, endTime = ?, slotNumber = ?, caseID = ?, judgeID = ?, witnessID = ? WHERE slotID = ?";
+        String insertQuery = "INSERT INTO slots (slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
+                PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+    
+            // Iterate through all slots to either update or insert
+            for (Slot slot : allSlots) {
+                // Check if the slot already exists (based on slotID)
+                if (doesSlotExist(slot.getSlotID(), connection)) {
+                    // If slot exists, update it
+                    updateStmt.setString(1, slot.getDayName());
+                    updateStmt.setTime(2, slot.getStartTime());
+                    updateStmt.setTime(3, slot.getEndTime());
+                    updateStmt.setInt(4, slot.getSlotNumber());
+                    updateStmt.setObject(5, slot.getCaseID());
+    
+                    if (slot.getCaseID() == null) {
+                        updateStmt.setObject(6, null); // Set JudgeID as null
+                        updateStmt.setObject(7, null); // Set WitnessID as null
+                    } else {
+                        updateStmt.setObject(6, slot.getJudgeID());
+                        updateStmt.setObject(7, slot.getWitnessID());
+                    }
+    
+                    updateStmt.setInt(8, slot.getSlotID());
+                    updateStmt.executeUpdate(); // Execute the update statement
+                } else {
+                    // If slot does not exist, insert it
+                    insertStmt.setInt(1, slot.getSlotID());
+                    insertStmt.setString(2, slot.getDayName());
+                    insertStmt.setTime(3, slot.getStartTime());
+                    insertStmt.setTime(4, slot.getEndTime());
+                    insertStmt.setInt(5, slot.getSlotNumber());
+                    insertStmt.setObject(6, slot.getCaseID());
+    
+                    if (slot.getCaseID() == null) {
+                        insertStmt.setObject(7, null); // Set JudgeID as null
+                        insertStmt.setObject(8, null); // Set WitnessID as null
+                    } else {
+                        insertStmt.setObject(7, slot.getJudgeID());
+                        insertStmt.setObject(8, slot.getWitnessID());
+                    }
+    
+                    insertStmt.executeUpdate(); // Execute the insert statement
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private boolean doesSlotExist(int slotID, Connection connection) {
+        String checkQuery = "SELECT 1 FROM slots WHERE slotID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(checkQuery)) {
+            stmt.setInt(1, slotID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next(); // If a result is found, the slot exists
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void getWitnessData(List<Witness> allWitnesses) {
+        String selectQuery = "SELECT CaseId, WitnessID FROM WitnessTable";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(selectQuery)) {
+
+            // Process each row from the WitnessTable
+            while (resultSet.next()) {
+                int caseId = resultSet.getInt("CaseId");
+                int witnessId = resultSet.getInt("WitnessID");
+
+                // Find the corresponding Witness object from the allWitnesses list
+                Witness witness = findWitnessById(allWitnesses, witnessId);
+                if (witness != null) {
+
+                    witness.CaseID.add(caseId);
+                }
+            }
+
+            System.out.println("Data transferred successfully and CaseIDs added to corresponding Witnesses.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error handling database operations: " + e.getMessage());
+        }
+    }
+
+    public Witness findWitnessById(List<Witness> allWitnesses, int witnessId) {
+        for (Witness witness : allWitnesses) {
+            if (witness.getWitnessID() == witnessId) {
+                return witness;
+            }
+        }
+        return null;
     }
 
     // public void getAllClients() {

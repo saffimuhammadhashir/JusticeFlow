@@ -245,6 +245,8 @@ CREATE TABLE Notifications (
 CREATE TABLE Slots (
     SlotID INT AUTO_INCREMENT PRIMARY KEY,
     DayName DATE NOT NULL,
+    startTime time Not Null,
+    EndTime time Not Null,
     SlotNumber INT NOT NULL,
     CaseID INT,
     JudgeID INT,
@@ -257,9 +259,19 @@ CREATE TABLE Slots (
         ON DELETE SET NULL ON UPDATE CASCADE
 );
 
+CREATE TABLE WitnessTable (
+witnesstableid INT AUTO_INCREMENT PRIMARY KEY,
+CaseId Int,
+WitnessID Int,
+FOREIGN KEY (CaseID) REFERENCES Cases(CaseID),
+FOREIGN KEY (WitnessID) REFERENCES Witnesses(WitnessID)
+);
 
-UPDATE users SET Activate = 1;
-SET SQL_SAFE_UPDATES = 0;
+
+-- UPDATE users SET Activate = 1;
+-- SET SQL_SAFE_UPDATES = 0;
+
+
 
 
 -- Select statements

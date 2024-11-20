@@ -1,5 +1,6 @@
 package JusticeFlow;
-
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Witness extends User {
@@ -12,6 +13,7 @@ public class Witness extends User {
     private String phoneNumber;
     private String email;
     private int userID;
+    public List<Integer> CaseID=new ArrayList<>(); 
 
     public Witness(int userID, String username, String password, String role, String email, String phoneNumber,
             boolean activate,
@@ -27,6 +29,7 @@ public class Witness extends User {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.userID = userID;
+        
     }
 
     public int getWitnessID() {

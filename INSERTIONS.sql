@@ -208,16 +208,16 @@ VALUES
 -- Insert into CaseFiles
 INSERT INTO CaseFiles (CaseID, FileName, FileHash)
 VALUES
-(1, 'file_1.pdf', 'hash_1',1),
-(2, 'file_2.pdf', 'hash_2',1),
-(3, 'file_3.pdf', 'hash_3',1),
-(4, 'file_4.pdf', 'hash_4',1),
-(5, 'file_5.pdf', 'hash_5',1),
-(6, 'file_6.pdf', 'hash_6',1),
-(7, 'file_7.pdf', 'hash_7',1),
-(8, 'file_8.pdf', 'hash_8',1),
-(9, 'file_9.pdf', 'hash_9',1),
-(10, 'file_10.pdf', 'hash_10',1);
+(1, 'file_1.pdf', 'hash_1'),
+(2, 'file_2.pdf', 'hash_2'),
+(3, 'file_3.pdf', 'hash_3'),
+(4, 'file_4.pdf', 'hash_4'),
+(5, 'file_5.pdf', 'hash_5'),
+(6, 'file_6.pdf', 'hash_6'),
+(7, 'file_7.pdf', 'hash_7'),
+(8, 'file_8.pdf', 'hash_8'),
+(9, 'file_9.pdf', 'hash_9'),
+(10, 'file_10.pdf', 'hash_10');
 
 
 
@@ -235,6 +235,22 @@ VALUES
 (9, '["17", "18"]', '["Plaintiff", "Defendant"]', 19, 'Lawyer'),
 (10, '["19", "20"]', '["Plaintiff", "Defendant"]', 21, 'Judge');
 
+-- Insert 10 dummy entries into the Slots table
+
+
+
+INSERT INTO WitnessTable (CaseId, WitnessID)
+VALUES 
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5);
+
+
+
+select * From WitnessTable;
+select * from slots;
 SELECT * FROM Users;
 SELECT * FROM Courts;
 SELECT * FROM Judges;
@@ -251,3 +267,4 @@ SELECT * FROM UserApplication;
 SELECT * FROM Cases;
 SELECT * FROM CaseFiles;
 SELECT * FROM Notifications;
+
