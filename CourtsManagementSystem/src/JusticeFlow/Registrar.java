@@ -358,7 +358,7 @@ public class Registrar extends User {
                         }
                     }
                 }
-                if(possibleSlots.isEmpty()){
+                if (possibleSlots.isEmpty()) {
                     for (Judge j : AllJudges) {
                         for (Court c : AllCourts) {
 
@@ -414,6 +414,49 @@ public class Registrar extends User {
                 cases.setCaseStatus("Not Allowed");
                 dbHandler.saveOrUpdateCase(cases);
                 // RejectCase(dbHandler, fileHandler, caseID);
+            } else {
+                System.out.println("Invalid Input!");
+            }
+        } else {
+            System.out.println("No Pending Requests!");
+        }
+    }
+
+    public void UpdateCase(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
+            List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, List<Court> AllCourts,
+            Scanner scanner) {
+
+        if (!AllCases.isEmpty()) {
+            for (Case c : AllCases) {
+                System.out.println(c.toString());
+                System.out.println("\n------------------------------------------- \n");
+            }
+
+            System.out.print("Select Case: ");
+            int caseID = scanner.nextInt();
+            scanner.nextLine();
+
+            Case cases = dbHandler.findCaseByID(AllCases, caseID);
+
+            if (cases != null) {
+                for (Slot s : AllSlots) {
+                    print(s.toString());
+                }
+                System.out.print("Select Slot Id: ");
+                int slotID = scanner.nextInt();
+                scanner.nextLine();
+            
+                for (Slot s : AllSlots) {
+                    if (s.getSlotID() == slotID) {
+                        
+                        print(s.toString());
+                        Slot.removeprevious(AllSlots, cases, s);
+                        dbHandler.updateOrInsertSlots(AllSlots);
+                        System.out.println("Slot Selected!");
+                        return;
+                    }
+                }
+
             } else {
                 System.out.println("Invalid Input!");
             }

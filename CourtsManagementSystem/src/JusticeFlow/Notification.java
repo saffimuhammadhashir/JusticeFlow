@@ -1,23 +1,26 @@
 package JusticeFlow;
 import java.util.List;
-
 public class Notification {
     private int notificationID;
     private int caseID;
-    private List<Integer> recipientsID;
-    private List<String> recipientsType;
+    private int recipientsID; // Changed to int to match SQL schema
     private int senderID;
     private String senderType;
+    private String notification; // Renamed to match SQL field
 
-    public Notification(int notificationID, int caseID, List<Integer> recipientsID, List<String> recipientsType, int senderID, String senderType) {
+    public Notification() {
+    }
+
+    public Notification(int notificationID, int caseID, int recipientsID, int senderID, String senderType, String notification) {
         this.notificationID = notificationID;
         this.caseID = caseID;
         this.recipientsID = recipientsID;
-        this.recipientsType = recipientsType;
         this.senderID = senderID;
         this.senderType = senderType;
+        this.notification = notification;
     }
 
+    // Getters and Setters
     public int getNotificationID() {
         return notificationID;
     }
@@ -34,20 +37,12 @@ public class Notification {
         this.caseID = caseID;
     }
 
-    public List<Integer> getRecipientsID() {
+    public int getRecipientsID() {
         return recipientsID;
     }
 
-    public void setRecipientsID(List<Integer> recipientsID) {
+    public void setRecipientsID(int recipientsID) {
         this.recipientsID = recipientsID;
-    }
-
-    public List<String> getRecipientsType() {
-        return recipientsType;
-    }
-
-    public void setRecipientsType(List<String> recipientsType) {
-        this.recipientsType = recipientsType;
     }
 
     public int getSenderID() {
@@ -65,4 +60,26 @@ public class Notification {
     public void setSenderType(String senderType) {
         this.senderType = senderType;
     }
+
+    public String getNotification() {
+        return notification;
+    }
+
+    public void setNotification(String notification) {
+        this.notification = notification;
+    }
+    public void display(DatabaseHandler dbhandler,List<Case> Allcases) {
+        Case cases=dbhandler.findCaseByID(Allcases,caseID);
+        System.out.println("╔══════════════════════════════════════════════════╗");
+        System.out.println("║                   NOTIFICATION                   ║");
+        System.out.println("╠══════════════════════════════════════════════════╣");
+        System.out.printf("║ %-15s : %-30d ║%n", "Notification ID", notificationID);
+        System.out.printf("║ %-15s : %-30s ║%n", "Case Title", cases.getCaseTitle());
+        System.out.printf("║ %-15s : %-30s ║%n", "Recipients ID", dbhandler.getUserById(recipientsID).getUsername());
+        System.out.printf("║ %-15s : %-30s ║%n", "Sender ID", dbhandler.getUserById(senderID).getUsername());
+        System.out.printf("║ %-15s : %-30s ║%n", "Sender Type", senderType);
+        System.out.printf("║ %-15s : %-30s ║%n", "Message", notification);
+        System.out.println("╚══════════════════════════════════════════════════╝");
+    }
+    
 }

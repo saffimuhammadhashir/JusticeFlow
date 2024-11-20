@@ -1,8 +1,11 @@
 package JusticeFlow;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import java.util.Scanner;
 import java.util.List;
 
 public class User {
@@ -191,5 +194,59 @@ public class User {
         }
         // Return null if no matching juror is found
         return null;
+    }
+    public void print(Object val) {
+        System.out.println(val);
+    }
+
+    public Object GetInput(Scanner scanner) {
+        String input = scanner.nextLine().trim(); // Read and trim the input
+    
+        // Try to parse the input as an Integer
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e1) {
+            // Not an Integer
+        }
+    
+        // Try to parse the input as a Double
+        try {
+            return Double.parseDouble(input);
+        } catch (NumberFormatException e2) {
+            // Not a Double
+        }
+    
+        // Try to parse the input as a Boolean
+        if (input.equalsIgnoreCase("true") || input.equalsIgnoreCase("false")) {
+            return Boolean.parseBoolean(input); // Successfully parsed as Boolean
+        }
+    
+        // Try to parse the input as a Date
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.setLenient(false); // Strict date parsing
+            return dateFormat.parse(input); // Successfully parsed as Date
+        } catch (ParseException e3) {
+            // Not a Date
+        }
+    
+        // If all parsing fails, return the input as a String
+        return input;
+    }
+    
+
+    public void viewMyNotifications(List<Notification> AllNotifications,List<Case> AllCases,DatabaseHandler dbHandler){
+        List<Notification> mynotifications=new ArrayList<>();
+        for (Notification n: AllNotifications){
+            if(n.getRecipientsID()==this.userID){
+                mynotifications.add(n);
+            }
+        }
+        print("All Notifications are here!");
+        for (Notification n: mynotifications){
+            n.display(dbHandler,AllCases);
+        }
+
+
     }
 }
