@@ -17,7 +17,7 @@ import com.mysql.cj.xdevapi.Client;
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "12345678";
+    private final String dbPassword = "test12345";
 
     public void getAllFiles(List<Case> AllCases) {
         // SQL query to retrieve all case files
@@ -180,8 +180,10 @@ public class DatabaseHandler {
                 Integer caseID = resultSet.getObject("CaseID") != null ? resultSet.getInt("CaseID") : null;
                 Integer judgeID = resultSet.getObject("JudgeID") != null ? resultSet.getInt("JudgeID") : null;
                 Integer witnessID = resultSet.getObject("WitnessID") != null ? resultSet.getInt("WitnessID") : null;
+                Integer courtid = resultSet.getObject("CourtId") != null ? resultSet.getInt("CourtId") : null;
 
-                Slot slot = new Slot(slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID);
+                Slot slot = new Slot(slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID,
+                        courtid);
                 allSlots.add(slot);
             }
 
@@ -750,15 +752,15 @@ public class DatabaseHandler {
         }
         return recipientsType;
     }
-
+   
     public void updateOrInsertSlots(List<Slot> allSlots) {
         // SQL queries for update and insert
-        String updateQuery = "UPDATE slots SET dayName = ?, startTime = ?, endTime = ?, slotNumber = ?, caseID = ?, judgeID = ?, witnessID = ? WHERE slotID = ?";
-        String insertQuery = "INSERT INTO slots (slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String updateQuery = "UPDATE slots SET dayName = ?, startTime = ?, endTime = ?, slotNumber = ?, caseID = ?, judgeID = ?, witnessID = ?, CourtId = ? WHERE slotID = ?";
+        String insertQuery = "INSERT INTO slots (slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID, CourtId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-                PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
-                PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+             PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
+             PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
     
             // Iterate through all slots to either update or insert
             for (Slot slot : allSlots) {
@@ -771,15 +773,18 @@ public class DatabaseHandler {
                     updateStmt.setInt(4, slot.getSlotNumber());
                     updateStmt.setObject(5, slot.getCaseID());
     
+                    // If the caseID is null, set the other values to null
                     if (slot.getCaseID() == null) {
                         updateStmt.setObject(6, null); // Set JudgeID as null
                         updateStmt.setObject(7, null); // Set WitnessID as null
+                        updateStmt.setObject(8, null); // Set CourtID as null
                     } else {
                         updateStmt.setObject(6, slot.getJudgeID());
-                        updateStmt.setObject(7, slot.getWitnessID());
+                        updateStmt.setObject(7, slot.getWitnessID() != null ? slot.getWitnessID() : null);
+                        updateStmt.setObject(8, slot.getCourtId());
                     }
     
-                    updateStmt.setInt(8, slot.getSlotID());
+                    updateStmt.setInt(9, slot.getSlotID()); // Set slotID for update
                     updateStmt.executeUpdate(); // Execute the update statement
                 } else {
                     // If slot does not exist, insert it
@@ -790,12 +795,15 @@ public class DatabaseHandler {
                     insertStmt.setInt(5, slot.getSlotNumber());
                     insertStmt.setObject(6, slot.getCaseID());
     
+                    // If the caseID is null, set the other values to null
                     if (slot.getCaseID() == null) {
                         insertStmt.setObject(7, null); // Set JudgeID as null
                         insertStmt.setObject(8, null); // Set WitnessID as null
+                        insertStmt.setObject(9, null); // Set CourtID as null
                     } else {
                         insertStmt.setObject(7, slot.getJudgeID());
-                        insertStmt.setObject(8, slot.getWitnessID());
+                        insertStmt.setObject(8, slot.getWitnessID() != null ? slot.getWitnessID() : null);
+                        insertStmt.setObject(9, slot.getCourtId());
                     }
     
                     insertStmt.executeUpdate(); // Execute the insert statement
