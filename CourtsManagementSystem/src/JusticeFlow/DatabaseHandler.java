@@ -126,6 +126,48 @@ public class DatabaseHandler {
      * @return String representing the user's role or "None" if authentication
      *         fails.
      */
+
+    public Integer Login(String username, String password) {
+
+        // SQL query to retrieve user information (including userID, role, and
+        // activation status)
+        String query = "SELECT userID, Role, Activate FROM Users WHERE username = ? AND Password = ?";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, dbUsername, dbPassword);
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int userID = rs.getInt("userID"); // Retrieve userID
+                String role = rs.getString("Role");
+                boolean status = rs.getBoolean("Activate");
+                if (!status) {
+                    role = "Request Pending"; // If the account is not activated
+                }
+                System.out.println("Login successful! User ID: " + userID + " | Role: " + role);
+                return userID; // Return the userID
+            } else {
+                System.out.println("Invalid username or password.");
+                return null; // Return null if login fails
+            }
+
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL JDBC Driver not found.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Database connection failed!");
+            e.printStackTrace();
+        }
+
+        return null; // Return null if there was an error or no matching user
+    }
+
     public Integer Login(Scanner scanner) {
 
         System.out.print("Enter username: ");
@@ -1350,7 +1392,7 @@ public class DatabaseHandler {
      * @return boolean Returns true if the user and role-specific entry were created
      *         successfully, otherwise false.
      */
-    private int createUserWithRole(String username, String password, String role, String email, String phoneNumber,
+    public int createUserWithRole(String username, String password, String role, String email, String phoneNumber,
             String firstName, String lastName, String dateOfBirth, String gender,
             String dateOfAppointment, String dateOfhiring, String license, String address,
             Integer courtID, Integer barAssociationID) {

@@ -4,7 +4,8 @@
   ],
   "java.project.outputPath": "bin",
   "java.project.referencedLibraries": [
-    "lib/**/*.jar"
+    "lib/**/*.jar",
+    "C:/javafx-sdk-17.0.13/lib/**/*.jar" // Added JavaFX SDK path
   ],
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
