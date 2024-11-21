@@ -252,3 +252,6 @@ SELECT * FROM Cases;
 SELECT * FROM CaseFiles;
 SELECT * FROM Notifications;
 
+
+
+-- update cases set CaseStatus='Pending' where CaseID>10;

@@ -446,10 +446,10 @@ public class Registrar extends User {
                 System.out.print("Select Slot Id: ");
                 int slotID = scanner.nextInt();
                 scanner.nextLine();
-            
+
                 for (Slot s : AllSlots) {
                     if (s.getSlotID() == slotID) {
-                        
+
                         print(s.toString());
                         Slot.removeprevious(AllSlots, cases, s);
                         dbHandler.updateOrInsertSlots(AllSlots);
@@ -465,56 +465,56 @@ public class Registrar extends User {
             System.out.println("No Pending Requests!");
         }
     }
-    public BarApplication getApplicationById(List<BarApplication> AllApplications,int id){
-        for(BarApplication b: AllApplications){
-            if(b.getApplicationTableId()==id){
+
+    public BarApplication getApplicationById(List<BarApplication> AllApplications, int id) {
+        for (BarApplication b : AllApplications) {
+            if (b.getApplicationTableId() == id) {
                 return b;
             }
         }
         return null;
     }
 
-    public void RegistertoBar(List<BarAssociation> barassociationlist, List<BarApplication> AllApplications, DatabaseHandler dbHandler, Scanner scanner) {
+    public void RegistertoBar(List<BarAssociation> barassociationlist, List<BarApplication> AllApplications,
+            DatabaseHandler dbHandler, Scanner scanner) {
         boolean running = true;
         while (running) {
             // Show all applications
             for (BarApplication b : AllApplications) {
                 print(b.toString());
             }
-    
+            // Approve
+            print("Enter the Application ID to approve:");
+            int Id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
             // Prompt user with options
             print("\nSelect an option:");
             print("1. Approve");
             print("2. Reject");
             print("3. Exit");
-    
+
             int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
-    
+            scanner.nextLine(); // Consume newline
+
             switch (choice) {
                 case 1:
-                    // Approve
-                    print("Enter the Application ID to approve:");
-                    int approveId = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                    BarApplication approvedApp = getApplicationById(AllApplications, approveId);
+
+                    BarApplication approvedApp = getApplicationById(AllApplications, Id);
                     if (approvedApp != null) {
                         approvedApp.setStatus(1); // Assuming 1 means approved
-                        print("Approved Application ID: " + approveId);
+                        print("Approved Application ID: " + Id);
                         dbHandler.updateBarApplication(approvedApp);
                     } else {
                         print("Invalid Application ID!");
                     }
                     break;
                 case 2:
-                    // Reject
-                    print("Enter the Application ID to reject:");
-                    int rejectId = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                    BarApplication rejectedApp = getApplicationById(AllApplications, rejectId);
+
+                    BarApplication rejectedApp = getApplicationById(AllApplications, Id);
                     if (rejectedApp != null) {
                         rejectedApp.setStatus(0); // Assuming -1 means rejected
-                        print("Rejected Application ID: " + rejectId);
+                        print("Rejected Application ID: " + Id);
                         dbHandler.updateBarApplication(rejectedApp);
                     } else {
                         print("Invalid Application ID!");
@@ -530,7 +530,5 @@ public class Registrar extends User {
             }
         }
     }
-    
 
-    
 }

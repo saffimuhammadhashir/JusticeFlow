@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -1061,24 +1062,22 @@ public class DatabaseHandler {
         String selectQuery = "SELECT COUNT(*) FROM BarApplication WHERE Applicationtableid = ?";
         String updateQuery = "UPDATE BarApplication SET Lawyerid = ?, Applicationtime = ?, Status = ? WHERE Applicationtableid = ?";
         String insertQuery = "INSERT INTO BarApplication (Applicationtableid, Lawyerid, Applicationtime, Status) VALUES (?, ?, ?, ?)";
-
+    
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
-            // Assuming barApplication.getApplicationTime() is a String in ISO format like
-            // "2024-11-21T11:32:55"
-            String applicationTimeStr = barApplication.getApplicationTime(); // Get the String value
-
-            // Parse the string to LocalDateTime using the appropriate formatter
-            DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // Example:
-                                                                                      // "yyyy-MM-dd'T'HH:mm:ss"
-            LocalDateTime applicationTime = LocalDateTime.parse(applicationTimeStr, inputFormatter);
-
-            // Format the LocalDateTime to MySQL DATETIME format (yyyy-MM-dd HH:mm:ss)
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String formattedTime = applicationTime.format(outputFormatter); // Convert LocalDateTime to String
-
-            // Convert formatted time to Timestamp
-            Timestamp timestamp = Timestamp.valueOf(formattedTime); // Convert to Timestamp
-
+            // Assuming barApplication.getApplicationTime() is a time-only string like "04:40:59"
+            String applicationTimeStr = barApplication.getApplicationTime(); // Get the time-only String value
+    
+            // Default date to combine with the time
+            String defaultDate = "2024-11-21"; // Example default date, you can use the current date or another one
+            String combinedDateTimeStr = defaultDate + "T" + applicationTimeStr;
+    
+            // Parse the combined string into LocalDateTime
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // Format "yyyy-MM-dd'T'HH:mm:ss"
+            LocalDateTime applicationTime = LocalDateTime.parse(combinedDateTimeStr, inputFormatter);
+    
+            // Convert LocalDateTime to Timestamp (MySQL DATETIME format)
+            Timestamp timestamp = Timestamp.valueOf(applicationTime);
+    
             // Check if record exists
             boolean exists = false;
             try (PreparedStatement selectStmt = connection.prepareStatement(selectQuery)) {
@@ -1089,7 +1088,7 @@ public class DatabaseHandler {
                     }
                 }
             }
-
+    
             // Perform update or insert
             if (exists) {
                 try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
@@ -1110,12 +1109,15 @@ public class DatabaseHandler {
                     System.out.println("Record inserted successfully.");
                 }
             }
-
+    
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
+        } catch (DateTimeParseException e) {
+            System.out.println("Error parsing application time: " + e.getMessage());
         }
     }
 
+    
     public void saveFileDetails(int caseID, String fileName, String fileHash, boolean status) {
         // SQL query to insert file details into CaseFiles
         String insertSQL = "INSERT INTO CaseFiles (CaseID, FileName, FileHash, status) VALUES (?, ?, ?, ?)";

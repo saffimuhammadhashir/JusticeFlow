@@ -13,6 +13,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -48,9 +49,9 @@ public class CourtsManagementSystem extends Application {
         dbHandler.Register();
     }
 
-    // CourtsManagementSystem() {
-    // loadData();
-    // }
+    CourtsManagementSystem() {
+     loadData();
+    }
 
     public void loadData() {
         if (dbHandler != null) {
@@ -298,7 +299,7 @@ public class CourtsManagementSystem extends Application {
             if (r != null) {
                 r.RegistertoBar(AllBarAssociations, AllBarApplications, dbHandler, scanner);
             } else {
-                System.out.println("Invalid User!");
+                System.out.println("Invalid Userr!");
             }
         }
 
@@ -845,39 +846,6 @@ public class CourtsManagementSystem extends Application {
 
     }
 
-    public static void CLI_main(String[] args) {
-        CourtsManagementSystem system = new CourtsManagementSystem();
-        Scanner scanner = new Scanner(System.in);
-
-        system.printAllObjects();
-
-        while (true) {
-            System.out.println("----- Welcome to Courts Management System -----");
-            System.out.println("1. Login");
-            System.out.println("2. Register");
-            System.out.println("3. Exit");
-            System.out.print("Please choose an option: ");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline after reading an integer
-
-            switch (choice) {
-                case 1:
-                    system.Login(scanner);
-                    return; // Exit after login attempt
-                case 2:
-                    system.CLI_Register();
-                    break;
-                case 3:
-                    System.out.println("Exiting program...");
-                    scanner.close(); // Close scanner before exiting
-                    return; // Exit the program
-                default:
-                    System.out.println("Invalid option. Please try again.");
-            }
-        }
-    }
-
     private class GUI_Menu {
         CourtsManagementSystem system;
         Scanner scanner;
@@ -886,7 +854,7 @@ public class CourtsManagementSystem extends Application {
                                                                                                     // transparent
                                                                                                     // background for
                                                                                                     // minimalism
-                + "-fx-text-fill: #333333; " // Dark text color for readability
+                + "-fx-text-fill: white; " // Dark text color for readability
                 + "-fx-font-size: 18px; " // Smaller font size for a cleaner look
                 + "-fx-font-family: 'Segoe UI', sans-serif; " // Font family
                 + "-fx-padding: 10px 15px; " // Padding for spacing
@@ -901,7 +869,7 @@ public class CourtsManagementSystem extends Application {
                                                                                                        // lighter
                                                                                                        // background
                                                                                                        // when focused
-                + "-fx-text-fill: #333333; " // Dark text color for readability
+                + "-fx-text-fill: white; " // Dark text color for readability
                 + "-fx-font-size: 18px; " // Font size
                 + "-fx-font-family: 'Segoe UI', sans-serif; " // Font family
                 + "-fx-padding: 10px 15px; " // Padding for spacing
@@ -911,12 +879,67 @@ public class CourtsManagementSystem extends Application {
                 + "-fx-background-radius: 20px; " // Rounded background
                 + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 10); " // Subtle shadow effect for depth
                 + "-fx-transition: all 0.3s ease-in-out;"; // Smooth transition for style changes
+        private static final String COMBOBOX_BASE_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.1); " // Subtle
+                                                                                                             // transparent
+                                                                                                             // background
+                                                                                                             // for
+                                                                                                             // minimalism
+                + "-fx-text-fill: white; " // Dark text color for readability
+                + "-fx-font-size: 18px; " // Font size for a cleaner look
+                + "-fx-font-family: 'Segoe UI', sans-serif; " // Font family
+                + "-fx-padding: 5px 15px; " // Padding for spacing
+                + "-fx-border-radius: 10px; " // Slightly rounded corners for subtle design
+                + "-fx-border-color: rgba(255, 255, 255, 0.2); " // Soft, light border color
+                + "-fx-border-width: 1px; " // Thin border width
+                + "-fx-background-radius: 10px; " // Rounded background
+                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 8); " // Subtle shadow effect for depth
+                + "-fx-transition: all 0.3s ease-in-out;"
+                + "-fx-prompt-text-fill: white;"; // Smooth transition for style changes
 
-    public void designTextField(TextField textField) {
+        private static final String COMBOBOX_FOCUSED_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.2); " // Slightly
+                                                                                                                // lighter
+                                                                                                                // background
+                                                                                                                // when
+                                                                                                                // focused
+                + "-fx-text-fill: white; " // Dark text color for readability
+                + "-fx-font-size: 18px; " // Font size
+                + "-fx-font-family: 'Segoe UI', sans-serif; " // Font family
+                + "-fx-padding: 5px 15px; " // Padding for spacing
+                + "-fx-border-radius: 20px; " // Rounded corners
+                + "-fx-border-color: rgba(255, 255, 255, 0.7); " // Soft blue border color when focused
+                + "-fx-border-width: 1px; " // Border width
+                + "-fx-background-radius: 20px; " // Rounded background
+                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 10); " // Subtle shadow effect for depth
+                + "-fx-transition: all 0.3s ease-in-out;"
+                + "-fx-prompt-text-fill: white;"; // Smooth transition for style changes
+
+        public void designComboBox(ComboBox<String> comboBox) {
+            comboBox.setStyle(COMBOBOX_BASE_STYLE);
+
+            // On focus gained (when the user clicks into the ComboBox)
+            comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    comboBox.setStyle(COMBOBOX_FOCUSED_STYLE);
+                } else {
+                    comboBox.setStyle(COMBOBOX_BASE_STYLE);
+                }
+            });
+
+            // Optional: To add focus style when a dropdown item is selected
+            comboBox.getEditor().focusedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    comboBox.setStyle(COMBOBOX_FOCUSED_STYLE);
+                } else {
+                    comboBox.setStyle(COMBOBOX_BASE_STYLE);
+                }
+            });
+        }
+
+        public void designTextField(TextField textField) {
             textField.setStyle(BASE_STYLE);
 
             // On focus gained (when the user clicks into the field)
-             textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
                     textField.setStyle(FOCUSED_STYLE);
                 } else {
@@ -1306,74 +1329,108 @@ public class CourtsManagementSystem extends Application {
         }
 
         public void Register() {
-            // VBox Layout
-            VBox layout = new VBox(10);
-            layout.setPadding(new Insets(20));
-            layout.setStyle("-fx-alignment: top-center;" 
-                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
+            // Main VBox layout with minimal padding and light background
+            VBox layout = new VBox(20);
+            layout.setStyle("-fx-alignment: center; "
+                    + "-fx-padding: 20px; "
+                    + "-fx-background-radius: 15px; "
+                    + "-fx-border-radius: 15px; "
+                    + "-fx-border-color: #e0e0e0; "
+                    + "-fx-border-width: 0px;"
+                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
                     + "-fx-background-size: cover; " // Ensures the image covers the entire area
                     + "-fx-background-position: center center; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
-
-            // Title Label
+            // Title Label with modern font style
             Label titleLabel = new Label("Register a New User");
-            titleLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold;-fx-text-fill: #f0f0f0;");
+            titleLabel.setStyle(
+                    "-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #f0f0f0; -fx-padding: 10px 0;");
 
-            // Input Fields
+            // Input Fields with a fixed width and minimal style
             TextField usernameField = new TextField();
             usernameField.setPromptText("Enter username");
+            usernameField.setStyle(BASE_STYLE);
+            usernameField.setMaxWidth(300);
 
             PasswordField passwordField = new PasswordField();
             passwordField.setPromptText("Enter password");
+            passwordField.setStyle(BASE_STYLE);
+            passwordField.setMaxWidth(300);
 
             TextField emailField = new TextField();
             emailField.setPromptText("Enter email");
+            emailField.setStyle(BASE_STYLE);
+            emailField.setMaxWidth(300);
 
             TextField firstNameField = new TextField();
             firstNameField.setPromptText("Enter first name");
+            firstNameField.setStyle(BASE_STYLE);
+            firstNameField.setMaxWidth(300);
 
             TextField lastNameField = new TextField();
             lastNameField.setPromptText("Enter last name");
+            lastNameField.setStyle(BASE_STYLE);
+            lastNameField.setMaxWidth(300);
 
             DatePicker dateOfBirthPicker = new DatePicker();
             dateOfBirthPicker.setPromptText("Select date of birth");
+            dateOfBirthPicker.setStyle(BASE_STYLE);
+            dateOfBirthPicker.setMaxWidth(300);
 
             ComboBox<String> genderComboBox = new ComboBox<>();
             genderComboBox.getItems().addAll("Male", "Female", "Other");
             genderComboBox.setPromptText("Select gender");
+            genderComboBox.setStyle(BASE_STYLE);
+            genderComboBox.setMaxWidth(300);
 
             TextField phoneNumberField = new TextField();
             phoneNumberField.setPromptText("Enter phone number");
+            phoneNumberField.setStyle(BASE_STYLE);
+            phoneNumberField.setMaxWidth(300);
 
             ComboBox<String> roleComboBox = new ComboBox<>();
             roleComboBox.getItems().addAll("Judge", "Lawyer", "Clerk", "Court Administrator", "Registrar",
                     "Probation Officer", "Client", "Witness", "Juror");
             roleComboBox.setPromptText("Select role");
+            roleComboBox.setStyle(BASE_STYLE);
+            roleComboBox.setMaxWidth(300);
 
-            // Dynamic Fields
+            // Dynamic Fields (will be shown based on role selection)
             TextField courtIDField = new TextField();
             courtIDField.setPromptText("Enter Court ID");
             courtIDField.setVisible(false);
+            courtIDField.setStyle(BASE_STYLE);
+            courtIDField.setMaxWidth(300);
 
             TextField licenseField = new TextField();
             licenseField.setPromptText("Enter License Number");
             licenseField.setVisible(false);
+            licenseField.setStyle(BASE_STYLE);
+            licenseField.setMaxWidth(300);
 
             TextField barAssociationIDField = new TextField();
             barAssociationIDField.setPromptText("Enter Bar Association ID");
             barAssociationIDField.setVisible(false);
+            barAssociationIDField.setStyle(BASE_STYLE);
+            barAssociationIDField.setMaxWidth(300);
 
             DatePicker dateOfAppointmentPicker = new DatePicker();
-            dateOfAppointmentPicker.setPromptText("Select Date of Appointment (YYYY-MM-DD)");
+            dateOfAppointmentPicker.setPromptText("Select Date of Appointment");
             dateOfAppointmentPicker.setVisible(false);
+            dateOfAppointmentPicker.setStyle(BASE_STYLE);
+            dateOfAppointmentPicker.setMaxWidth(300);
 
             DatePicker dateOfHiringPicker = new DatePicker();
-            dateOfHiringPicker.setPromptText("Select Date of Hiring (YYYY-MM-DD)");
+            dateOfHiringPicker.setPromptText("Select Date of Hiring");
             dateOfHiringPicker.setVisible(false);
+            dateOfHiringPicker.setStyle(BASE_STYLE);
+            dateOfHiringPicker.setMaxWidth(300);
 
             TextField addressField = new TextField();
             addressField.setPromptText("Enter Address");
             addressField.setVisible(false);
+            addressField.setStyle(BASE_STYLE);
+            addressField.setMaxWidth(300);
 
             // Update visibility of dynamic fields based on role selection
             roleComboBox.setOnAction(e -> {
@@ -1408,12 +1465,14 @@ public class CourtsManagementSystem extends Application {
                     addressField.setVisible(true);
                 }
             });
+            Label statusLabel = new Label("");
+            statusLabel.setStyle(
+                    "-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #f0f0f0; -fx-padding: 10px 0;");
 
-            // Register Button
+            // Register Button with minimalistic style
             Button registerButton = new Button("Register");
-            Label statusLabel = new Label();
-
-            // Register Action
+            registerButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; "
+                    + "-fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-cursor: hand;");
             registerButton.setOnAction(e -> {
                 String username = usernameField.getText().trim();
                 String password = passwordField.getText().trim();
@@ -1454,46 +1513,45 @@ public class CourtsManagementSystem extends Application {
                     statusLabel.setStyle("-fx-text-fill: red;");
                 }
             });
-
             // Back Button
             Button backButton = new Button("Back");
-            backButton.setOnAction(e -> start(primaryStage)); // Replace with your main menu method
+            backButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 16px; "
+                    + "-fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-cursor: hand;");
+            backButton.setOnAction(e -> start(primaryStage));
 
-            HBox layout3 = new HBox(30);
-            layout3.setStyle("-fx-padding: 20px 30px; "
-                    + "-fx-alignment: center; ");
-                    designButton(registerButton);
-                    designButton(backButton);
+            // Layout for buttons
+            HBox buttonLayout = new HBox(20);
+            buttonLayout.setStyle("-fx-padding:0px 20px; -fx-alignment: center;");
+            designButton(registerButton);
+            designButton(backButton);
+            buttonLayout.getChildren().addAll(registerButton, backButton);
 
-            layout3.getChildren().addAll(registerButton, backButton);
-            VBox outerlayout=new VBox(25);
-            
+            // Scrollable Layout for form fields
+            ScrollPane formScrollPane = new ScrollPane();
+            formScrollPane.setContent(new VBox(15));
+            VBox formLayout = new VBox(15);
+            formLayout.setStyle("-fx-alignment: center; -fx-spacing: 10px; -fx-background-color: black;");
 
-            HBox layout4 = new HBox(30);
-            layout4.setStyle("-fx-padding: 20px 30px; "
-                    + "-fx-alignment: center; ");
-            layout4.getChildren().addAll(genderComboBox, roleComboBox, dateOfBirthPicker);
+            formLayout.getChildren().addAll(
+                    firstNameField, lastNameField, emailField, phoneNumberField, usernameField, passwordField,
+                    genderComboBox,
+                    roleComboBox, dateOfBirthPicker, courtIDField, licenseField, barAssociationIDField,
+                    dateOfAppointmentPicker, dateOfHiringPicker, addressField);
+            formScrollPane.setContent(formLayout);
+            formScrollPane.setFitToWidth(true);
+            formScrollPane.setStyle(
+                    "-fx-padding: 20px;-fx-alignment: center; -fx-spacing: 10px; -fx-border-radius: 20px;-fx-background-color: black;-fx-background-radius:20px;");
 
-            HBox layout5 = new HBox(30);
-            layout5.setStyle("-fx-padding: 20px 30px; "
-                    + "-fx-alignment: center; ");
-            layout5.getChildren().addAll(firstNameField,  lastNameField);
-            HBox layout6 = new HBox(30);
-            layout6.setStyle("-fx-padding: 20px 30px; "
-                    + "-fx-alignment: center; ");
-            layout6.getChildren().addAll(emailField,  phoneNumberField);
+            // Outer Layout (title + form)
+            VBox outerLayout = new VBox(20);
+            outerLayout.setStyle("-fx-alignment: center; -fx-background-color: rgba(0,0,0,0.4); "
+                    + "-fx-background-radius:20px;-fx-padding: 20px; -fx-border-radius: 20px; -fx-border-color: #e0e0e0; -fx-border-width: 0px;");
+            outerLayout.getChildren().addAll(titleLabel, formScrollPane, statusLabel, buttonLayout);
 
-            HBox layout7 = new HBox(30);
-            layout7.setStyle("-fx-padding: 20px 30px; "
-                    + "-fx-alignment: center; ");
-            layout7.getChildren().addAll(usernameField,  passwordField);
-            // Add components to layout
-            layout.getChildren().addAll(titleLabel, layout7, layout5 ,layout6 , layout4,
-                    courtIDField, licenseField, barAssociationIDField, dateOfAppointmentPicker,
-                    dateOfHiringPicker, addressField,layout3, statusLabel);
+            layout.getChildren().addAll(outerLayout);
 
-            // Scene Setup
-            Scene registerScene = new Scene(layout, 1100, 700);
+            // Scene Setup with a fixed width and height
+            Scene registerScene = new Scene(layout, 1000, 700);
             primaryStage.setScene(registerScene);
             primaryStage.show();
         }
@@ -1657,9 +1715,42 @@ public class CourtsManagementSystem extends Application {
         launch(args);
     }
 
+    public static void CLI_main(String[] args) {
+        CourtsManagementSystem system = new CourtsManagementSystem();
+        Scanner scanner = new Scanner(System.in);
+
+        system.printAllObjects();
+
+        while (true) {
+            System.out.println("----- Welcome to Courts Management System -----");
+            System.out.println("1. Login");
+            System.out.println("2. Register");
+            System.out.println("3. Exit");
+            System.out.print("Please choose an option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline after reading an integer
+
+            switch (choice) {
+                case 1:
+                    system.Login(scanner);
+                    return; // Exit after login attempt
+                case 2:
+                    system.CLI_Register();
+                    break;
+                case 3:
+                    System.out.println("Exiting program...");
+                    scanner.close(); // Close scanner before exiting
+                    return; // Exit the program
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
     public static void main(String[] args) {
-        // CLI_main(args);
-        launch(args);
+        CLI_main(args);
+        // launch(args);
     }
 
 }
