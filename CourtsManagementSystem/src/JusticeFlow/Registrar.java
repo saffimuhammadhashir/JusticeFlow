@@ -2,6 +2,7 @@ package JusticeFlow;
 
 import java.util.List;
 import java.util.Scanner;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -464,5 +465,72 @@ public class Registrar extends User {
             System.out.println("No Pending Requests!");
         }
     }
+    public BarApplication getApplicationById(List<BarApplication> AllApplications,int id){
+        for(BarApplication b: AllApplications){
+            if(b.getApplicationTableId()==id){
+                return b;
+            }
+        }
+        return null;
+    }
 
+    public void RegistertoBar(List<BarAssociation> barassociationlist, List<BarApplication> AllApplications, DatabaseHandler dbHandler, Scanner scanner) {
+        boolean running = true;
+        while (running) {
+            // Show all applications
+            for (BarApplication b : AllApplications) {
+                print(b.toString());
+            }
+    
+            // Prompt user with options
+            print("\nSelect an option:");
+            print("1. Approve");
+            print("2. Reject");
+            print("3. Exit");
+    
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+    
+            switch (choice) {
+                case 1:
+                    // Approve
+                    print("Enter the Application ID to approve:");
+                    int approveId = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+                    BarApplication approvedApp = getApplicationById(AllApplications, approveId);
+                    if (approvedApp != null) {
+                        approvedApp.setStatus(1); // Assuming 1 means approved
+                        print("Approved Application ID: " + approveId);
+                        dbHandler.updateBarApplication(approvedApp);
+                    } else {
+                        print("Invalid Application ID!");
+                    }
+                    break;
+                case 2:
+                    // Reject
+                    print("Enter the Application ID to reject:");
+                    int rejectId = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+                    BarApplication rejectedApp = getApplicationById(AllApplications, rejectId);
+                    if (rejectedApp != null) {
+                        rejectedApp.setStatus(0); // Assuming -1 means rejected
+                        print("Rejected Application ID: " + rejectId);
+                        dbHandler.updateBarApplication(rejectedApp);
+                    } else {
+                        print("Invalid Application ID!");
+                    }
+                    break;
+                case 3:
+                    // Exit to previous function
+                    running = false;
+                    break;
+                default:
+                    print("Invalid option! Please try again.");
+                    break;
+            }
+        }
+    }
+    
+
+    
 }

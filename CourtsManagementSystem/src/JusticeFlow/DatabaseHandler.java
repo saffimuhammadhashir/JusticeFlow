@@ -7,17 +7,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Date;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.mysql.cj.xdevapi.Client;
 
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "12345678";
+    private final String dbPassword = "test12345";
 
     public void getAllFiles(List<Case> AllCases) {
         // SQL query to retrieve all case files
@@ -642,11 +651,11 @@ public class DatabaseHandler {
 
     public void getAllNotifications(List<Notification> allNotifications) {
         String query = "SELECT * FROM Notifications";
-    
+
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
-    
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
             while (resultSet.next()) {
                 int notificationID = resultSet.getInt("NotificationID");
                 int caseID = resultSet.getInt("CaseID");
@@ -654,15 +663,39 @@ public class DatabaseHandler {
                 int senderID = resultSet.getInt("SenderID");
                 String senderType = resultSet.getString("SenderType");
                 String notification = resultSet.getString("Notification");
-    
-                Notification notif = new Notification(notificationID, caseID, recipientsID, senderID, senderType, notification);
+
+                Notification notif = new Notification(notificationID, caseID, recipientsID, senderID, senderType,
+                        notification);
                 allNotifications.add(notif);
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving notifications: " + e.getMessage());
         }
     }
-    
+
+    public void getAllBarApplications(List<BarApplication> barApplicationList) {
+        String query = "SELECT * FROM BarApplication";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+            // Iterate through result set and populate the list
+            while (resultSet.next()) {
+                int applicationTableId = resultSet.getInt("Applicationtableid");
+                int lawyerId = resultSet.getInt("Lawyerid");
+                String applicationTime = resultSet.getString("Applicationtime");
+                int status = resultSet.getInt("Status");
+
+                // Create BarApplication object and add to list
+                BarApplication application = new BarApplication(applicationTableId, lawyerId, applicationTime, status);
+                barApplicationList.add(application);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+    }
 
     private List<Integer> parseRecipientsID_notification(String recipientsIDString) {
         List<Integer> recipientsID = new ArrayList<>();
@@ -982,6 +1015,65 @@ public class DatabaseHandler {
     // a confirmation message
     // is printed. This method ensures that file data is securely stored and
     // accessible by related cases.
+    public void updateBarApplication(BarApplication barApplication) {
+        String selectQuery = "SELECT COUNT(*) FROM BarApplication WHERE Applicationtableid = ?";
+        String updateQuery = "UPDATE BarApplication SET Lawyerid = ?, Applicationtime = ?, Status = ? WHERE Applicationtableid = ?";
+        String insertQuery = "INSERT INTO BarApplication (Applicationtableid, Lawyerid, Applicationtime, Status) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
+            // Assuming barApplication.getApplicationTime() is a String in ISO format like
+            // "2024-11-21T11:32:55"
+            String applicationTimeStr = barApplication.getApplicationTime(); // Get the String value
+
+            // Parse the string to LocalDateTime using the appropriate formatter
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // Example:
+                                                                                      // "yyyy-MM-dd'T'HH:mm:ss"
+            LocalDateTime applicationTime = LocalDateTime.parse(applicationTimeStr, inputFormatter);
+
+            // Format the LocalDateTime to MySQL DATETIME format (yyyy-MM-dd HH:mm:ss)
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedTime = applicationTime.format(outputFormatter); // Convert LocalDateTime to String
+
+            // Convert formatted time to Timestamp
+            Timestamp timestamp = Timestamp.valueOf(formattedTime); // Convert to Timestamp
+
+            // Check if record exists
+            boolean exists = false;
+            try (PreparedStatement selectStmt = connection.prepareStatement(selectQuery)) {
+                selectStmt.setInt(1, barApplication.getApplicationTableId());
+                try (ResultSet resultSet = selectStmt.executeQuery()) {
+                    if (resultSet.next() && resultSet.getInt(1) > 0) {
+                        exists = true;
+                    }
+                }
+            }
+
+            // Perform update or insert
+            if (exists) {
+                try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
+                    updateStmt.setInt(1, barApplication.getLawyerId());
+                    updateStmt.setTimestamp(2, timestamp); // Pass the Timestamp object
+                    updateStmt.setInt(3, barApplication.getStatus());
+                    updateStmt.setInt(4, barApplication.getApplicationTableId());
+                    updateStmt.executeUpdate();
+                    System.out.println("Record updated successfully.");
+                }
+            } else {
+                try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+                    insertStmt.setInt(1, barApplication.getApplicationTableId());
+                    insertStmt.setInt(2, barApplication.getLawyerId());
+                    insertStmt.setTimestamp(3, timestamp); // Pass the Timestamp object
+                    insertStmt.setInt(4, barApplication.getStatus());
+                    insertStmt.executeUpdate();
+                    System.out.println("Record inserted successfully.");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+    }
+
     public void saveFileDetails(int caseID, String fileName, String fileHash, boolean status) {
         // SQL query to insert file details into CaseFiles
         String insertSQL = "INSERT INTO CaseFiles (CaseID, FileName, FileHash, status) VALUES (?, ?, ?, ?)";
@@ -1122,9 +1214,9 @@ public class DatabaseHandler {
         }
     }
 
-    public void addWitness(Witness w){
+    public void addWitness(Witness w) {
         String updateSQL = "INSERT INTO Witnesses (FirstName, LastName, DateOfBirth, Gender, Address, PhoneNumber, Email, UserID) VALUES (?,?,?,?,?,?,?,?)";
-    
+
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
                 PreparedStatement updateStatement = connection.prepareStatement(updateSQL)) {
 
@@ -1152,7 +1244,7 @@ public class DatabaseHandler {
         }
     }
 
-    public void updateWitness(Witness w, Slot s){
+    public void updateWitness(Witness w, Slot s) {
         String updateSQL = "INSERT INTO WitnessTable (CaseId, WitnessID) VALUES (?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
@@ -1186,10 +1278,10 @@ public class DatabaseHandler {
         String checkQuery = "SELECT COUNT(*) AS count FROM Notifications WHERE NotificationID = ?";
         String updateQuery = "UPDATE Notifications SET CaseID = ?, RecipientsID = ?, SenderID = ?, SenderType = ?, Notification = ? WHERE NotificationID = ?";
         String insertQuery = "INSERT INTO Notifications (NotificationID, CaseID, RecipientsID, SenderID, SenderType, Notification) VALUES (?, ?, ?, ?, ?, ?)";
-    
+
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
             boolean exists;
-    
+
             // Check if the notification exists
             try (PreparedStatement checkStatement = connection.prepareStatement(checkQuery)) {
                 checkStatement.setInt(1, notification.getNotificationID());
@@ -1198,7 +1290,7 @@ public class DatabaseHandler {
                     exists = resultSet.getInt("count") > 0;
                 }
             }
-    
+
             if (exists) {
                 // Update existing notification
                 try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
@@ -1226,7 +1318,7 @@ public class DatabaseHandler {
             System.out.println("Error updating or creating notification: " + e.getMessage());
         }
     }
-    
+
     // Helper method to convert List<Integer> to List<String> for joining
     private List<String> convertRecipientsToString(List<Integer> recipientsID) {
         List<String> recipientsString = new ArrayList<>();

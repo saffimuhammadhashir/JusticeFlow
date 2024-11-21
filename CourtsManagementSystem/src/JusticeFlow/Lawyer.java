@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.nio.file.*;
 import java.awt.*;
+import java.time.LocalDateTime;
 
 public class Lawyer extends User {
     private int lawyerID;
@@ -359,5 +360,26 @@ public class Lawyer extends User {
         // } else {
         // System.out.println("Case not Sheduled.");
         // }
+    }
+
+    public void RegistertoBar(List<BarAssociation> barassociationlist, List<BarApplication> AllApplications,DatabaseHandler dbHandler, Scanner scanner) {
+        for (BarAssociation b : barassociationlist) {
+            print(b.toString());
+        }
+        if (!barassociationlist.isEmpty()) {
+            print("Select Bar ID :");
+            Object var = GetInput(scanner);
+            Integer id = (Integer) var;
+            BarAssociation bar = BarAssociation.getbar(barassociationlist, id);
+            if (bar != null) {
+                // Use LocalDateTime.now() for the current machine time
+                BarApplication barrequest = new BarApplication(AllApplications.size(), this.lawyerID, LocalDateTime.now().toString(), 0);
+                AllApplications.add(barrequest); // Add the new BarApplication to the list
+                dbHandler.updateBarApplication(barrequest);
+
+            } else {
+                print("Invalid Input!");
+            }
+        }
     }
 }

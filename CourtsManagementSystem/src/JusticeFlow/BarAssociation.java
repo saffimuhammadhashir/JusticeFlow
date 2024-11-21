@@ -1,6 +1,8 @@
 package JusticeFlow;
 
+import java.util.List;
 import java.util.Date;
+
 public class BarAssociation {
     private int barAssociationID;
     private String associationName;
@@ -47,5 +49,13 @@ public class BarAssociation {
     public void setEmail(String email) {
         this.email = email;
     }
-}
 
+    public static BarAssociation getbar(List<BarAssociation> bars, int id) {
+        for (BarAssociation b : bars) {
+            if (b.getBarAssociationID() == id) {
+                return b;
+            }
+        }
+        return null;
+    }
+}

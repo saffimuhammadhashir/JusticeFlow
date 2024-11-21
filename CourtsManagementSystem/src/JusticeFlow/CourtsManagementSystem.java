@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
+
+import org.apache.pdfbox.debugger.ui.ArrayEntry;
+
 import java.util.List;
 
 public class CourtsManagementSystem {
@@ -22,6 +25,7 @@ public class CourtsManagementSystem {
     List<Court> AllCourts = new ArrayList<>();
     List<UserApplication> AllUserApplications = new ArrayList<>();
     List<Notification> AllNotifications = new ArrayList<>();
+    List<BarApplication> AllBarApplications = new ArrayList();
     DatabaseHandler dbHandler = new DatabaseHandler();
     FileHandler fileHandler = new FileHandler(dbHandler);
     private User user;
@@ -32,6 +36,7 @@ public class CourtsManagementSystem {
     }
 
     CourtsManagementSystem() {
+        ITAdmin.CaseReport();
         loadData();
     }
 
@@ -53,6 +58,7 @@ public class CourtsManagementSystem {
             dbHandler.getAllFiles(AllCases);
             dbHandler.getAllSlots(AllSlot);
             dbHandler.getWitnessData(AllWitnesses);
+            dbHandler.getAllBarApplications(AllBarApplications);
             Slot.manageslot(AllSlot, dbHandler);
 
         } else {
@@ -145,6 +151,12 @@ public class CourtsManagementSystem {
         System.out.println("\nNotifications:");
         for (Notification notification : AllNotifications) {
             System.out.println(notification.toString());
+        }
+
+        // Print Notifications
+        System.out.println("\\Bar Applications:");
+        for (BarApplication Barapp : AllBarApplications) {
+            System.out.println(Barapp.toString());
         }
 
         // Print Notifications
@@ -350,8 +362,8 @@ public class CourtsManagementSystem {
                             break;
                         case 4:
                             System.out.println("Display Notifications");
-                           viewMyNotifications();
-                           break;
+                            viewMyNotifications();
+                            break;
                         case 5:
                             // Log Out
                             System.out.println("Logging out...");
@@ -378,9 +390,9 @@ public class CourtsManagementSystem {
                             break;
                         case 2:
                             System.out.println("Display Notifications");
-                           viewMyNotifications();
-                           break;
-                       case 3:
+                            viewMyNotifications();
+                            break;
+                        case 3:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -418,7 +430,7 @@ public class CourtsManagementSystem {
                         case 3:
                             // Register to Bar
                             System.out.println("Register to Bar selected.");
-                            RegisterToBar(); // Calling method to register to the bar
+                            RegisterToBar(scanner); // Calling method to register to the bar
                             break;
                         case 4:
                             // Submit Document
@@ -442,9 +454,9 @@ public class CourtsManagementSystem {
                             break;
                         case 8:
                             System.out.println("Display Notifications");
-                           viewMyNotifications();
-                           break;
-                       case 9:
+                            viewMyNotifications();
+                            break;
+                        case 9:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -476,8 +488,8 @@ public class CourtsManagementSystem {
                             break;
                         case 3:
                             System.out.println("Display Notifications");
-                           viewMyNotifications();
-                           break;
+                            viewMyNotifications();
+                            break;
                         case 4:
                             // Log Out
                             System.out.println("Logging out...");
@@ -504,9 +516,9 @@ public class CourtsManagementSystem {
                             break;
                         case 2:
                             System.out.println("Display Notifications");
-                           viewMyNotifications();
-                           break;
-                       case 3:
+                            viewMyNotifications();
+                            break;
+                        case 3:
                             // Log Out
                             System.out.println("Logging out...");
                             return; // Exit the menu and logout
@@ -537,8 +549,8 @@ public class CourtsManagementSystem {
                             break;
                         case 3:
                             System.out.println("Display Notifications");
-                           viewMyNotifications();
-                           break;
+                            viewMyNotifications();
+                            break;
                         case 4:
                             // Log Out
                             System.out.println("Logging out...");
@@ -570,7 +582,7 @@ public class CourtsManagementSystem {
                         case 2:
                             // Track/Manage Updates
                             System.out.println("Bar Registration");
-                            RegisterToBar(); // Calling method to monitor Bar Registration
+                            RegisterToBar(scanner); // Calling method to monitor Bar Registration
                             break;
                         case 3:
                             // Track Case
@@ -646,11 +658,32 @@ public class CourtsManagementSystem {
     public void CaseFilingScheduling() {
         // Method to handle case filing and scheduling
         System.out.println("Implement case filing and scheduling logic here.");
+        
     }
 
-    public void RegisterToBar() {
+    public void RegisterToBar(Scanner scanner) {
         // Method to handle lawyer's registration to the bar
         System.out.println("Implement lawyer registration to bar logic here.");
+        String role = user.getRole();
+        if ("Lawyer".equalsIgnoreCase(role)) {
+            Lawyer l = user.getRelevantLawyer(AllLawyers, user);
+            if(l!=null){
+                l.RegistertoBar(AllBarAssociations,AllBarApplications,dbHandler,scanner);
+            }else{
+                System.out.println("Invalid User!");
+            }
+
+        }
+        else if("Registrar".equalsIgnoreCase(role)){
+            Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
+            if(r!=null){
+                r.RegistertoBar(AllBarAssociations,AllBarApplications,dbHandler,scanner);
+            }else{
+                System.out.println("Invalid User!");
+            }
+        }
+
+
     }
 
     public void SubmitDocument(Scanner scanner) {
@@ -684,7 +717,7 @@ public class CourtsManagementSystem {
     public void TrackUpdates() {
         // Method to handle tracking updates
         System.out.println("Implement tracking updates logic here.");
-       
+
     }
 
     public void ReviewDocumentLogJudgment(Scanner scanner) {
@@ -749,7 +782,6 @@ public class CourtsManagementSystem {
             } else {
                 System.out.println("Invalid User!");
             }
-
         }
     }
 
@@ -760,12 +792,10 @@ public class CourtsManagementSystem {
         if ("Court Administrator".equalsIgnoreCase(role)) {
             CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
             c.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler);
-        }
-         else if ("Lawyer".equalsIgnoreCase(role)) {
+        } else if ("Lawyer".equalsIgnoreCase(role)) {
             Lawyer l = user.getRelevantLawyer(AllLawyers, user);
             l.scheduleWitness(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler);
-        }
-        else if ("Registrar".equalsIgnoreCase(role)) {
+        } else if ("Registrar".equalsIgnoreCase(role)) {
             Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
             r.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler);
         }

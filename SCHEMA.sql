@@ -274,7 +274,15 @@ FOREIGN KEY (WitnessID) REFERENCES Witnesses(WitnessID)
 -- UPDATE users SET Activate = 1;
 -- SET SQL_SAFE_UPDATES = 0;
 
+CREATE TABLE BarApplication (
+	Applicationtableid INT AUTO_INCREMENT PRIMARY KEY,
+	Lawyerid INT,
+    Applicationtime time Not Null,
+	Status INT,
+    CONSTRAINT fk_lawyer FOREIGN KEY (Lawyerid) REFERENCES Lawyers(LawyerID)
+        ON DELETE SET NULL ON UPDATE CASCADE
 
+);
 
 
 -- Select statements
@@ -292,7 +300,7 @@ SELECT * FROM Registrar;
 SELECT * FROM ProbationOfficers;
 SELECT * FROM ITAdmins;
 SELECT * FROM Slots;
-
+Select * from BarApplication;
 
 
 
