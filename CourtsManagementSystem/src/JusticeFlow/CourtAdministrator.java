@@ -8,6 +8,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 public class CourtAdministrator extends User {
     private int adminID;
     private String firstName;
@@ -245,56 +255,229 @@ public class CourtAdministrator extends User {
 
     public void scheduleHearing(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
             List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
-            DatabaseHandler databaseHandler) {
+            DatabaseHandler databaseHandler, Stage primaryStage, Scene prevScene) {
 
-        System.out.println("\nCases:");
+        // Main layout container
+        VBox mainLayout = new VBox(20);
+        mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+
+        // Title label
+        Label titleLabel = new Label("Schedule a Hearing");
+        titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
+        mainLayout.getChildren().add(titleLabel);
+
+        // Scrollable ViewBox for displaying cases
+        ScrollPane caseScrollPane = new ScrollPane();
+        VBox caseViewBox = new VBox(10);
+        caseViewBox.setStyle(
+                "-fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-radius: 10px; -fx-background-radius: 10px;");
+
+        Label casesLabel = new Label("Available Cases:");
+        casesLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+        caseViewBox.getChildren().add(casesLabel);
+
         for (Case caseObj : AllCases) {
-            System.out.println(caseObj.toString());
+            Label caseEntry = new Label(caseObj.toString());
+            caseEntry.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5;");
+            caseViewBox.getChildren().add(caseEntry);
         }
 
-        System.out.print("\nEnter CaseID: ");
-        int cid = scanner.nextInt();
+        caseScrollPane.setContent(caseViewBox);
+        caseScrollPane.setFitToWidth(true);
+        caseScrollPane.setPrefHeight(300);
+        mainLayout.getChildren().add(caseScrollPane);
 
-        System.out.println("\nSlots:");
-        for (Slot slotObj : AllSlots) {
-            System.out.println(slotObj.toString());
-        }
+        // Input field for CaseID
+        Label caseIdLabel = new Label("Enter Case ID:");
+        caseIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+        TextField caseIdField = new TextField();
+        caseIdField.setPromptText("Case ID");
+        caseIdField.setPrefWidth(200);
 
-        System.out.print("\nEnter SlotID: ");
-        int sid = scanner.nextInt();
-        scanner.nextLine();
+        // Create "Back" button
+        Button backButton = new Button("Back");
+        backButton.setStyle(
+                "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #FF6347; -fx-text-fill: white;");
+        backButton.setOnAction(ev -> {
+            primaryStage.setScene(prevScene); // Go back to case selection scene
+        });
 
-        Slot s = new Slot();
-        for (Slot slotObj : AllSlots) {
-            if (slotObj.getSlotID() == sid) {
-                s = slotObj;
-            }
-        }
+        Button nextButton = new Button("Next");
+        nextButton.setStyle(
+                "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
 
-        if (s.getJudgeID() == null) {
-            int jid;
-            int courtid;
-            for (Slot slotObj : AllSlots) {
-                if (slotObj != null) {
-                    if (slotObj.getCaseID() != null) {
-                        if (slotObj.getCaseID() == cid) {
-                            jid = slotObj.getJudgeID();
-                            courtid = slotObj.getCourtId();
-                            s.setJudgeID(jid);
-                            s.setCourtId(courtid);
-                        }
-                    }
+        // Create an HBox to place the "Back" and "Submit" buttons in a line
+        HBox buttonLayout1 = new HBox(20, backButton, nextButton);
+        buttonLayout1.setAlignment(Pos.CENTER); // Align buttons to the center
+
+        VBox caseInputSection = new VBox(10, caseIdLabel, caseIdField, buttonLayout1);
+        caseInputSection.setStyle("-fx-alignment: center;");
+        mainLayout.getChildren().add(caseInputSection);
+
+        // Transition to slots after CaseID input
+        nextButton.setOnAction(e -> {
+            try {
+                int caseId = Integer.parseInt(caseIdField.getText());
+                boolean caseExists = AllCases.stream().anyMatch(c -> c.getCaseID() == caseId);
+                if (!caseExists) {
+                    System.out.println("Invalid Case ID.");
+                    return;
                 }
+
+                VBox slotLayout = new VBox(20);
+                slotLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+
+                Label slotTitleLabel = new Label("Available Slots:");
+                slotTitleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
+                slotLayout.getChildren().add(slotTitleLabel);
+
+                ScrollPane slotScrollPane = new ScrollPane();
+                VBox slotViewBox = new VBox(10);
+                slotViewBox.setStyle(
+                        "-fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-radius: 10px; -fx-background-radius: 10px;");
+
+                for (Slot slotObj : AllSlots) {
+                    Label slotEntry = new Label(slotObj.toString());
+                    slotEntry.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5;");
+                    slotViewBox.getChildren().add(slotEntry);
+                }
+
+                slotScrollPane.setContent(slotViewBox);
+                slotScrollPane.setFitToWidth(true);
+                slotScrollPane.setPrefHeight(300);
+                slotLayout.getChildren().add(slotScrollPane);
+
+                Label slotIdLabel = new Label("Enter Slot ID:");
+                slotIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+                TextField slotIdField = new TextField();
+                slotIdField.setPromptText("Slot ID");
+                slotIdField.setPrefWidth(200);
+
+                Button submitButton = new Button("Submit");
+                submitButton.setStyle(
+                        "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+
+                // Create an HBox to place the "Back" and "Submit" buttons in a line
+                HBox buttonLayout = new HBox(20, backButton, submitButton);
+                buttonLayout.setAlignment(Pos.CENTER); // Align buttons to the center
+
+                Label successLabel = new Label();
+                successLabel.setStyle("-fx-text-fill: lime; -fx-font-size: 14px; -fx-font-weight: bold;");
+
+                VBox slotInputSection = new VBox(10, slotIdLabel, slotIdField, buttonLayout, successLabel);
+                slotInputSection.setStyle("-fx-alignment: center;");
+                slotLayout.getChildren().add(slotInputSection);
+
+                // Set scene to slot selection
+                Scene slotScene = new Scene(slotLayout, 1100, 650);
+                slotLayout.setStyle(
+                        "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+                primaryStage.setScene(slotScene);
+
+                submitButton.setOnAction(ev -> {
+                    try {
+                        int slotId = Integer.parseInt(slotIdField.getText());
+                        Slot selectedSlot = AllSlots.stream().filter(s -> s.getSlotID() == slotId).findFirst()
+                                .orElse(null);
+
+                        if (selectedSlot == null || selectedSlot.getCaseID() != null) {
+                            System.out.println("Invalid or unavailable Slot ID.");
+                            return;
+                        }
+
+                        selectedSlot.setCaseID(caseId);
+                        databaseHandler.updateOrInsertSlots(AllSlots);
+                        System.out.println("Hearing Scheduled for Slot ID: " + slotId);
+
+                        // Show success message
+                        successLabel.setText("Hearing successfully scheduled for Slot ID: " + slotId + "!");
+                    } catch (NumberFormatException ex) {
+                        System.out.println("Invalid Slot ID input.");
+                    }
+                });
+            } catch (NumberFormatException ex) {
+                System.out.println("Invalid Case ID input.");
             }
+        });
 
-            s.setCaseID(cid);
-
-            databaseHandler.updateOrInsertSlots(AllSlots);
-            System.out.println("Hearing Scheduled for Slot " + s.getSlotID());
-        } else {
-            System.out.println("Slot not free.");
-        }
+        // Set scene and display
+        Scene caseScene = new Scene(mainLayout, 1100, 650);
+        mainLayout.setStyle(
+                "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        primaryStage.setScene(caseScene);
+        primaryStage.show();
     }
+
+    // public void scheduleHearing(Scanner scanner, List<Case> AllCases, List<Slot>
+    // AllSlots, List<Judge> AllJudges,
+    // List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
+    // DatabaseHandler databaseHandler, Stage primaryStage) {
+
+    // VBox layout = new VBox(10); // 10px spacing between buttons
+    // VBox layoutouter = new VBox(10);
+    // VBox layoutinner = new VBox(10);
+    // Scene scene = new Scene(layoutouter, 1100, 650); // Setting up the scene size
+    // layout.setStyle("-fx-alignment: top-center;");
+
+    // primaryStage.setTitle("Schedule Hearing");
+
+    // Button caseButton = new Button("Log Out");
+    // CourtsManagementSystem c = new CourtsManagementSystem();
+    // // c.designButton_smaller(caseButton);
+
+    // layout.getChildren().addAll(layoutinner);
+    // layoutinner.getChildren().addAll(caseButton);
+
+    // primaryStage.show();
+
+    // // System.out.println("\nCases:");
+    // // for (Case caseObj : AllCases) {
+    // // System.out.println(caseObj.toString());
+    // // }
+
+    // // System.out.print("\nEnter CaseID: ");
+    // // int cid = scanner.nextInt();
+
+    // // System.out.println("\nSlots:");
+    // // for (Slot slotObj : AllSlots) {
+    // // System.out.println(slotObj.toString());
+    // // }
+
+    // // System.out.print("\nEnter SlotID: ");
+    // // int sid = scanner.nextInt();
+    // // scanner.nextLine();
+
+    // // Slot s = new Slot();
+    // // for (Slot slotObj : AllSlots) {
+    // // if (slotObj.getSlotID() == sid) {
+    // // s = slotObj;
+    // // }
+    // // }
+
+    // // if (s.getJudgeID() == null) {
+    // // int jid;
+    // // int courtid;
+    // // for (Slot slotObj : AllSlots) {
+    // // if (slotObj != null) {
+    // // if (slotObj.getCaseID() != null) {
+    // // if (slotObj.getCaseID() == cid) {
+    // // jid = slotObj.getJudgeID();
+    // // courtid = slotObj.getCourtId();
+    // // s.setJudgeID(jid);
+    // // s.setCourtId(courtid);
+    // // }
+    // // }
+    // // }
+    // // }
+
+    // // s.setCaseID(cid);
+
+    // // databaseHandler.updateOrInsertSlots(AllSlots);
+    // // System.out.println("Hearing Scheduled for Slot " + s.getSlotID());
+    // // } else {
+    // // System.out.println("Slot not free.");
+    // // }
+    // }
 
     public void TrackAndManageUpdates(List<Case> Allcases, List<Slot> AllSlots, List<Judge> AllJudges,
             List<Lawyer> AllLawyers, List<Clients> AllClients, List<Notification> AllNotifications,
