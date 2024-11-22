@@ -11,6 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import JusticeFlow.CourtsManagementSystem.GUI_Menu;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -25,6 +28,19 @@ import java.sql.SQLException;
 import java.nio.file.*;
 import java.awt.*;
 import java.time.LocalDateTime;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class Lawyer extends User {
     private int lawyerID;
@@ -245,10 +261,186 @@ public class Lawyer extends User {
         System.out.println("Case has been successfully created.");
     }
 
+    // public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler, Stage primaryStage, Scene previousScene) {
+    // // Create main layout for the submit document process
+    // VBox mainLayout = new VBox(20);
+    // mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+    public void FileNewCase(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases, Stage primaryStage,GUI_Menu gui) {
+        primaryStage.setTitle("File New Case");
+        Label PageTitle = new Label("File New Case");
+        PageTitle.setStyle("-fx-font-size: 44px;-fx-alignment:center center;");
+        // Create a GridPane to hold the UI elements
+        VBox outerlayout=new VBox(25);
+        HBox horizontalbox=new HBox(25);
+        GridPane grid = new GridPane();
+        VBox imagebox=new VBox(15);
+        imagebox.setStyle(
+            "-fx-background-size: contain; "
+            + "-fx-background-position: center; "
+            + "-fx-background-repeat: no-repeat; "
+            + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/pic1.png'); "
+            + "-fx-min-height:200px;"
+            + "-fx-min-width:400px;"
+        );
+        imagebox.minWidthProperty().bind(grid.widthProperty());
+        grid.setStyle(
+            "-fx-background-color: rgba(0,0,0,0.8); "
+            + "-fx-background-radius: 20px; "
+            + "-fx-padding: 20px 50px; "
+        );
+        outerlayout.setStyle("-fx-alignment:center center;-fx-background-color: #f4f4f9;padding:10px 80px;");
+        grid.setVgap(25);
+        grid.setHgap(25);
+        horizontalbox.setStyle("-fx-spacing:50px;");
+        horizontalbox.getChildren().addAll(grid,imagebox);
+        outerlayout.getChildren().addAll(PageTitle,horizontalbox);
+
+
+        // Labels and Input Fields with a minimalistic design
+        Label titleLabel = new Label("Case Title:");
+        titleLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;-fx-text-fill: white;");
+        TextField titleField = new TextField();
+        titleField.setPromptText("Enter case title");
+        titleField.setStyle("-fx-font-size: 14px; -fx-background-color: #ffffff; -fx-border-radius: 5px;");
+
+        Label typeLabel = new Label("Case Type:");
+        typeLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;-fx-text-fill: white;");
+        ComboBox<String> typeComboBox = new ComboBox<>();
+        typeComboBox.getItems().addAll("Civil", "Criminal", "Family", "Other");
+        typeComboBox.setValue("Civil");
+        typeComboBox.setStyle("-fx-font-size: 14px; -fx-background-color: #ffffff; -fx-border-radius: 5px;-fx-text-fill: white;");
+
+        Label filingDateLabel = new Label("Filing Date:");
+        filingDateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;-fx-text-fill: white; ");
+        DatePicker filingDatePicker = new DatePicker();
+        filingDatePicker.setPromptText("yyyy-MM-dd");
+
+        Label courtDateLabel = new Label("Court Date:");
+        courtDateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;-fx-text-fill: white;");
+        DatePicker courtDatePicker = new DatePicker();
+        courtDatePicker.setPromptText("yyyy-MM-dd");
+
+        Label plaintiffIDLabel = new Label("Plaintiff ID:");
+        plaintiffIDLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;-fx-text-fill: white;");
+        TextField plaintiffIDField = new TextField();
+        plaintiffIDField.setPromptText("Plaintiff ID");
+
+        Label defendantIDLabel = new Label("Defendant ID:");
+        defendantIDLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;-fx-text-fill: white;");
+        TextField defendantIDField = new TextField();
+        defendantIDField.setPromptText("Defendant ID");
+        
+        // Submit Button
+        Button submitButton = new Button("Submit");
+        submitButton.setStyle("-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        submitButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
+
+        Button returnButton = new Button("Close");
+        returnButton.setStyle("-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        returnButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
+
+
+        Label confirmationLabel = new Label();
+        confirmationLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #4CAF50;");
+
+        // Add controls to the grid
+        designTextField(titleField);
+        designTextField(plaintiffIDField);
+        designTextField(defendantIDField);
+        designComboBox(typeComboBox);
+        designComboBox(typeComboBox);
+        grid.add(titleLabel, 0, 0);
+        grid.add(titleField, 1, 0);
+
+        grid.add(typeLabel, 0, 1);
+        grid.add(typeComboBox, 1, 1);
+
+        grid.add(filingDateLabel, 0, 2);
+        grid.add(filingDatePicker, 1, 2);
+
+        grid.add(courtDateLabel, 0, 3);
+        grid.add(courtDatePicker, 1, 3);
+
+        grid.add(plaintiffIDLabel, 0, 4);
+        grid.add(plaintiffIDField, 1, 4);
+
+        grid.add(defendantIDLabel, 0, 5);
+        grid.add(defendantIDField, 1, 5);
+
+        grid.add(returnButton, 0, 6);
+        grid.add(submitButton, 1, 6);
+
+        VBox vbox = new VBox(20, outerlayout, confirmationLabel);
+        vbox.setStyle("-fx-padding: 20; -fx-background-color: #f4f4f9;"); // Minimal background for vbox
+        returnButton.setOnAction(event -> { gui.GUI_startmenu(primaryStage);});
+        // Event handler for the submit button
+        submitButton.setOnAction(event -> {
+            // Get inputs
+            String caseTitle = titleField.getText().isEmpty() ? "Default Case Title" : titleField.getText();
+            String caseType = typeComboBox.getValue();
+            Date filingDate = convertToDate(filingDatePicker.getValue());
+            Date courtDate = convertToDate(courtDatePicker.getValue());
+            int plaintiffID = parseID(plaintiffIDField.getText());
+            int defendantID = parseID(defendantIDField.getText());
+            
+            // Case Status
+            String caseStatus = "Pending";
+
+            // Create new Case object (use your Case constructor)
+            Case newCase = new Case(
+                    AllCases.size() + 1, // ID will be auto-generated
+                    caseTitle,
+                    caseType,
+                    filingDate,
+                    courtDate,
+                    plaintiffID,
+                    defendantID,
+                    caseStatus,
+                    this.getLawyerID() // assuming lawyerID is 0 for now
+            );
+
+            // Simulate saving the case to the database
+            dbHandler.saveOrUpdateCase(newCase);
+            newCase.updateCaseFiles(fileHandler, dbHandler); // Uncomment when FileHandler is available
+            AllCases.add(newCase); // Add the new case to the list (AllCases is a List)
+
+            confirmationLabel.setText("Case has been successfully created.");
+        });
+
+        // Create the Scene and set it to the Stage
+        Scene scene = new Scene(vbox, 1000, 600);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private java.sql.Date convertToDate(java.time.LocalDate localDate) {
+        // If the date is null, return the current date
+        if (localDate == null) {
+            return new java.sql.Date(System.currentTimeMillis()); // Default to current date
+        }
+        return java.sql.Date.valueOf(localDate); // Convert LocalDate to java.sql.Date
+    }
+    
+
+    private Date getDateFromString(String dateInput) {
+        if (dateInput.isEmpty()) {
+            return new Date(System.currentTimeMillis()); // default to current date
+        }
+        try {
+            return java.sql.Date.valueOf(dateInput);
+        } catch (IllegalArgumentException e) {
+            return new Date(System.currentTimeMillis()); // return current date on invalid input
+        }
+    }
+
+    private int parseID(String idInput) {
+        return idInput.isEmpty() ? 0 : Integer.parseInt(idInput); // default to 0 if empty
+    }
+
     public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler, Stage primaryStage, Scene previousScene) {
-    // Create main layout for the submit document process
-    VBox mainLayout = new VBox(20);
-    mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+        // Create main layout for the submit document process
+        VBox mainLayout = new VBox(20);
+        mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
 
     // Title label
     Label titleLabel = new Label("Submit Document for Case");

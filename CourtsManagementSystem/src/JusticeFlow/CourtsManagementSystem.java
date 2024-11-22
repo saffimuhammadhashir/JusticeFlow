@@ -199,6 +199,18 @@ public class CourtsManagementSystem extends Application {
         }
     }
 
+    public void AddNewCase(Stage primaryStage, GUI_Menu gui) {
+        Lawyer lawyer = new Lawyer();
+        lawyer = lawyer.getRelevantLawyer(AllLawyers, user);
+        if (lawyer != null) {
+            lawyer.FileNewCase(dbHandler, fileHandler, AllCases, primaryStage, gui);
+            System.out.println("Case has been successfully created.");
+
+        } else {
+            System.out.println("Lawyer Not Found!");
+        }
+    }
+
     public void ReviewUpcomingCaseRequests(Scanner scanner) {
         Registrar registrar = new Registrar();
         registrar = registrar.getRelevantRegistrar(AllRegistrar, user);
@@ -214,6 +226,29 @@ public class CourtsManagementSystem extends Application {
             if (CourtAdmin != null) {
                 CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses,
                         AllCourts, scanner);
+                System.out.println("Case has been successfully created.");
+            } else {
+                System.out.println("Invalid User!");
+            }
+
+        }
+    }
+
+    public void ReviewUpcomingCaseRequests(Stage primaryStage,GUI_Menu gui) {
+        Registrar registrar = new Registrar();
+        registrar = registrar.getRelevantRegistrar(AllRegistrar, user);
+        if (registrar != null) {
+            registrar.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
+                    primaryStage,gui);
+            System.out.println("Case has been successfully created.");
+
+        } else {
+
+            CourtAdministrator CourtAdmin = new CourtAdministrator();
+            CourtAdmin = CourtAdmin.getRelevantCourtAdministrators(AllCourt_Administrators, user);
+            if (CourtAdmin != null) {
+                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
+                primaryStage,gui);
                 System.out.println("Case has been successfully created.");
             } else {
                 System.out.println("Invalid User!");
@@ -1234,13 +1269,16 @@ public class CourtsManagementSystem extends Application {
             this.system = system;
             this.scanner = scanner;
             this.primaryStage = primaryStage;
+            system.loadData();
+            system.printAllObjects();
 
         }
 
-        public void GUI_startmenu() {
+        public void GUI_startmenu(Stage primaryStage) {
             String role = user.getRole();
             system.loadData();
 
+            system.user = user;
             // Create a VBox layout to hold the buttons
             VBox layout = new VBox(10); // 10px spacing between buttons
             VBox layoutouter = new VBox(10);
@@ -1271,7 +1309,7 @@ public class CourtsManagementSystem extends Application {
 
                 caseFilingButton.setOnAction(e -> {
                     System.out.println("Case Filing/Scheduling selected.");
-                    ReviewUpcomingCaseRequests(scanner); // Call your method
+                    system.ReviewUpcomingCaseRequests(primaryStage,this); // Call your method
                 });
 
                 trackUpdatesButton.setOnAction(e -> {
@@ -1415,7 +1453,7 @@ public class CourtsManagementSystem extends Application {
 
                 designButton_smaller(btnReviewDocLogJudgment);
                 designButton_smaller(btnViewNotifications);
-                designButton_smaller(btnLogout);
+                styleLogoutButton(btnLogout);
 
                 btnLogout.setOnAction(e -> {
                     System.out.println("Logging out...");
@@ -1430,7 +1468,7 @@ public class CourtsManagementSystem extends Application {
                 titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Lawyer");
                 Button btnCaseFiling = new Button("Case Filing/Scheduling");
-                btnCaseFiling.setOnAction(e -> AddNewCase());
+                btnCaseFiling.setOnAction(e -> system.AddNewCase(primaryStage, this));
 
                 Button btnTrackUpdates = new Button("Track Updates");
                 btnTrackUpdates.setOnAction(e -> TrackUpdates());
@@ -1490,7 +1528,7 @@ public class CourtsManagementSystem extends Application {
                 designButton_smaller(btnTrackCase);
                 designButton_smaller(btnSubmitDoc);
                 designButton_smaller(btnViewNotifications);
-                designButton_smaller(btnLogout);
+                styleLogoutButton(btnLogout);
 
                 btnLogout.setOnAction(e -> {
                     System.out.println("Logging out...");
@@ -1514,7 +1552,7 @@ public class CourtsManagementSystem extends Application {
 
                 designButton_smaller(btnViewCaseDetails);
                 designButton_smaller(btnViewNotifications);
-                designButton_smaller(btnLogout);
+                styleLogoutButton(btnLogout);
 
                 btnLogout.setOnAction(e -> {
                     System.out.println("Logging out...");
@@ -1544,7 +1582,7 @@ public class CourtsManagementSystem extends Application {
                 designButton_smaller(btnTrackUpdates);
                 designButton_smaller(btnRequestReOpeningAppeal);
                 designButton_smaller(btnViewNotifications);
-                designButton_smaller(btnLogout);
+                styleLogoutButton(btnLogout);
 
                 btnLogout.setOnAction(e -> {
                     System.out.println("Logging out...");
@@ -1562,7 +1600,7 @@ public class CourtsManagementSystem extends Application {
                 titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Registrar");
                 Button btnCaseFiling = new Button("Case Filing/Scheduling");
-                btnCaseFiling.setOnAction(e -> ReviewUpcomingCaseRequests(scanner));
+                btnCaseFiling.setOnAction(e -> system.ReviewUpcomingCaseRequests(primaryStage,this));
 
                 Button btnBarRegistration = new Button("Bar Registration");
                 btnBarRegistration.setOnAction(e -> RegisterToBar(scanner));
@@ -1918,7 +1956,7 @@ public class CourtsManagementSystem extends Application {
                     user = dbHandler.getUserById(loggedinID);
                     statusLabel.setText("Login Successful!");
                     statusLabel.setStyle("-fx-text-fill: green;");
-                    GUI_startmenu();
+                    GUI_startmenu(primaryStage);
                     return;
                     // CLI_Menu loggedin = new CLI_Menu(user,scanner); // Replace with actual JavaFX
                     // menu scene
@@ -1960,7 +1998,7 @@ public class CourtsManagementSystem extends Application {
         CourtsManagementSystem system = new CourtsManagementSystem();
         Scanner scanner = new Scanner(System.in);
         GUI_Menu Gui = new GUI_Menu(system, primaryStage, scanner);
-        system.loadData();
+
         // Title Label
         Label titleLabel1 = new Label("Welcome to Courts Management System");
         titleLabel1.setStyle("-fx-font-size: 45px; -fx-font-weight: bold; -fx-text-fill: #f0f0f0;");

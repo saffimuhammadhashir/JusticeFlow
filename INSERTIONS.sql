@@ -2,7 +2,7 @@
 INSERT INTO Users (Username, Password, Role, Email, PhoneNumber, Activate) 
 VALUES 
 -- Judges
-('judge_john', 'password123', 'Judge', 'judge.john@example.com', '1234567890', 1),
+('judge', '123', 'Judge', 'judge.john@example.com', '1234567890', 1),
 ('judge_jane', 'password123', 'Judge', 'judge.jane@example.com', '2234567891', 1),
 ('judge_mark', 'password123', 'Judge', 'judge.mark@example.com', '3234567892', 1),
 ('judge_anna', 'password123', 'Judge', 'judge.anna@example.com', '4234567893', 1),
@@ -13,52 +13,52 @@ VALUES
 ('lawyer_jack', 'password123', 'Lawyer', 'lawyer.jack@example.com', '2234567895', 1),
 ('lawyer_henry', 'password123', 'Lawyer', 'lawyer.henry@example.com', '3234567896', 1),
 ('lawyer_clara', 'password123', 'Lawyer', 'lawyer.clara@example.com', '4234567897', 1),
-('saffi', '123', 'Lawyer', 'lawyer.oliver@example.com', '5234567898', 1),
+('lawyer', '123', 'Lawyer', 'lawyer.oliver@example.com', '5234567898', 1),
 
 -- Administrators
-('admin_mary', 'password123', 'Court Administrator', 'admin.mary@example.com', '1234567892', 1),
+('admin', '123', 'Court Administrator', 'admin.mary@example.com', '1234567892', 1),
 ('admin_luke', 'password123', 'Court Administrator', 'admin.luke@example.com', '2234567899', 1),
 ('admin_emma', 'password123', 'Court Administrator', 'admin.emma@example.com', '3234567800', 1),
 ('admin_sophia', 'password123', 'Court Administrator', 'admin.sophia@example.com', '4234567801', 1),
 ('admin_noah', 'password123', 'Court Administrator', 'admin.noah@example.com', '5234567802', 1),
 
 -- Clients
-('client_mark', 'password123', 'Client', 'client.mark@example.com', '1234567893', 1),
+('client', '123', 'Client', 'client.mark@example.com', '1234567893', 1),
 ('client_susan', 'password123', 'Client', 'client.susan@example.com', '1234567894', 1),
 ('client_harry', 'password123', 'Client', 'client.harry@example.com', '2234567895', 1),
 ('client_ron', 'password123', 'Client', 'client.ron@example.com', '3234567896', 1),
 ('client_hermione', 'password123', 'Client', 'client.hermione@example.com', '4234567897', 1),
 
 -- Witnesses
-('witness_tom', 'password123', 'Witness', 'witness.tom@example.com', '1234567895', 1),
+('witness', '123', 'Witness', 'witness.tom@example.com', '1234567895', 1),
 ('witness_lisa', 'password123', 'Witness', 'witness.lisa@example.com', '2234567898', 1),
 ('witness_harry', 'password123', 'Witness', 'witness.harry@example.com', '3234567899', 1),
 ('witness_ron', 'password123', 'Witness', 'witness.ron@example.com', '4234567890', 1),
 ('witness_hermione', 'password123', 'Witness', 'witness.hermione@example.com', '5234567891', 1),
 
 -- Registrars
-('registrar_anna', 'password123', 'Registrar', 'registrar.anna@example.com', '1234567896', 1),
+('registrar', '123', 'Registrar', 'registrar.anna@example.com', '1234567896', 1),
 ('registrar_john', 'password123', 'Registrar', 'registrar.john@example.com', '2234567892', 1),
 ('registrar_jane', 'password123', 'Registrar', 'registrar.jane@example.com', '3234567893', 1),
 ('registrar_paul', 'password123', 'Registrar', 'registrar.paul@example.com', '4234567894', 1),
 ('registrar_lucy', 'password123', 'Registrar', 'registrar.lucy@example.com', '5234567895', 1),
 
 -- Jurors
-('juror_henry', 'password123', 'Juror', 'juror.henry@example.com', '1234567897', 1),
+('juror', '123', 'Juror', 'juror.henry@example.com', '1234567897', 1),
 ('juror_clara', 'password123', 'Juror', 'juror.clara@example.com', '2234567893', 1),
 ('juror_james', 'password123', 'Juror', 'juror.james@example.com', '3234567894', 1),
 ('juror_linda', 'password123', 'Juror', 'juror.linda@example.com', '4234567895', 1),
 ('juror_ethan', 'password123', 'Juror', 'juror.ethan@example.com', '5234567896', 1),
 
 -- Probation Officers
-('officer_emma', 'password123', 'Probation Officer', 'officer.emma@example.com', '1234567898', 1),
+('officer', '123', 'Probation Officer', 'officer.emma@example.com', '1234567898', 1),
 ('officer_oliver', 'password123', 'Probation Officer', 'officer.oliver@example.com', '2234567894', 1),
 ('officer_sophia', 'password123', 'Probation Officer', 'officer.sophia@example.com', '3234567895', 1),
 ('officer_jack', 'password123', 'Probation Officer', 'officer.jack@example.com', '4234567896', 1),
 ('officer_ava', 'password123', 'Probation Officer', 'officer.ava@example.com', '5234567897', 1),
 
 -- IT Admins
-('itadmin_jack', 'password123', 'IT Admin', 'itadmin.jack@example.com', '1234567899', 1),
+('itadmin', '123', 'IT Admin', 'itadmin.jack@example.com', '1234567899', 1),
 ('itadmin_mia', 'password123', 'IT Admin', 'itadmin.mia@example.com', '2234567895', 1),
 ('itadmin_luke', 'password123', 'IT Admin', 'itadmin.luke@example.com', '3234567896', 1),
 ('itadmin_emily', 'password123', 'IT Admin', 'itadmin.emily@example.com', '4234567897', 1),
@@ -254,4 +254,4 @@ SELECT * FROM Notifications;
 
 
 
--- update cases set CaseStatus='Pending' where CaseID>10;
+update cases set CaseStatus='Pending' where CaseID>10;
