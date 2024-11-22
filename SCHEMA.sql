@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS Jurors;
 DROP TABLE IF EXISTS UserApplication;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Notifications;
-
+DROP TABLE IF EXISTS Slots;
 -- Create tables for the system
 
 -- Actor Table
