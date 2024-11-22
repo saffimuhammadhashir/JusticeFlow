@@ -49,9 +49,9 @@ public class CourtsManagementSystem extends Application {
         dbHandler.Register();
     }
 
-    CourtsManagementSystem() {
-     loadData();
-    }
+    // CourtsManagementSystem() {
+    // loadData();
+    // }
 
     public void loadData() {
         if (dbHandler != null) {
@@ -848,70 +848,58 @@ public class CourtsManagementSystem extends Application {
 
     private class GUI_Menu {
         CourtsManagementSystem system;
+
         Scanner scanner;
         Stage primaryStage;
-        private static final String BASE_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.1); " // Subtle
-                                                                                                    // transparent
-                                                                                                    // background for
-                                                                                                    // minimalism
-                + "-fx-text-fill: white; " // Dark text color for readability
-                + "-fx-font-size: 18px; " // Smaller font size for a cleaner look
-                + "-fx-font-family: 'Segoe UI', sans-serif; " // Font family
-                + "-fx-padding: 10px 15px; " // Padding for spacing
-                + "-fx-border-radius: 10px; " // Slightly rounded corners for subtle design
-                + "-fx-border-color: rgba(255, 255, 255, 0.2); " // Soft, light border color
-                + "-fx-border-width: 1px; " // Thin border width
-                + "-fx-background-radius: 10px; " // Rounded background
-                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 8); " // Subtle shadow effect for depth
-                + "-fx-transition: all 0.3s ease-in-out;"; // Smooth transition for style changes
+        private static final String BASE_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.1); "
+                + "-fx-text-fill: white; "
+                + "-fx-font-size: 18px; "
+                + "-fx-font-family: 'Segoe UI', sans-serif; "
+                + "-fx-padding: 10px 15px; "
+                + "-fx-border-radius: 10px; "
+                + "-fx-border-color: rgba(255, 255, 255, 0.2); "
+                + "-fx-border-width: 1px; "
+                + "-fx-background-radius: 10px; "
+                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 8); "
+                + "-fx-transition: all 0.3s ease-in-out;";
 
-        private static final String FOCUSED_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.2); " // Slightly
-                                                                                                       // lighter
-                                                                                                       // background
-                                                                                                       // when focused
-                + "-fx-text-fill: white; " // Dark text color for readability
-                + "-fx-font-size: 18px; " // Font size
-                + "-fx-font-family: 'Segoe UI', sans-serif; " // Font family
-                + "-fx-padding: 10px 15px; " // Padding for spacing
-                + "-fx-border-radius: 20px; " // Rounded corners
-                + "-fx-border-color: rgba(255, 255, 255, 0.7); " // Soft blue border color when focused
-                + "-fx-border-width: 1px; " // Border width
-                + "-fx-background-radius: 20px; " // Rounded background
-                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 10); " // Subtle shadow effect for depth
-                + "-fx-transition: all 0.3s ease-in-out;"; // Smooth transition for style changes
-        private static final String COMBOBOX_BASE_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.1); " // Subtle
-                                                                                                             // transparent
-                                                                                                             // background
-                                                                                                             // for
-                                                                                                             // minimalism
-                + "-fx-text-fill: white; " // Dark text color for readability
-                + "-fx-font-size: 18px; " // Font size for a cleaner look
-                + "-fx-font-family: 'Segoe UI', sans-serif; " // Font family
-                + "-fx-padding: 5px 15px; " // Padding for spacing
-                + "-fx-border-radius: 10px; " // Slightly rounded corners for subtle design
-                + "-fx-border-color: rgba(255, 255, 255, 0.2); " // Soft, light border color
-                + "-fx-border-width: 1px; " // Thin border width
-                + "-fx-background-radius: 10px; " // Rounded background
-                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 8); " // Subtle shadow effect for depth
-                + "-fx-transition: all 0.3s ease-in-out;"
-                + "-fx-prompt-text-fill: white;"; // Smooth transition for style changes
+        private static final String FOCUSED_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.2); "
+                + "-fx-text-fill: white; "
+                + "-fx-font-size: 18px; "
+                + "-fx-font-family: 'Segoe UI', sans-serif; "
+                + "-fx-padding: 10px 15px; "
+                + "-fx-border-radius: 20px; "
+                + "-fx-border-color: rgba(255, 255, 255, 0.7); "
+                + "-fx-border-width: 1px; "
+                + "-fx-background-radius: 20px; "
+                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 10); "
+                + "-fx-transition: all 0.3s ease-in-out;";
 
-        private static final String COMBOBOX_FOCUSED_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.2); " // Slightly
-                                                                                                                // lighter
-                                                                                                                // background
-                                                                                                                // when
-                                                                                                                // focused
-                + "-fx-text-fill: white; " // Dark text color for readability
-                + "-fx-font-size: 18px; " // Font size
-                + "-fx-font-family: 'Segoe UI', sans-serif; " // Font family
-                + "-fx-padding: 5px 15px; " // Padding for spacing
-                + "-fx-border-radius: 20px; " // Rounded corners
-                + "-fx-border-color: rgba(255, 255, 255, 0.7); " // Soft blue border color when focused
-                + "-fx-border-width: 1px; " // Border width
-                + "-fx-background-radius: 20px; " // Rounded background
-                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 10); " // Subtle shadow effect for depth
+        private static final String COMBOBOX_BASE_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.1); "
+                + "-fx-text-fill: white; "
+                + "-fx-font-size: 18px; "
+                + "-fx-font-family: 'Segoe UI', sans-serif; "
+                + "-fx-padding: 5px 15px; "
+                + "-fx-border-radius: 10px; "
+                + "-fx-border-color: rgba(255, 255, 255, 0.2); "
+                + "-fx-border-width: 1px; "
+                + "-fx-background-radius: 10px; "
+                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 8); "
                 + "-fx-transition: all 0.3s ease-in-out;"
-                + "-fx-prompt-text-fill: white;"; // Smooth transition for style changes
+                + "-fx-prompt-text-fill: white;";
+
+        private static final String COMBOBOX_FOCUSED_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.2); "
+                + "-fx-text-fill: white; "
+                + "-fx-font-size: 18px; "
+                + "-fx-font-family: 'Segoe UI', sans-serif; "
+                + "-fx-padding: 5px 15px; "
+                + "-fx-border-radius: 20px; "
+                + "-fx-border-color: rgba(255, 255, 255, 0.7); "
+                + "-fx-border-width: 1px; "
+                + "-fx-background-radius: 20px; "
+                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 10); "
+                + "-fx-transition: all 0.3s ease-in-out;"
+                + "-fx-prompt-text-fill: white;";
 
         public void designComboBox(ComboBox<String> comboBox) {
             comboBox.setStyle(COMBOBOX_BASE_STYLE);
@@ -975,7 +963,8 @@ public class CourtsManagementSystem extends Application {
                             + "-fx-border-width: 1px; " // Thin border for subtle effect
                             + "-fx-background-radius: 15px; " // Rounded corners for background
                             + "-fx-effect: dropshadow(gaussian, #000000, 10, 0, 0, 10); " // Shadow effect for depth
-                            + "-fx-transition: all 1.5s ease; " // Smooth transition for hover effect
+                            + "-fx-transition: all 1.5s ease; "
+                            + "-fx-min-width: 200px; " // Smooth transition for hover effect
 
             );
 
@@ -992,7 +981,7 @@ public class CourtsManagementSystem extends Application {
                                 + "-fx-border-width: 1px; "
                                 + "-fx-background-radius: 20px; "
                                 + "-fx-effect: dropshadow(gaussian, #000000, 10, 0, 0, 15); " // Enhanced shadow on
-                                                                                              // hover
+                                + "-fx-min-width: 200px; " // hover
                                 + "-fx-transition: all 1.5s ease; "
 
                 );
@@ -1012,9 +1001,113 @@ public class CourtsManagementSystem extends Application {
                                 + "-fx-background-radius: 15px; "
                                 + "-fx-effect: dropshadow(gaussian, #000000, 10, 0, 0, 10); "
                                 + "-fx-transition: all 1.5s ease; "
+                                + "-fx-min-width: 200px; "
 
                 );
             });
+        }
+
+        public void designButton_smaller(Button button) {
+            // Initial button style (Glassmorphism)
+            button.setStyle(
+                    "-fx-background-color: rgba(255, 255, 255, 0.7); " // Semi-transparent white background for glass
+                                                                       // effect
+                            + "-fx-text-fill: black; " // White text color
+                            + "-fx-font-size: 16px; " // Font size
+                            + "-fx-font-weight: bold; " // Bold text
+                            + "-fx-padding: 3px 30px; " // Padding for spacing
+                            + "-fx-border-radius: 15px; " // Rounded corners for smooth look
+                            + "-fx-border-color: rgba(255, 255, 255, 0.6); " // Light border with slight transparency
+                            + "-fx-border-width: 1px; " // Thin border for subtle effect
+                            + "-fx-background-radius: 15px; " // Rounded corners for background
+                            + "-fx-effect: dropshadow(gaussian, #000000, 10, 0, 0, 10); " // Shadow effect for depth
+                            + "-fx-transition: all 1.5s ease; "
+                            + "-fx-min-width: 300px; " // Smooth transition for hover effect
+
+            );
+
+            // Hover effect with animation
+            button.setOnMouseEntered(e -> {
+                button.setStyle(
+                        "-fx-background-color: rgba(255, 255, 255, 1.0); " // Lighter transparency on hover
+                                + "-fx-text-fill: black; " // Text color changes to blue
+                                + "-fx-font-size: 16px; "
+                                + "-fx-font-weight: bold; "
+                                + "-fx-padding: 3px 30px; "
+                                + "-fx-border-radius: 20px; "
+                                + "-fx-border-color: rgba(255, 255, 255, 0.8); " // Lighter border on hover
+                                + "-fx-border-width: 1px; "
+                                + "-fx-background-radius: 20px; "
+                                + "-fx-effect: dropshadow(gaussian, #000000, 10, 0, 0, 15); " // Enhanced shadow on
+                                + "-fx-min-width: 300px; " // hover
+                                + "-fx-transition: all 1.5s ease; "
+
+                );
+            });
+
+            // Reset style when mouse exits
+            button.setOnMouseExited(e -> {
+                button.setStyle(
+                        "-fx-background-color: rgba(255, 255, 255,0.7); " // Reset to original glass effect
+                                + "-fx-text-fill: black; "
+                                + "-fx-font-size: 16px; "
+                                + "-fx-font-weight: bold; "
+                                + "-fx-padding: 3px 30px; "
+                                + "-fx-border-radius: 15px; "
+                                + "-fx-border-color: rgba(255, 255, 255, 0.6); "
+                                + "-fx-border-width: 1px; "
+                                + "-fx-background-radius: 15px; "
+                                + "-fx-effect: dropshadow(gaussian, #000000, 10, 0, 0, 10); "
+                                + "-fx-transition: all 1.5s ease; "
+                                + "-fx-min-width: 300px; "
+
+                );
+            });
+        }
+
+        public void styleLogoutButton(Button button) {
+            button.setText("Logout"); // Set button text
+            button.setStyle(
+                    "-fx-background-color: rgba(255, 69, 58, 0.7); " // Semi-transparent red background
+                            + "-fx-text-fill: white; " // White text color
+                            + "-fx-font-size: 16px; " // Font size
+                            + "-fx-font-weight: bold; " // Bold text
+                            + "-fx-padding: 8px 20px; " // Padding for spacing
+                            + "-fx-border-radius: 10px; " // Rounded corners for smooth look
+                            + "-fx-border-color: rgba(255, 69, 58, 0.9); " // Subtle border in red
+                            + "-fx-border-width: 1px; " // Thin border for a minimal effect
+                            + "-fx-background-radius: 10px; " // Rounded corners for background
+                            + "-fx-cursor: hand; " // Change cursor to pointer
+                            + "-fx-transition: all 0.3s ease-in-out;" // Smooth animation for hover
+            );
+
+            // Set hover effect
+            button.setOnMouseEntered(event -> button.setStyle(
+                    "-fx-background-color: rgba(255, 69, 58, 1); " // Solid red background on hover
+                            + "-fx-text-fill: white; " // White text on hover
+                            + "-fx-font-size: 16px; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-padding: 8px 20px; "
+                            + "-fx-border-radius: 10px; "
+                            + "-fx-border-color: rgba(255, 255, 255, 0.7); " // White border on hover
+                            + "-fx-border-width: 1px; "
+                            + "-fx-background-radius: 10px; "
+                            + "-fx-cursor: hand; "
+                            + "-fx-transition: all 0.3s ease-in-out;"));
+
+            // Revert to original style on mouse exit
+            button.setOnMouseExited(event -> button.setStyle(
+                    "-fx-background-color: rgba(255, 69, 58, 0.7); " // Semi-transparent red
+                            + "-fx-text-fill: white; "
+                            + "-fx-font-size: 16px; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-padding: 8px 20px; "
+                            + "-fx-border-radius: 10px; "
+                            + "-fx-border-color: rgba(255, 69, 58, 0.9); "
+                            + "-fx-border-width: 1px; "
+                            + "-fx-background-radius: 10px; "
+                            + "-fx-cursor: hand; "
+                            + "-fx-transition: all 0.3s ease-in-out;"));
         }
 
         public GUI_Menu(CourtsManagementSystem system, Stage primaryStage, Scanner scanner) {
@@ -1022,6 +1115,7 @@ public class CourtsManagementSystem extends Application {
             this.system = system;
             this.scanner = scanner;
             this.primaryStage = primaryStage;
+
         }
 
         public void GUI_startmenu() {
@@ -1029,13 +1123,17 @@ public class CourtsManagementSystem extends Application {
 
             // Create a VBox layout to hold the buttons
             VBox layout = new VBox(10); // 10px spacing between buttons
-            Scene scene = new Scene(layout, 1100, 600); // Setting up the scene size
+            VBox layoutouter = new VBox(10);
+            VBox layoutinner = new VBox(10);
+            Scene scene = new Scene(layoutouter, 1100, 650); // Setting up the scene size
             layout.setStyle("-fx-alignment: top-center;");
+
             // Main menu for different roles
             if ("Court Administrator".equalsIgnoreCase(role)) {
+
                 primaryStage.setTitle("Main Menu for Court Administrator");
                 Label titleLabel = new Label("Court Administrator's Menu");
-                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;");
+                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 Button caseFilingButton = new Button("Case Filing/Scheduling");
                 Button trackUpdatesButton = new Button("Track/Manage Updates");
                 Button trackCaseButton = new Button("Track Case");
@@ -1044,6 +1142,14 @@ public class CourtsManagementSystem extends Application {
                 Button retrieveRecordButton = new Button("Retrieve Record");
                 Button displayNotificationsButton = new Button("Display Notifications");
                 Button logoutButton = new Button("Log Out");
+                designButton_smaller(caseFilingButton);
+                designButton_smaller(trackUpdatesButton);
+                designButton_smaller(trackCaseButton);
+                designButton_smaller(scheduleHearingButton);
+                designButton_smaller(viewITScheduleButton);
+                designButton_smaller(retrieveRecordButton);
+                designButton_smaller(displayNotificationsButton);
+                styleLogoutButton(logoutButton);
 
                 caseFilingButton.setOnAction(e -> {
                     System.out.println("Case Filing/Scheduling selected.");
@@ -1086,19 +1192,25 @@ public class CourtsManagementSystem extends Application {
                 });
 
                 // Add buttons to the layout
-                layout.getChildren().addAll(titleLabel, caseFilingButton, trackUpdatesButton, trackCaseButton,
+                layout.getChildren().addAll(titleLabel, layoutinner);
+                layoutinner.getChildren().addAll(caseFilingButton, trackUpdatesButton, trackCaseButton,
                         scheduleHearingButton, viewITScheduleButton,
                         retrieveRecordButton, displayNotificationsButton, logoutButton);
 
             } else if ("IT Admin".equalsIgnoreCase(role)) {
                 primaryStage.setTitle("Main Menu for IT Administrator");
                 Label titleLabel = new Label("IT Admin's Menu");
-                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;");
+                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 Button caseReportButton = new Button("Generate Report of Cases");
                 Button caseNotificationButton = new Button("Display Notifications");
                 Button lawyerReportButton = new Button("Generate Report for Lawyers");
                 Button judgeReportButton = new Button("Generate Report for Judges");
                 Button logoutButton = new Button("Log Out");
+                designButton_smaller(caseReportButton);
+                designButton_smaller(caseNotificationButton);
+                designButton_smaller(lawyerReportButton);
+                designButton_smaller(judgeReportButton);
+                styleLogoutButton(logoutButton);
 
                 caseReportButton.setOnAction(e -> {
                     System.out.println("Generate Report of Cases selected.");
@@ -1125,18 +1237,25 @@ public class CourtsManagementSystem extends Application {
                     primaryStage.close(); // Close the primaryStage for logout
                 });
 
-                layout.getChildren().addAll(titleLabel, caseReportButton, caseNotificationButton, lawyerReportButton,
+                layout.getChildren().addAll(titleLabel, layoutinner);
+                layoutinner.getChildren().addAll(caseReportButton, caseNotificationButton, lawyerReportButton,
                         judgeReportButton, logoutButton);
 
             } else if ("Judge".equalsIgnoreCase(role)) {
                 primaryStage.setTitle("Main Menu for Judge");
                 Label titleLabel = new Label("Judge's Menu");
-                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;");
+                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 Button trackUpdatesButton = new Button("Track Updates");
                 Button trackCaseButton = new Button("Track Case");
                 Button reviewDocumentButton = new Button("Review Document/Log Judgment");
                 Button notificationButton = new Button("Display Notifications");
                 Button logoutButton = new Button("Log Out");
+
+                designButton_smaller(trackUpdatesButton);
+                designButton_smaller(trackCaseButton);
+                designButton_smaller(reviewDocumentButton);
+                designButton_smaller(notificationButton);
+                styleLogoutButton(logoutButton);
 
                 trackUpdatesButton.setOnAction(e -> {
                     System.out.println("Track Updates selected.");
@@ -1163,13 +1282,14 @@ public class CourtsManagementSystem extends Application {
                     primaryStage.close(); // Close the primaryStage for logout
                 });
 
-                layout.getChildren().addAll(titleLabel, trackUpdatesButton, trackCaseButton, reviewDocumentButton,
+                layout.getChildren().addAll(titleLabel, layoutinner);
+                layoutinner.getChildren().addAll(trackUpdatesButton, trackCaseButton, reviewDocumentButton,
                         notificationButton, logoutButton);
 
             } else if ("Juror".equalsIgnoreCase(role)) {
                 // Juror role buttons
                 Label titleLabel = new Label("Juror's Menu");
-                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;");
+                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Juror");
 
                 Button btnReviewDocLogJudgment = new Button("Review Document/Log Judgment");
@@ -1179,16 +1299,22 @@ public class CourtsManagementSystem extends Application {
                 btnViewNotifications.setOnAction(e -> viewMyNotifications());
 
                 Button btnLogout = new Button("Log Out");
+
+                designButton_smaller(btnReviewDocLogJudgment);
+                designButton_smaller(btnViewNotifications);
+                designButton_smaller(btnLogout);
+
                 btnLogout.setOnAction(e -> {
                     System.out.println("Logging out...");
                     primaryStage.close();
                 });
 
-                layout.getChildren().addAll(titleLabel, btnReviewDocLogJudgment, btnViewNotifications, btnLogout);
+                layout.getChildren().addAll(titleLabel, layoutinner);
+                layoutinner.getChildren().addAll(btnReviewDocLogJudgment, btnViewNotifications, btnLogout);
             } else if ("Lawyer".equalsIgnoreCase(role)) {
                 // Lawyer role buttons
                 Label titleLabel = new Label("Lawyer's Menu");
-                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;");
+                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Lawyer");
                 Button btnCaseFiling = new Button("Case Filing/Scheduling");
                 btnCaseFiling.setOnAction(e -> AddNewCase());
@@ -1215,17 +1341,28 @@ public class CourtsManagementSystem extends Application {
                 btnViewNotifications.setOnAction(e -> viewMyNotifications());
 
                 Button btnLogout = new Button("Log Out");
+                designButton_smaller(btnCaseFiling);
+                designButton_smaller(btnTrackUpdates);
+                designButton_smaller(btnRegisterBar);
+                designButton_smaller(btnSubmitDoc);
+                designButton_smaller(btnReopenCase);
+                designButton_smaller(btnRetrieveRecord);
+                designButton_smaller(btnAddWitness);
+                designButton_smaller(btnViewNotifications);
+                styleLogoutButton(btnLogout);
+
                 btnLogout.setOnAction(e -> {
                     System.out.println("Logging out...");
                     primaryStage.close();
                 });
 
-                layout.getChildren().addAll(titleLabel, btnCaseFiling, btnTrackUpdates, btnRegisterBar, btnSubmitDoc,
+                layout.getChildren().addAll(titleLabel, layoutinner);
+                layoutinner.getChildren().addAll(btnCaseFiling, btnTrackUpdates, btnRegisterBar, btnSubmitDoc,
                         btnReopenCase, btnRetrieveRecord, btnAddWitness, btnViewNotifications, btnLogout);
             } else if ("Probation Officer".equalsIgnoreCase(role)) {
                 // Probation Officer role buttons
                 Label titleLabel = new Label("Probation Officer's Menu");
-                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;");
+                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Probation Officer");
                 Button btnTrackCase = new Button("Track Case");
                 btnTrackCase.setOnAction(e -> TrackCase(scanner));
@@ -1237,16 +1374,22 @@ public class CourtsManagementSystem extends Application {
                 btnViewNotifications.setOnAction(e -> viewMyNotifications());
 
                 Button btnLogout = new Button("Log Out");
+                designButton_smaller(btnTrackCase);
+                designButton_smaller(btnSubmitDoc);
+                designButton_smaller(btnViewNotifications);
+                designButton_smaller(btnLogout);
+
                 btnLogout.setOnAction(e -> {
                     System.out.println("Logging out...");
                     primaryStage.close();
                 });
 
-                layout.getChildren().addAll(titleLabel, btnTrackCase, btnSubmitDoc, btnViewNotifications, btnLogout);
+                layout.getChildren().addAll(titleLabel, layoutinner);
+                layoutinner.getChildren().addAll(btnTrackCase, btnSubmitDoc, btnViewNotifications, btnLogout);
             } else if ("Witness".equalsIgnoreCase(role)) {
                 // Witness role buttons
                 Label titleLabel = new Label("Witness's Menu");
-                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;");
+                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Witness");
                 Button btnViewCaseDetails = new Button("View Case Details");
                 btnViewCaseDetails.setOnAction(e -> ViewCaseDetails(scanner));
@@ -1255,17 +1398,24 @@ public class CourtsManagementSystem extends Application {
                 btnViewNotifications.setOnAction(e -> viewMyNotifications());
 
                 Button btnLogout = new Button("Log Out");
+
+                designButton_smaller(btnViewCaseDetails);
+                designButton_smaller(btnViewNotifications);
+                designButton_smaller(btnLogout);
+
                 btnLogout.setOnAction(e -> {
                     System.out.println("Logging out...");
+                    
                     primaryStage.close();
                 });
 
-                layout.getChildren().addAll(titleLabel, btnViewCaseDetails, btnViewNotifications, btnLogout);
+                layout.getChildren().addAll(titleLabel, layoutinner);
+                layoutinner.getChildren().addAll(btnViewCaseDetails, btnViewNotifications, btnLogout);
 
             } else if ("Client".equalsIgnoreCase(role)) {
                 // Client role buttons
                 Label titleLabel = new Label("Client's Menu");
-                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;");
+                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Client");
                 Button btnTrackUpdates = new Button("Track Updates");
                 btnTrackUpdates.setOnAction(e -> TrackUpdates());
@@ -1277,19 +1427,26 @@ public class CourtsManagementSystem extends Application {
                 btnViewNotifications.setOnAction(e -> viewMyNotifications());
 
                 Button btnLogout = new Button("Log Out");
+
+                designButton_smaller(btnTrackUpdates);
+                designButton_smaller(btnRequestReOpeningAppeal);
+                designButton_smaller(btnViewNotifications);
+                designButton_smaller(btnLogout);
+
                 btnLogout.setOnAction(e -> {
                     System.out.println("Logging out...");
                     primaryStage.close();
                 });
 
-                layout.getChildren().addAll(titleLabel, btnTrackUpdates, btnRequestReOpeningAppeal,
+                layout.getChildren().addAll(titleLabel, layoutinner);
+                layoutinner.getChildren().addAll(btnTrackUpdates, btnRequestReOpeningAppeal,
                         btnViewNotifications,
                         btnLogout);
 
             } else if ("Registrar".equalsIgnoreCase(role)) {
                 // Registrar role buttons
                 Label titleLabel = new Label("Registrar's Menu");
-                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;");
+                titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Registrar");
                 Button btnCaseFiling = new Button("Case Filing/Scheduling");
                 btnCaseFiling.setOnAction(e -> ReviewUpcomingCaseRequests(scanner));
@@ -1313,17 +1470,63 @@ public class CourtsManagementSystem extends Application {
                 btnViewNotifications.setOnAction(e -> viewMyNotifications());
 
                 Button btnLogout = new Button("Log Out");
+
+                designButton_smaller(btnCaseFiling);
+                designButton_smaller(btnBarRegistration);
+                designButton_smaller(btnTrackCase);
+                designButton_smaller(btnScheduleHearing);
+                designButton_smaller(btnApproveDocument);
+                designButton_smaller(btnApproveJudgement);
+                designButton_smaller(btnViewNotifications);
+                styleLogoutButton(btnLogout);
+
                 btnLogout.setOnAction(e -> {
                     System.out.println("Logging out...");
+
                     primaryStage.close();
                 });
 
-                layout.getChildren().addAll(titleLabel, btnCaseFiling, btnBarRegistration, btnTrackCase,
+                layout.getChildren().addAll(titleLabel, layoutinner);
+                layoutinner.getChildren().addAll(btnCaseFiling, btnBarRegistration, btnTrackCase,
                         btnScheduleHearing,
                         btnApproveDocument, btnApproveJudgement, btnViewNotifications, btnLogout);
             }
 
             // Set the scene and show the primary stage
+            layoutouter.setStyle("-fx-padding: 80px; -fx-alignment: center;"
+                    + "-fx-background-size: stretch; " // Ensures the image covers the entire area
+                    + "-fx-background-position: center ; " // Centers the image
+                    + "-fx-background-repeat: no-repeat; "
+                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); ");
+
+            layoutinner.setStyle(
+                    """
+                            -fx-alignment: center;
+                            -fx-spacing: 20px;
+                            -fx-border-radius: 20px; /* Rounds the border edges to match */
+                            -fx-background-radius: 20px;
+                            -fx-padding: 30px;
+                            -fx-border-color: rgba(255, 255, 255, 0.4);
+                            -fx-border-width: 2px;
+                            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 5);
+                            -fx-background-color: rgba(255, 255, 255, 0.3);
+                            """);
+
+            layout.setStyle(
+                    """
+                            -fx-alignment: center;
+                            -fx-spacing: 20px;
+                            -fx-background-size: stretch; /* Scales the image to fit inside the box */
+                            -fx-background-position: center;
+                            -fx-background-radius: 20px; /* Rounds the background image edges */
+                            -fx-background-radius: 20px;
+                            -fx-border-radius: 20px;
+                            -fx-padding:5px 210px;
+                            -fx-border-color: rgba(255, 255, 255, 0.4);
+                            -fx-border-width: 2px;
+                            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 5);
+                            """);
+            layoutouter.getChildren().add(layout);
             primaryStage.setScene(scene);
             primaryStage.show();
         }
@@ -1528,9 +1731,10 @@ public class CourtsManagementSystem extends Application {
 
             // Scrollable Layout for form fields
             ScrollPane formScrollPane = new ScrollPane();
-            formScrollPane.setContent(new VBox(15));
+            formScrollPane.setContent(new VBox(25));
             VBox formLayout = new VBox(15);
-            formLayout.setStyle("-fx-alignment: center; -fx-spacing: 10px; -fx-background-color: black;");
+            formLayout.setStyle(
+                    "-fx-alignment: center;-fx-padding:10px 10px; -fx-spacing: 10px; -fx-background-color: black;");
 
             formLayout.getChildren().addAll(
                     firstNameField, lastNameField, emailField, phoneNumberField, usernameField, passwordField,
@@ -1540,10 +1744,10 @@ public class CourtsManagementSystem extends Application {
             formScrollPane.setContent(formLayout);
             formScrollPane.setFitToWidth(true);
             formScrollPane.setStyle(
-                    "-fx-padding: 20px;-fx-alignment: center; -fx-spacing: 10px; -fx-border-radius: 20px;-fx-background-color: black;-fx-background-radius:20px;");
+                    "-fx-padding:0px 20px;-fx-alignment: center; -fx-spacing: 0px; -fx-border-radius: 20px;-fx-background-color: black;-fx-background-radius:20px;");
 
             // Outer Layout (title + form)
-            VBox outerLayout = new VBox(20);
+            VBox outerLayout = new VBox(15);
             outerLayout.setStyle("-fx-alignment: center; -fx-background-color: rgba(0,0,0,0.4); "
                     + "-fx-background-radius:20px;-fx-padding: 20px; -fx-border-radius: 20px; -fx-border-color: #e0e0e0; -fx-border-width: 0px;");
             outerLayout.getChildren().addAll(titleLabel, formScrollPane, statusLabel, buttonLayout);
@@ -1643,6 +1847,7 @@ public class CourtsManagementSystem extends Application {
         CourtsManagementSystem system = new CourtsManagementSystem();
         Scanner scanner = new Scanner(System.in);
         GUI_Menu Gui = new GUI_Menu(system, primaryStage, scanner);
+        system.loadData();
         // Title Label
         Label titleLabel1 = new Label("Welcome to Courts Management System");
         titleLabel1.setStyle("-fx-font-size: 45px; -fx-font-weight: bold; -fx-text-fill: #f0f0f0;");
@@ -1749,8 +1954,8 @@ public class CourtsManagementSystem extends Application {
     }
 
     public static void main(String[] args) {
-        CLI_main(args);
-        // launch(args);
+        // CLI_main(args);
+        launch(args);
     }
 
 }
