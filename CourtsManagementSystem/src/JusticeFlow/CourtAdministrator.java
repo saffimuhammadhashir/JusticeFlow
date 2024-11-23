@@ -296,76 +296,89 @@ public class CourtAdministrator extends User {
             Slot.removeSlotsWithSameIDOneByOne(lastSlot, possibleSlots);
         }
         for (Slot slot : possibleSlots) {
+            if (ValidSlotTime(AllSlots, slot)) {
 
-            // Create a GridPane for each case
-            GridPane eachCase = new GridPane();
-            eachCase.setHgap(10); // Horizontal gap between columns
-            eachCase.setVgap(10); // Vertical gap between rows
-            eachCase.setStyle(
-                    "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
+                // Create a GridPane for each case
+                GridPane eachCase = new GridPane();
+                eachCase.setHgap(10); // Horizontal gap between columns
+                eachCase.setVgap(10); // Vertical gap between rows
+                eachCase.setStyle(
+                        "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
 
-            // Case Title Label
-            Label caseName = new Label(slot.dayName);
-            caseName.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+                // Case Title Label
+                Label caseName = new Label(slot.dayName);
+                caseName.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-            Label casetype = new Label("Judge ID : " + slot.getJudgeID());
-            casetype.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+                Label casetype = new Label("Judge ID : " + slot.getJudgeID());
+                casetype.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-            Label caseplaintiff = new Label("Witness ID : " + slot.getWitnessID());
-            caseplaintiff.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+                Label caseplaintiff = new Label("Witness ID : " + slot.getWitnessID());
+                caseplaintiff.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-            Label casedefendant = new Label("Court ID: " + slot.getCourtId());
-            casedefendant.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+                Label casedefendant = new Label("Court ID: " + slot.getCourtId());
+                casedefendant.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-            Label CaseFiling = new Label("Start Time: " + slot.getStartTime());
-            CaseFiling.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: red;");
+                Label CaseFiling = new Label("Start Time: " + slot.getStartTime());
+                CaseFiling.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: red;");
 
-            // Add the case title to the first column, first row
-            GridPane.setConstraints(caseName, 0, 0);
-            GridPane.setConstraints(casetype, 0, 1);
-            GridPane.setConstraints(caseplaintiff, 3, 0);
-            GridPane.setConstraints(casedefendant, 3, 1);
-            GridPane.setConstraints(CaseFiling, 5, 0);
-            eachCase.getChildren().add(caseName);
-            eachCase.getChildren().add(casetype);
-            eachCase.getChildren().add(caseplaintiff);
-            eachCase.getChildren().add(casedefendant);
-            eachCase.getChildren().add(CaseFiling);
+                // Add the case title to the first column, first row
+                GridPane.setConstraints(caseName, 0, 0);
+                GridPane.setConstraints(casetype, 0, 1);
+                GridPane.setConstraints(caseplaintiff, 3, 0);
+                GridPane.setConstraints(casedefendant, 3, 1);
+                GridPane.setConstraints(CaseFiling, 5, 0);
+                eachCase.getChildren().add(caseName);
+                eachCase.getChildren().add(casetype);
+                eachCase.getChildren().add(caseplaintiff);
+                eachCase.getChildren().add(casedefendant);
+                eachCase.getChildren().add(CaseFiling);
 
-            // Approve and Reject Buttons
-            Button approveButton = new Button("Select");
-            approveButton.setStyle(
-                    "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5px 15px; -fx-border-radius: 5px;");
+                // Approve and Reject Buttons
+                Button approveButton = new Button("Select");
+                approveButton.setStyle(
+                        "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5px 15px; -fx-border-radius: 5px;");
 
-            // Button Actions (for demonstration purposes, implement logic later)
-            approveButton.setOnAction(e -> {
-                // showandscheduleslots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
-                // AllWitnesses, AllCourts,
-                // primaryStage, gui, cases);
-                for (Slot org : AllSlots) {
-                    if (org.getSlotID() == slot.getSlotID()) {
-                        org.setCaseID(cases.getCaseID());
-                        org.setJudgeID(slot.getJudgeID());
-                        org.setWitnessID(slot.getWitnessID());
-                        org.setCourtId(slot.getCourtId());
+                // Button Actions (for demonstration purposes, implement logic later)
+                approveButton.setOnAction(e -> {
+                    // showandscheduleslots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
+                    // AllWitnesses, AllCourts,
+                    // primaryStage, gui, cases);
+                    boolean isSlotUpdated = false; // Flag to track if the slot is updated
 
-                        dbHandler.updateOrInsertSlots(AllSlots);
-
-                        ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlots, AllJudges, AllWitnesses,
-                                AllCourts, primaryStage, gui);
+                    for (Slot org : new ArrayList<>(AllSlots)) { // Iterate over a copy to avoid concurrent modification
+                        if (org.getSlotID() == slot.getSlotID()) {
+                            if (org.getCaseID() != null) { // Slot is already assigned
+                                slot.setSlotID(generateUniqueSlotID(AllSlots)); // Generate a unique Slot ID
+                                AllSlots.add(slot);
+                            } else { // Slot is available
+                                org.setCaseID(cases.getCaseID());
+                                org.setJudgeID(slot.getJudgeID());
+                                org.setWitnessID(slot.getWitnessID());
+                                org.setCourtId(slot.getCourtId());
+                            }
+                            isSlotUpdated = true;
+                            break; // Exit the loop once the slot is processed
+                        }
                     }
-                }
 
-            });
+                    if (isSlotUpdated) {
+                        dbHandler.updateOrInsertSlots(AllSlots); // Update the database with changes
+                        ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlots, AllJudges, AllWitnesses,
+                                AllCourts,
+                                primaryStage, gui);
+                    }
 
-            // Add buttons to GridPane, starting from row 1
-            GridPane.setConstraints(approveButton, 0, 3); // Place in column 1, row 1
-            // Place in column 2, row 1
+                });
 
-            eachCase.getChildren().addAll(approveButton);
+                // Add buttons to GridPane, starting from row 1
+                GridPane.setConstraints(approveButton, 0, 3); // Place in column 1, row 1
+                // Place in column 2, row 1
 
-            // Add the GridPane to the formLayout
-            formLayout.getChildren().add(eachCase);
+                eachCase.getChildren().addAll(approveButton);
+
+                // Add the GridPane to the formLayout
+                formLayout.getChildren().add(eachCase);
+            }
         }
 
         // Set the VBox into the ScrollPane and display it
@@ -378,6 +391,22 @@ public class CourtAdministrator extends User {
         primaryStage.setScene(registerScene);
         primaryStage.show();
         //
+    }
+
+    private int generateUniqueSlotID(List<Slot> allSlots) {
+        return allSlots.stream().mapToInt(Slot::getSlotID).max().orElse(0) + 1;
+    }
+
+    private boolean ValidSlotTime(List<Slot> AllSlots, Slot slot) {
+        for (Slot s : AllSlots) {
+            if (s.getCourtId() == slot.getCourtId() &&
+                    s.getDayName().equals(slot.getDayName()) && // Use equals() for string comparison
+                    s.getStartTime().equals(slot.getStartTime())) { // Use equals() for time comparison
+                return false;
+            }
+
+        }
+        return true;
     }
 
     public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
@@ -494,7 +523,6 @@ public class CourtAdministrator extends User {
         primaryStage.show();
 
     }
-
 
     public void scheduleHearing(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
             List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,

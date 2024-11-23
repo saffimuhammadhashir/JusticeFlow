@@ -587,8 +587,7 @@ public class Registrar extends User {
 
     private boolean ValidSlotTime(List<Slot> AllSlots, Slot slot) {
         for (Slot s : AllSlots) {
-            if (s.getSlotID() == slot.getSlotID() &&
-                    s.getCourtId() == slot.getCourtId() &&
+            if ( s.getCourtId() == slot.getCourtId() &&
                     s.getDayName().equals(slot.getDayName()) && // Use equals() for string comparison
                     s.getStartTime().equals(slot.getStartTime())) { // Use equals() for time comparison
                 return false;

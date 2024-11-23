@@ -254,4 +254,4 @@ SELECT * FROM Notifications;
 
 
 
-update cases set CaseStatus='Pending' where CaseID>10;
+update cases set CaseStatus='Pending' where CaseID>=10;
