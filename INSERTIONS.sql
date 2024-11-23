@@ -190,18 +190,18 @@ VALUES
 
 
 -- Insert into Cases
-INSERT INTO Cases (CaseTitle, CaseType, CaseStatus, FilingDate, CourtDate, PlaintiffID, DefendantID, CaseState)
+INSERT INTO Cases (CaseTitle, CaseType, CaseStatus, FilingDate, CourtDate, PlaintiffID, DefendantID, CaseState,LawyerId)
 VALUES
-('Case 1: John Doe vs Jane Doe', 'Civil', 'Open', '2024-01-01', '2024-02-01', 1, 5, 'Pending'),
-('Case 2: Company X vs Individual Y', 'Criminal', 'Closed', '2023-12-10', '2024-01-20', 2, 4, 'Filed'),
-('Case 3: ABC Corp vs XYZ Ltd', 'Civil', 'Pending', '2024-01-15', '2024-03-01', 3, 1, 'Pending'),
-('Case 4: Jane Smith vs Mike Lee', 'Family', 'Open', '2024-02-01', '2024-04-05', 4, 2, 'Filed'),
-('Case 5: City vs Citizen A', 'Criminal', 'Closed', '2024-03-01', '2024-04-10', 5, 3, 'Filed'),
-('Case 6: Corporation A vs Individual B', 'Civil', 'Open', '2024-01-10', '2024-03-15', 1, 5, 'Pending'),
-('Case 7: Mary Lou vs John Green', 'Family', 'Pending', '2024-02-20', '2024-05-01', 2, 4, 'Pending'),
-('Case 8: John White vs State', 'Criminal', 'Open', '2024-03-05', '2024-06-01', 3, 1, 'Pending'),
-('Case 9: Sarah Black vs William Gray', 'Civil', 'Closed', '2024-04-01', '2024-07-01', 4, 2, 'Filed'),
-('Case 10: XYZ Ltd vs ABC Ltd', 'Criminal', 'Pending', '2024-05-01', '2024-08-10', 5, 3, 'Pending');
+('Case 1: John Doe vs Jane Doe', 'Civil', 'Open', '2024-01-01', '2024-02-01', 1, 5, 'Pending',1),
+('Case 2: Company X vs Individual Y', 'Criminal', 'Closed', '2023-12-10', '2024-01-20', 2, 4, 'Filed',2),
+('Case 3: ABC Corp vs XYZ Ltd', 'Civil', 'Pending', '2024-01-15', '2024-03-01', 3, 1, 'Pending',1),
+('Case 4: Jane Smith vs Mike Lee', 'Family', 'Open', '2024-02-01', '2024-04-05', 4, 2, 'Filed',3),
+('Case 5: City vs Citizen A', 'Criminal', 'Closed', '2024-03-01', '2024-04-10', 5, 3, 'Filed',5),
+('Case 6: Corporation A vs Individual B', 'Civil', 'Open', '2024-01-10', '2024-03-15', 1, 5, 'Pending',4),
+('Case 7: Mary Lou vs John Green', 'Family', 'Pending', '2024-02-20', '2024-05-01', 2, 4, 'Pending',2),
+('Case 8: John White vs State', 'Criminal', 'Open', '2024-03-05', '2024-06-01', 3, 1, 'Pending',1),
+('Case 9: Sarah Black vs William Gray', 'Civil', 'Closed', '2024-04-01', '2024-07-01', 4, 2, 'Filed',2),
+('Case 10: XYZ Ltd vs ABC Ltd', 'Criminal', 'Pending', '2024-05-01', '2024-08-10', 5, 3, 'Pending',2);
 
 
 
@@ -219,17 +219,23 @@ VALUES
 (9, 'file_9.pdf', 'hash_9', 1),
 (10, 'file_10.pdf', 'hash_10', 1);
 
+INSERT INTO BarApplication (Lawyerid, Applicationtime, Status,BarId)
+VALUES
+    (1, '10:15:00', 0,1), -- Approved
+    (2, '11:00:00', 0,2), -- Rejected
+    (3, '12:30:00', 0,3), -- Pending
+    (4, '09:45:00', 0,1), -- Approved
+    (5, '14:20:00', 0,2); -- Rejected
 
 
 
-
--- INSERT INTO WitnessTable (CaseId, WitnessID)
--- VALUES 
---     (11, 1),
---     (11, 2),
---     (11, 3),
---     (11, 4),
---     (11, 5);
+ INSERT INTO WitnessTable (CaseId, WitnessID)
+ VALUES 
+    (10, 1),
+     (10, 2),
+     (10, 3),
+     (10, 4),
+     (10, 5);
 
 
 
@@ -251,7 +257,17 @@ SELECT * FROM UserApplication;
 SELECT * FROM Cases;
 SELECT * FROM CaseFiles;
 SELECT * FROM Notifications;
+Select * FROM BarApplication;
+
+INSERT INTO Notifications (CaseID, RecipientsID, SenderID, SenderType, Notification, CreatedAt)
+VALUES
+    (14, 16, 11, 'Admin', 'Notification 1: Case details have been updated.', '2024-11-22 10:00:00'),
+    (14, 16, 11, 'Admin', 'Notification 2: New hearing date has been scheduled.', '2024-11-22 12:00:00'),
+    (14, 16, 11, 'Admin', 'Notification 3: Your case summary has been uploaded.', '2024-11-22 15:00:00'),
+    (14, 16, 11, 'Admin', 'Notification 4: Important documents are pending review.', '2024-11-22 17:00:00');
 
 
 
-update cases set CaseStatus='Pending' where CaseID>=10;
+
+
+update cases set CaseStatus='Pending' where CaseID>=0;

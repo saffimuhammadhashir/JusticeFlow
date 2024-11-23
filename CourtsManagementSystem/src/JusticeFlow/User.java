@@ -7,10 +7,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import JusticeFlow.CourtsManagementSystem.GUI_Menu;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.scene.control.Separator;
 
 import java.util.List;
 
@@ -252,6 +263,148 @@ public class User {
             n.display(dbHandler, AllCases);
         }
 
+    }
+
+    public void viewMyNotifications(List<Notification> AllNotifications, List<Case> AllCases,
+            DatabaseHandler dbHandler, Stage primaryStage, GUI_Menu gui) {
+
+        // Title Label
+        Label titleLabel = new Label("Notification Center");
+        titleLabel.setStyle(
+                "-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #333333; -fx-padding: 20px 0;");
+        titleLabel.setAlignment(Pos.CENTER); // Center the text
+
+        // Filter notifications for the current user
+        List<Notification> myNotifications = new ArrayList<>();
+        for (Notification n : AllNotifications) {
+            if (n.getRecipientsID() == this.userID) {
+                myNotifications.add(n);
+            }
+        }
+
+        // Create a layout for the notifications list
+        VBox notificationLayout = new VBox(15); // Spacing between notifications
+        notificationLayout.setPadding(new Insets(20));
+        notificationLayout.setAlignment(Pos.CENTER); // Center-align notifications
+        notificationLayout.setStyle("-fx-background-color: #f9f9f9;");
+
+        for (Notification notification : myNotifications) {
+            // Create a container for each notification
+            HBox notificationBox = new HBox(20);
+            notificationBox.setStyle(
+                    "-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 1px; -fx-padding: 10px;");
+            notificationBox.setAlignment(Pos.CENTER); // Center-align contents of the HBox
+            notificationBox.setPadding(new Insets(10));
+
+            // Display notification summary
+            Label notificationSummary = new Label("Notification ID: " + notification.getNotificationID() +
+                    " | Case Title: " + dbHandler.findCaseByID(AllCases, notification.getCaseID()).getCaseTitle());
+            notificationSummary.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
+
+            // Button to show details
+            Button detailsButton = new Button("Show Details");
+            detailsButton.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-size: 12px;");
+            detailsButton.setOnAction(event -> showNotificationDetails(notification, dbHandler, AllCases));
+
+            // Add elements to the notification box
+            notificationBox.getChildren().addAll(notificationSummary, detailsButton);
+            notificationLayout.getChildren().add(notificationBox);
+        }
+
+        Button returnButton = new Button(
+                "Close");
+        returnButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        returnButton.setMaxWidth(Double.MAX_VALUE);
+        returnButton.setOnAction(e -> {
+            gui.GUI_startmenu(primaryStage);
+        });
+        // Create a scroll pane for the notifications list
+        ScrollPane scrollPane = new ScrollPane(notificationLayout);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: #f9f9f9;");
+        scrollPane.setPannable(true);
+
+        // Set up the main layout with center alignment
+        VBox mainLayout = new VBox(20);
+        mainLayout.setPadding(new Insets(20));
+        mainLayout.setAlignment(Pos.CENTER); // Center-align all elements in the main layout
+        mainLayout.setStyle("-fx-background-color: #f9f9f9;");
+        mainLayout.getChildren().addAll(titleLabel, scrollPane, returnButton);
+
+        // Set up the scene
+        Scene scene = new Scene(mainLayout, 1000, 600);
+        primaryStage.setTitle("My Notifications");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    // Function to display details of a notification
+    private void showNotificationDetails(Notification notification, DatabaseHandler dbHandler, List<Case> AllCases) {
+        Stage detailsStage = new Stage();
+        detailsStage.initModality(Modality.APPLICATION_MODAL); // Block interaction with the main window
+
+        // Retrieve case details
+        Case cases = dbHandler.findCaseByID(AllCases, notification.getCaseID());
+
+        // Header Label
+        Label headerLabel = new Label("Notification Details");
+        headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-padding: 10;");
+
+        // Separator
+        Separator separator = new Separator();
+        separator.setStyle("-fx-background-color: #2c3e50; -fx-padding: 10;");
+
+        // Details layout
+        VBox detailsLayout = new VBox(15);
+        detailsLayout.setPadding(new Insets(20));
+        detailsLayout.setStyle(
+                "-fx-background-color: #f4f7f9; -fx-border-radius: 10px; -fx-border-color: #2c3e50; -fx-border-width: 2px;");
+
+        // Add notification details
+        detailsLayout.getChildren().addAll(
+                createStyledDetail("Notification ID", String.valueOf(notification.getNotificationID())),
+                createStyledDetail("Case Title", cases.getCaseTitle()),
+                createStyledDetail("Recipients", dbHandler.getUserById(notification.getRecipientsID()).getUsername()),
+                createStyledDetail("Sender", dbHandler.getUserById(notification.getSenderID()).getUsername()),
+                createStyledDetail("Sender Type", notification.getSenderType()),
+                createStyledDetail("Message", notification.getNotification()));
+
+        // Close button
+        Button closeButton = new Button("Close");
+        closeButton.setStyle(
+                "-fx-background-color: #d9534f; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-border-radius: 5px;");
+        closeButton.setOnAction(event -> detailsStage.close());
+
+        // Footer layout
+        HBox footerLayout = new HBox(closeButton);
+        footerLayout.setAlignment(Pos.CENTER);
+        footerLayout.setPadding(new Insets(10));
+
+        // Main layout
+        VBox mainLayout = new VBox(10, headerLabel, separator, detailsLayout, footerLayout);
+        mainLayout.setStyle("-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-radius: 10px;");
+        mainLayout.setAlignment(Pos.CENTER);
+
+        // Set up the scene for the popup
+        Scene detailsScene = new Scene(mainLayout, 450, 600);
+        detailsStage.setTitle("Notification Details");
+        detailsStage.setScene(detailsScene);
+        detailsStage.show();
+    }
+
+    // Helper function to create a styled detail layout
+    private HBox createStyledDetail(String key, String value) {
+        Label keyLabel = new Label(key + ":");
+        keyLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #34495e;");
+
+        Label valueLabel = new Label(value);
+        valueLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
+
+        HBox detailBox = new HBox(10, keyLabel, valueLabel);
+        detailBox.setAlignment(Pos.TOP_LEFT);
+        detailBox.setStyle("-fx-padding: 5;");
+        return detailBox;
     }
 
     private static final String BASE_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.1); "

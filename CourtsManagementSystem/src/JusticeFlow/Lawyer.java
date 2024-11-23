@@ -6,9 +6,14 @@ import java.util.Scanner;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import JusticeFlow.CourtsManagementSystem.GUI_Menu;
@@ -16,6 +21,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ListCell;
+import javafx.scene.input.MouseEvent;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -1276,8 +1284,8 @@ public class Lawyer extends User {
             BarAssociation bar = BarAssociation.getbar(barassociationlist, id);
             if (bar != null) {
                 // Use LocalDateTime.now() for the current machine time
-                BarApplication barrequest = new BarApplication(AllApplications.size(), this.lawyerID,
-                        LocalDateTime.now().toString(), 0);
+                BarApplication barrequest = new BarApplication(AllApplications.size() + 1, this.lawyerID,
+                        LocalDateTime.now().toString(), 0, bar.getBarAssociationID());
                 AllApplications.add(barrequest); // Add the new BarApplication to the list
                 dbHandler.updateBarApplication(barrequest);
 
@@ -1286,4 +1294,161 @@ public class Lawyer extends User {
             }
         }
     }
+
+    public void RegistertoBar(List<BarAssociation> barassociationlist, List<BarApplication> AllApplications,
+            DatabaseHandler dbHandler, Stage primaryStage, GUI_Menu gui) {
+
+        // Create the main layout for the UI
+        VBox mainLayout = new VBox(25);
+        mainLayout.setPadding(new Insets(30));
+        mainLayout.setStyle("-fx-background-color: #f9f9f9; -fx-alignment: center;");
+
+        // Title Label
+        Label titleLabel = new Label("Register to Bar Association");
+        titleLabel.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+
+        // List all Bar Associations in a scrollable list
+        ListView<BarAssociation> barListView = new ListView<>();
+        barListView.getItems().addAll(barassociationlist);
+        Label selectedBarLabel = new Label("No Bar Selected");
+        selectedBarLabel.setStyle(
+                "-fx-font-size: 18px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-text-fill: #2c3e50; " +
+                        "-fx-background-color: #ecf0f1; " + // Light background color
+                        "-fx-padding: 20px; " + // Padding inside the label
+                        "-fx-border-radius: 10px; " + // Rounded corners
+                        "-fx-border-color: #bdc3c7; " + // Border color
+                        "-fx-border-width: 1px; " + // Border width
+                        "-fx-alignment: center; " + // Text centered inside the label
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0, 0, 2);"); // Subtle shadow for better
+                                                                                            // contrast
+
+        // Customizing the appearance of list items
+        barListView.setCellFactory(param -> new ListCell<BarAssociation>() {
+            @Override
+            protected void updateItem(BarAssociation item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle(""); // Reset the style
+                } else {
+                    setText("Bar ID: " + item.getBarAssociationID() + " | " + item.getAssociationName());
+                    setStyle("-fx-font-size: 16px; -fx-text-fill: #333333; -fx-padding: 10px;");
+
+                    // Alternate background colors
+                    if (getIndex() % 2 == 0) {
+                        setStyle(getStyle() + "-fx-background-color: #f7f7f7;");
+                    } else {
+                        setStyle(getStyle() + "-fx-background-color: #ffffff;");
+                    }
+
+                    // Hover effect
+                    setOnMouseEntered(e -> {
+                        if (!isSelected()) {
+                            setStyle(getStyle() + "-fx-background-color: #dce6f1; -fx-cursor: hand;");
+                        }
+                    });
+
+                    setOnMouseExited(e -> {
+                        if (!isSelected()) {
+                            setStyle(getStyle().replace("-fx-background-color: #dce6f1;", ""));
+                        }
+                    });
+
+                    // Keep selected item colored
+                    selectedProperty().addListener((observable, oldValue, newValue) -> {
+                        selectedBarLabel.setText("Selected Bar: " + "Bar ID: " + item.getBarAssociationID() + " | "
+                                + item.getAssociationName());
+                        if (newValue) {
+                            setStyle(getStyle() + "-fx-background-color: #4CAF50; -fx-text-fill: white;");
+                        } else {
+                            if (getIndex() % 2 == 0) {
+                                setStyle(getStyle() + "-fx-background-color: #f7f7f7;");
+                            } else {
+                                setStyle(getStyle() + "-fx-background-color: #ffffff;");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        // Scroll pane to make the list scrollable
+        ScrollPane barScrollPane = new ScrollPane(barListView);
+        barScrollPane.setFitToWidth(true);
+        barScrollPane.setStyle("-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 1px; " +
+                "-fx-background-radius: 8px; -fx-border-radius: 8px; -fx-padding: 10px;-fx-max-height:200px;");
+
+        // TabPane to show the selected bar association
+        TabPane tabPane = new TabPane();
+        Tab selectedBarTab = new Tab("Selected Bar");
+
+        selectedBarTab.setContent(selectedBarLabel);
+        tabPane.getTabs().add(selectedBarTab);
+        selectedBarTab.setClosable(false);
+
+        // Button to confirm registration
+        Button registerButton = new Button("Register to Selected Bar");
+        registerButton.setStyle(
+                "-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 16px; " +
+                        "-fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+        registerButton.setOnAction(event -> {
+            // Get selected bar ID from ListView
+            BarAssociation selectedBar = barListView.getSelectionModel().getSelectedItem();
+
+            if (selectedBar != null) {
+                // Update tab with selected bar association details dynamically
+                selectedBarLabel.setText("Selected Bar: " + selectedBar.getAssociationName() +
+                        "\nBar ID: " + selectedBar.getBarAssociationID());
+
+                // Create a new BarApplication and add it to the list
+                LocalDateTime now = LocalDateTime.now();
+                String applicationTime = now.toString();
+
+                BarApplication barrequest = new BarApplication(AllApplications.size() + 1, this.lawyerID,
+                        applicationTime, 0, selectedBar.getBarAssociationID());
+                AllApplications.add(barrequest);
+                dbHandler.updateBarApplication(barrequest);
+
+                // Confirmation
+                Alert confirmationAlert = new Alert(Alert.AlertType.INFORMATION);
+                confirmationAlert.setTitle("Registration Successful");
+                confirmationAlert.setHeaderText("You have successfully registered to the Bar Association.");
+                confirmationAlert.setContentText(
+                        "Bar ID: " + selectedBar.getBarAssociationID() + " | " + selectedBar.getAssociationName());
+                confirmationAlert.showAndWait();
+            } else {
+                // Show error if no bar is selected
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("No Bar Selected");
+                errorAlert.setHeaderText("Please select a Bar Association to register.");
+                errorAlert.showAndWait();
+            }
+        });
+
+        // Button to close the registration window
+        Button closeButton = new Button("Close");
+        closeButton.setStyle(
+                "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 16px; " +
+                        "-fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+        closeButton.setOnAction(event -> {
+            gui.GUI_startmenu(primaryStage);
+        });
+
+        // Layout: Arrange UI elements
+        HBox buttonLayout = new HBox(20);
+        buttonLayout.setAlignment(Pos.CENTER);
+        buttonLayout.getChildren().addAll(registerButton, closeButton);
+
+        mainLayout.getChildren().addAll(titleLabel, barScrollPane, tabPane, buttonLayout);
+
+        // Scene setup
+        Scene scene = new Scene(mainLayout, 1000, 600);
+        primaryStage.setTitle("Register to Bar Association");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
 }
