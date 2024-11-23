@@ -243,9 +243,8 @@ public class CourtsManagementSystem extends Application {
             CourtAdministrator CourtAdmin = new CourtAdministrator();
             CourtAdmin = CourtAdmin.getRelevantCourtAdministrators(AllCourt_Administrators, user);
             if (CourtAdmin != null) {
-                // CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot,
-                // AllJudges, AllWitnesses,
-                // AllCourts, primaryStage);
+                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
+                primaryStage,gui);
                 System.out.println("Case has been successfully created.");
             } else {
                 System.out.println("Invalid User!");
@@ -346,7 +345,7 @@ public class CourtsManagementSystem extends Application {
         String role = user.getRole();
 
         if ("Lawyer".equalsIgnoreCase(role)) {
-            Lawyer l = user.getRelevantLawyer(AllLawyers, user);
+            // Lawyer l = user.getRelevantLawyer(AllLawyers, user);
             // l.SubmitDocument(scanner, AllCases, fileHandler);
         } else if ("Probation Officer".equalsIgnoreCase(role)) {
             ProbationOfficer p = user.getRelevantProbationOfficer(AllProbationOfficers, user);
@@ -430,18 +429,6 @@ public class CourtsManagementSystem extends Application {
         }
     }
 
-    public void TrackManageUpdates(Stage Primarystage,GUI_Menu gui) {
-        // Method to handle tracking and managing updates
-
-        CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
-        if (c != null) {
-            System.out.println("Implement tracking/managing updates logic here.");
-            c.TrackAndManageUpdates(AllCases, AllSlot, AllJudges, AllLawyers, AllClients, AllNotifications, dbHandler,
-                    Primarystage,gui);
-        } else {
-            System.out.println("Invalid User!");
-        }
-    }
     public void TrackCase(Scanner scanner) {
         // Method to handle tracking a specific case
         System.out.println("Implement case tracking logic here.");
@@ -1208,7 +1195,7 @@ public class CourtsManagementSystem extends Application {
 
                 trackUpdatesButton.setOnAction(e -> {
                     System.out.println("Track/Manage Updates selected.");
-                    system.TrackManageUpdates(primaryStage,this); // Call your method
+                    TrackManageUpdates(scanner); // Call your method
                 });
 
                 trackCaseButton.setOnAction(e -> {

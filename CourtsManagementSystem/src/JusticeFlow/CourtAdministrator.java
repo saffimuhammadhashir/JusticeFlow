@@ -402,7 +402,7 @@ public class CourtAdministrator extends User {
 
     private boolean ValidSlotTime(List<Slot> AllSlots, Slot slot) {
         for (Slot s : AllSlots) {
-            if (s.getCourtId() == slot.getCourtId() &&
+            if ( s.getCourtId() == slot.getCourtId() &&
                     s.getDayName().equals(slot.getDayName()) && // Use equals() for string comparison
                     s.getStartTime().equals(slot.getStartTime())) { // Use equals() for time comparison
                 return false;
@@ -526,6 +526,10 @@ public class CourtAdministrator extends User {
         primaryStage.show();
 
     }
+
+
+
+
 
     public void scheduleHearing(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
             List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
@@ -790,42 +794,54 @@ public class CourtAdministrator extends User {
         }
     }
 
-    public void TrackAndManageUpdates(List<Case> Allcases, List<Slot> AllSlots, List<Judge> AllJudges,
-            List<Lawyer> AllLawyers, List<Clients> AllClients, List<Notification> AllNotifications,
-            DatabaseHandler dbHandler,Stage Primarystage,GUI_Menu gui) {
-        for (Case c : Allcases) {
-            print(c.toString());
-        }
-        print("Select Any Case From Above");
-        Object val1 = GetInput(scanner);
-        print((int) val1);
+    // public void TrackAndManageUpdates(List<Case> Allcases, List<Slot> AllSlots, List<Judge> AllJudges,
+    //         List<Lawyer> AllLawyers, List<Clients> AllClients, List<Notification> AllNotifications,
+    //         DatabaseHandler dbHandler, Stage Primarystage, GUI_Menu gui) {
 
-        Case tempcase = dbHandler.findCaseByID(Allcases, (Integer) val1);
-        if (tempcase != null) {
-            print("Input Notification Msg:");
-            Object notification = GetInput(scanner);
-            String message = (String) notification;
-            print(message);
-            List<Integer> case_stakeholders = tempcase.getStakeholders(AllClients, AllSlots, AllJudges, AllLawyers);
+    //     // Main layout container
+    //     VBox mainLayout = new VBox(20);
+    //     mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
 
-            int count = 1;
-            for (Notification n : AllNotifications) {
-                count++;
-            }
-            if (case_stakeholders.size() > 0) {
-                for (Integer i : case_stakeholders) {
-                    Notification newnotification = new Notification(count, tempcase.getCaseID(), i, this.getUserID(),
-                            "Courts Administrator", message);
-                    AllNotifications.add(newnotification);
-                    dbHandler.updateOrCreateNotification(newnotification);
-                    count++;
-                }
-            }
+    //     Label titleLabel = new Label("Track and Manage Update");
+    //     titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
+    //     mainLayout.getChildren().add(titleLabel);
 
-        } else {
-            print("Invalid Case id!");
-        }
-    }
+
+    //     for (Case c : Allcases) {
+    //         print(c.toString());
+    //     }
+
+        
+    //     print("Select Any Case From Above");
+    //     Object val1 = GetInput(scanner);
+    //     print((int) val1);
+
+    //     Case tempcase = dbHandler.findCaseByID(Allcases, (Integer) val1);
+    //     if (tempcase != null) {
+    //         print("Input Notification Msg:");
+    //         Object notification = GetInput(scanner);
+    //         String message = (String) notification;
+    //         print(message);
+    //         List<Integer> case_stakeholders = tempcase.getStakeholders(AllClients, AllSlots, AllJudges, AllLawyers);
+
+    //         int count = 1;
+    //         for (Notification n : AllNotifications) {
+    //             count++;
+    //         }
+    //         if (case_stakeholders.size() > 0) {
+    //             for (Integer i : case_stakeholders) {
+    //                 Notification newnotification = new Notification(count, tempcase.getCaseID(), i, this.getUserID(),
+    //                         "Courts Administrator", message);
+    //                 AllNotifications.add(newnotification);
+    //                 dbHandler.updateOrCreateNotification(newnotification);
+    //                 count++;
+    //             }
+    //         }
+
+    //     } else {
+    //         print("Invalid Case id!");
+    //     }
+    // }
 
     public void UpdateCase(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
             List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, List<Court> AllCourts,
