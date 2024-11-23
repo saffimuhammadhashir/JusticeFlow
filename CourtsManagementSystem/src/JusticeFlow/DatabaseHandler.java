@@ -27,7 +27,7 @@ import com.mysql.cj.xdevapi.Client;
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "test12345";
+    private final String dbPassword = "12345678";
 
     public void getAllFiles(List<Case> AllCases) {
         // SQL query to retrieve all case files
@@ -1301,7 +1301,7 @@ public class DatabaseHandler {
 
             // Set the values for the prepared statement
             updateStatement.setInt(1, s.getCaseID()); // CaseID
-            updateStatement.setInt(2, s.getWitnessID()); // WitnessID
+            updateStatement.setInt(2, w.getWitnessID()); // WitnessID
 
             // Execute the update query
             int rowsAffected = updateStatement.executeUpdate();

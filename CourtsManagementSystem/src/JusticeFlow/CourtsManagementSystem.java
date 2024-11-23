@@ -345,14 +345,30 @@ public class CourtsManagementSystem extends Application {
         String role = user.getRole();
 
         if ("Lawyer".equalsIgnoreCase(role)) {
-            // Lawyer l = user.getRelevantLawyer(AllLawyers, user);
-            // l.SubmitDocument(scanner, AllCases, fileHandler);
+            Lawyer l = user.getRelevantLawyer(AllLawyers, user);
+            l.SubmitDocument(scanner, AllCases, fileHandler);
         } else if ("Probation Officer".equalsIgnoreCase(role)) {
             ProbationOfficer p = user.getRelevantProbationOfficer(AllProbationOfficers, user);
-            // p.SubmitDocument(scanner, AllCases, fileHandler);
+            p.SubmitDocument(scanner, AllCases, fileHandler);
         } else if ("Registrar".equalsIgnoreCase(role)) {
             Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
-            // r.ApproveDocument(scanner, AllCases, fileHandler);
+            r.ApproveDocument(scanner, AllCases, fileHandler);
+        }
+    }
+
+    public void SubmitDocument(Scanner scanner,Stage primaryStage) {
+        // Method to handle document submission
+        String role = user.getRole();
+
+        if ("Lawyer".equalsIgnoreCase(role)) {
+            Lawyer l = user.getRelevantLawyer(AllLawyers, user);
+            l.SubmitDocument(scanner,AllCases,fileHandler,primaryStage,primaryStage.getScene());
+        } else if ("Probation Officer".equalsIgnoreCase(role)) {
+            ProbationOfficer p = user.getRelevantProbationOfficer(AllProbationOfficers, user);
+            p.SubmitDocument(scanner,AllCases,fileHandler,primaryStage,primaryStage.getScene());
+        } else if ("Registrar".equalsIgnoreCase(role)) {
+            Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
+            r.ApproveDocument(dbHandler,scanner,AllCases,fileHandler,primaryStage,primaryStage.getScene());
         }
     }
 
@@ -380,13 +396,29 @@ public class CourtsManagementSystem extends Application {
 
         if ("Judge".equalsIgnoreCase(role)) {
             Judge jud = user.getRelevantJudge(AllJudges, user);
-            // jud.LogJudgement(scanner, AllCases, fileHandler);
+            jud.LogJudgement(scanner, AllCases, fileHandler);
         } else if ("Juror".equalsIgnoreCase(role)) {
             Juror jur = user.getRelevantJuror(AllJurors, user);
-            // jur.LogJudgement(scanner, AllCases, fileHandler);
+            jur.LogJudgement(scanner, AllCases, fileHandler);
         } else if ("Registrar".equalsIgnoreCase(role)) {
             Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
-            // r.ApproveJudgement(scanner, AllCases, fileHandler);
+            r.ApproveJudgement(scanner, AllCases, fileHandler);
+        }
+    }
+
+    public void ReviewDocumentLogJudgment(Scanner scanner,Stage primaryStage) {
+        // Method to handle reviewing documents or logging judgments
+        String role = user.getRole();
+
+        if ("Judge".equalsIgnoreCase(role)) {
+            Judge jud = user.getRelevantJudge(AllJudges, user);
+            jud.LogJudgement(scanner, AllCases,AllSlot, fileHandler,primaryStage,primaryStage.getScene());
+        } else if ("Juror".equalsIgnoreCase(role)) {
+            Juror jur = user.getRelevantJuror(AllJurors, user);
+            jur.LogJudgement(scanner, AllCases,AllSlot, fileHandler,primaryStage,primaryStage.getScene());
+        } else if ("Registrar".equalsIgnoreCase(role)) {
+            Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
+            r.ApproveJudgement(dbHandler,scanner, AllCases, fileHandler,primaryStage,primaryStage.getScene());
         }
     }
 
@@ -450,6 +482,24 @@ public class CourtsManagementSystem extends Application {
             } else {
                 System.out.println("Invalid User!");
             }
+        }
+    }
+
+    public void ScheduleHearingWitness(Scanner scanner,Stage primaryStage,GUI_Menu gui) {
+        // Method to handle scheduling hearings or witnesses
+        String role = user.getRole();
+
+        if ("Court Administrator".equalsIgnoreCase(role)) {
+            CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
+            if (c!=null){
+                c.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler,primaryStage,gui);
+            }
+        } else if ("Lawyer".equalsIgnoreCase(role)) {
+            Lawyer l = user.getRelevantLawyer(AllLawyers, user);
+            l.scheduleWitness(dbHandler,scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, primaryStage,primaryStage.getScene());
+        } else if ("Registrar".equalsIgnoreCase(role)) {
+            Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
+            // r.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler);
         }
     }
 
@@ -1205,7 +1255,7 @@ public class CourtsManagementSystem extends Application {
 
                 scheduleHearingButton.setOnAction(e -> {
                     System.out.println("Schedule Hearing selected.");
-                    ScheduleHearingWitness(scanner); // Call your method
+                    system.ScheduleHearingWitness(scanner,primaryStage,this); // Call your method
                 });
 
                 viewITScheduleButton.setOnAction(e -> {
@@ -1306,7 +1356,7 @@ public class CourtsManagementSystem extends Application {
 
                 reviewDocumentButton.setOnAction(e -> {
                     System.out.println("Review Document/Log Judgment selected.");
-                    ReviewDocumentLogJudgment(scanner); // Call your method
+                    system.ReviewDocumentLogJudgment(scanner,primaryStage); // Call your method
                 });
 
                 notificationButton.setOnAction(e -> {
@@ -1330,7 +1380,7 @@ public class CourtsManagementSystem extends Application {
                 primaryStage.setTitle("Main Menu for Juror");
 
                 Button btnReviewDocLogJudgment = new Button("Review Document/Log Judgment");
-                btnReviewDocLogJudgment.setOnAction(e -> ReviewDocumentLogJudgment(scanner));
+                btnReviewDocLogJudgment.setOnAction(e -> system.ReviewDocumentLogJudgment(scanner,primaryStage));
 
                 Button btnViewNotifications = new Button("Display Notifications");
                 btnViewNotifications.setOnAction(e -> viewMyNotifications());
@@ -1363,7 +1413,7 @@ public class CourtsManagementSystem extends Application {
                 btnRegisterBar.setOnAction(e -> RegisterToBar(scanner));
 
                 Button btnSubmitDoc = new Button("Submit Document");
-                btnSubmitDoc.setOnAction(e -> SubmitDocument(scanner));
+                btnSubmitDoc.setOnAction(e -> system.SubmitDocument(scanner,primaryStage));
 
                 Button btnReopenCase = new Button("Re-open Case/Appeal");
                 btnReopenCase.setOnAction(e -> ReOpenCaseOrAppeal());
@@ -1372,7 +1422,7 @@ public class CourtsManagementSystem extends Application {
                 btnRetrieveRecord.setOnAction(e -> RequestToRetrieveRecord());
 
                 Button btnAddWitness = new Button("Add Witness to Case");
-                btnAddWitness.setOnAction(e -> ScheduleHearingWitness(scanner));
+                btnAddWitness.setOnAction(e -> system.ScheduleHearingWitness(scanner,primaryStage,this));
 
                 Button btnViewNotifications = new Button("Display Notifications");
                 btnViewNotifications.setOnAction(e -> viewMyNotifications());
@@ -1405,7 +1455,7 @@ public class CourtsManagementSystem extends Application {
                 btnTrackCase.setOnAction(e -> TrackCase(scanner));
 
                 Button btnSubmitDoc = new Button("Submit Document");
-                btnSubmitDoc.setOnAction(e -> SubmitDocument(scanner));
+                btnSubmitDoc.setOnAction(e -> SubmitDocument(scanner,primaryStage));
 
                 Button btnViewNotifications = new Button("Display Notifications");
                 btnViewNotifications.setOnAction(e -> viewMyNotifications());
@@ -1495,13 +1545,13 @@ public class CourtsManagementSystem extends Application {
                 btnTrackCase.setOnAction(e -> TrackCase(scanner));
 
                 Button btnScheduleHearing = new Button("Schedule Hearing");
-                btnScheduleHearing.setOnAction(e -> ScheduleHearingWitness(scanner));
+                btnScheduleHearing.setOnAction(e -> system.ScheduleHearingWitness(scanner,primaryStage,this));
 
                 Button btnApproveDocument = new Button("Approve Document");
-                btnApproveDocument.setOnAction(e -> SubmitDocument(scanner));
+                btnApproveDocument.setOnAction(e -> system.SubmitDocument(scanner,primaryStage));
 
                 Button btnApproveJudgement = new Button("Approve Judgement");
-                btnApproveJudgement.setOnAction(e -> ReviewDocumentLogJudgment(scanner));
+                btnApproveJudgement.setOnAction(e -> system.ReviewDocumentLogJudgment(scanner,primaryStage));
 
                 Button btnViewNotifications = new Button("Display Notifications");
                 btnViewNotifications.setOnAction(e -> viewMyNotifications());
@@ -1534,7 +1584,7 @@ public class CourtsManagementSystem extends Application {
                     + "-fx-background-size: stretch; " // Ensures the image covers the entire area
                     + "-fx-background-position: center ; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "
-                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); ");
+                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); ");
 
             layoutinner.setStyle(
                     """
@@ -1577,7 +1627,7 @@ public class CourtsManagementSystem extends Application {
                     + "-fx-border-radius: 15px; "
                     + "-fx-border-color: #e0e0e0; "
                     + "-fx-border-width: 0px;"
-                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
+                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
                     + "-fx-background-size: cover; " // Ensures the image covers the entire area
                     + "-fx-background-position: center center; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
@@ -1803,7 +1853,7 @@ public class CourtsManagementSystem extends Application {
             VBox layout = new VBox(25); // Vertical box layout with spacing of 25
             layout.setStyle("-fx-padding:0px 300px;"
                     + " -fx-alignment: center;"
-                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
+                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
                     + "-fx-background-size: cover; " // Ensures the image covers the entire area
                     + "-fx-background-position: center center; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
@@ -1938,7 +1988,7 @@ public class CourtsManagementSystem extends Application {
         layout.setStyle("-fx-padding: 50px; "
                 + "-fx-alignment: center; "
                 + "-fx-fill-width: true; "
-                + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/awesome%207.jpg'); "
+                + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/awesome%207.jpg'); "
                 + "-fx-background-size: cover; " // Ensures the image covers the entire area
                 + "-fx-background-position: center center; " // Centers the image
                 + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image

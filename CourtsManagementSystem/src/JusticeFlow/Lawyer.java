@@ -261,40 +261,39 @@ public class Lawyer extends User {
         System.out.println("Case has been successfully created.");
     }
 
-    // public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler, Stage primaryStage, Scene previousScene) {
+    // public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler
+    // fileHandler, Stage primaryStage, Scene previousScene) {
     // // Create main layout for the submit document process
     // VBox mainLayout = new VBox(20);
     // mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
-    public void FileNewCase(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases, Stage primaryStage,GUI_Menu gui) {
+    public void FileNewCase(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases, Stage primaryStage,
+            GUI_Menu gui) {
         primaryStage.setTitle("File New Case");
         Label PageTitle = new Label("File New Case");
         PageTitle.setStyle("-fx-font-size: 44px;-fx-alignment:center center;");
         // Create a GridPane to hold the UI elements
-        VBox outerlayout=new VBox(25);
-        HBox horizontalbox=new HBox(25);
+        VBox outerlayout = new VBox(25);
+        HBox horizontalbox = new HBox(25);
         GridPane grid = new GridPane();
-        VBox imagebox=new VBox(15);
+        VBox imagebox = new VBox(15);
         imagebox.setStyle(
-            "-fx-background-size: contain; "
-            + "-fx-background-position: center; "
-            + "-fx-background-repeat: no-repeat; "
-            + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/pic1.png'); "
-            + "-fx-min-height:200px;"
-            + "-fx-min-width:400px;"
-        );
+                "-fx-background-size: contain; "
+                        + "-fx-background-position: center; "
+                        + "-fx-background-repeat: no-repeat; "
+                        + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/pic1.png'); "
+                        + "-fx-min-height:200px;"
+                        + "-fx-min-width:400px;");
         imagebox.minWidthProperty().bind(grid.widthProperty());
         grid.setStyle(
-            "-fx-background-color: rgba(0,0,0,0.8); "
-            + "-fx-background-radius: 20px; "
-            + "-fx-padding: 20px 50px; "
-        );
+                "-fx-background-color: rgba(0,0,0,0.8); "
+                        + "-fx-background-radius: 20px; "
+                        + "-fx-padding: 20px 50px; ");
         outerlayout.setStyle("-fx-alignment:center center;-fx-background-color: #f4f4f9;padding:10px 80px;");
         grid.setVgap(25);
         grid.setHgap(25);
         horizontalbox.setStyle("-fx-spacing:50px;");
-        horizontalbox.getChildren().addAll(grid,imagebox);
-        outerlayout.getChildren().addAll(PageTitle,horizontalbox);
-
+        horizontalbox.getChildren().addAll(grid, imagebox);
+        outerlayout.getChildren().addAll(PageTitle, horizontalbox);
 
         // Labels and Input Fields with a minimalistic design
         Label titleLabel = new Label("Case Title:");
@@ -308,7 +307,8 @@ public class Lawyer extends User {
         ComboBox<String> typeComboBox = new ComboBox<>();
         typeComboBox.getItems().addAll("Civil", "Criminal", "Family", "Other");
         typeComboBox.setValue("Civil");
-        typeComboBox.setStyle("-fx-font-size: 14px; -fx-background-color: #ffffff; -fx-border-radius: 5px;-fx-text-fill: white;");
+        typeComboBox.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #ffffff; -fx-border-radius: 5px;-fx-text-fill: white;");
 
         Label filingDateLabel = new Label("Filing Date:");
         filingDateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;-fx-text-fill: white; ");
@@ -329,16 +329,17 @@ public class Lawyer extends User {
         defendantIDLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;-fx-text-fill: white;");
         TextField defendantIDField = new TextField();
         defendantIDField.setPromptText("Defendant ID");
-        
+
         // Submit Button
         Button submitButton = new Button("Submit");
-        submitButton.setStyle("-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        submitButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
         submitButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
 
         Button returnButton = new Button("Close");
-        returnButton.setStyle("-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        returnButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
         returnButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
-
 
         Label confirmationLabel = new Label();
         confirmationLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #4CAF50;");
@@ -372,7 +373,9 @@ public class Lawyer extends User {
 
         VBox vbox = new VBox(20, outerlayout, confirmationLabel);
         vbox.setStyle("-fx-padding: 20; -fx-background-color: #f4f4f9;"); // Minimal background for vbox
-        returnButton.setOnAction(event -> { gui.GUI_startmenu(primaryStage);});
+        returnButton.setOnAction(event -> {
+            gui.GUI_startmenu(primaryStage);
+        });
         // Event handler for the submit button
         submitButton.setOnAction(event -> {
             // Get inputs
@@ -382,7 +385,7 @@ public class Lawyer extends User {
             Date courtDate = convertToDate(courtDatePicker.getValue());
             int plaintiffID = parseID(plaintiffIDField.getText());
             int defendantID = parseID(defendantIDField.getText());
-            
+
             // Case Status
             String caseStatus = "Pending";
 
@@ -420,7 +423,6 @@ public class Lawyer extends User {
         }
         return java.sql.Date.valueOf(localDate); // Convert LocalDate to java.sql.Date
     }
-    
 
     private Date getDateFromString(String dateInput) {
         if (dateInput.isEmpty()) {
@@ -437,386 +439,830 @@ public class Lawyer extends User {
         return idInput.isEmpty() ? 0 : Integer.parseInt(idInput); // default to 0 if empty
     }
 
-    public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler, Stage primaryStage, Scene previousScene) {
+    public void showWitness(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
+            List<Slot> AllSlots, List<Judge> AllJudges,
+            List<Witness> AllWitnesses, List<Court> AllCourts,
+            Stage primaryStage, Scene previousScene, Case cases) {
+
+        Label titleLabel = new Label("Select Witness over here!");
+        titleLabel.setStyle(
+                "-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #333333; -fx-padding: 20px 0; -fx-alignment: center;");
+
+        // ScrollPane containing the case list
+        ScrollPane formScrollPane = new ScrollPane();
+        formScrollPane.setFitToWidth(true);
+        formScrollPane.setStyle("-fx-background-color: #f4f4f9;");
+
+        VBox formLayout = new VBox(20); // Increased spacing for clarity
+        formLayout.setStyle("-fx-padding: 20px;");
+
+        // Iterate over all cases and add only pending cases
+        for (Witness w : AllWitnesses) {
+            // if (file.getStatus() == 0) {
+            // Create a GridPane for each case
+            GridPane eachCase = new GridPane();
+            eachCase.setHgap(10); // Horizontal gap between columns
+            eachCase.setVgap(10); // Vertical gap between rows
+            eachCase.setStyle(
+                    "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
+
+            // Case Title Label
+            Label witnessName = new Label(w.getFirstName() + " " + w.getLastName());
+            witnessName.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+
+            Label witnessEmail = new Label("Email: " + w.getEmail());
+            witnessEmail.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+
+            Label witnessAddress = new Label("Address: " + w.getAddress());
+            witnessAddress.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+
+            // Add the case title to the first column, first row
+            GridPane.setConstraints(witnessName, 0, 0);
+            GridPane.setConstraints(witnessEmail, 0, 1);
+            GridPane.setConstraints(witnessAddress, 0, 2);
+            eachCase.getChildren().add(witnessName);
+            eachCase.getChildren().add(witnessEmail);
+            eachCase.getChildren().add(witnessAddress);
+
+            // Approve and Reject Buttons
+            Button approveButton = new Button("Approve");
+            approveButton.setStyle(
+                    "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5px 15px; -fx-border-radius: 5px;");
+
+            // Button Actions (for demonstration purposes, implement logic later)
+            approveButton.setOnAction(e -> {
+                try {
+                    // dbHandler.updateFileDetails(cases.getCaseID(), file.getFileName(),
+                    // file.getFileHash(), false,
+                    // true);
+                    boolean val = false;
+                    Slot s = new Slot();
+                    for (Slot sl : AllSlots) {
+                        if (sl.getCaseID() != null) {
+                            if (sl.getCaseID() == cases.getCaseID()) {
+                                s = sl;
+                                val=true;
+                            }
+                        }
+                    }
+
+                    if (val == true) {
+                        dbHandler.updateWitness(w, s);
+                        s.setWitnessID(w.getWitnessID());
+                        dbHandler.updateOrInsertSlots(AllSlots);
+                    }
+                } catch (NumberFormatException ex) {
+                    Label invalidInputLabel = new Label("Invalid input for Witness Number.");
+                    invalidInputLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                    formLayout.getChildren().add(invalidInputLabel);
+                }
+            });
+
+            // Add buttons to GridPane, starting from row 1
+            GridPane.setConstraints(approveButton, 0, 3); // Place in column 1, row 1
+
+            eachCase.getChildren().addAll(approveButton);
+
+            // Add the GridPane to the formLayout
+            formLayout.getChildren().add(eachCase);
+            // }
+
+        }
+        // Set the VBox into the ScrollPane and display it
+        formScrollPane.setContent(formLayout);
+        Button returnButton = new Button("Close");
+        returnButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        returnButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
+        returnButton.setOnAction(e -> {
+            primaryStage.setScene(previousScene);
+        });
+        // Setting up the scene with the scrollable content
+        VBox rootLayout = new VBox(20);
+        rootLayout.getChildren().addAll(titleLabel, formScrollPane, returnButton);
+        rootLayout.setStyle("-fx-background-color: #f4f4f9; -fx-padding: 20px;");
+
+        Scene registerScene = new Scene(rootLayout, 1000, 700);
+        primaryStage.setScene(registerScene);
+        primaryStage.show();
+    }
+
+    public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler, Stage primaryStage,
+            Scene previousScene) {
         // Create main layout for the submit document process
         VBox mainLayout = new VBox(20);
         mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
 
-    // Title label
-    Label titleLabel = new Label("Submit Document for Case");
-    titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
-    mainLayout.getChildren().add(titleLabel);
+        // Title label
+        Label titleLabel = new Label("Submit Document for Case");
+        titleLabel.setStyle("-fx-text-fill: black; -fx-font-size: 22px; -fx-font-weight: bold;");
+        mainLayout.getChildren().add(titleLabel);
 
-    // Show lawyer's cases in a scrollable VBox
-    VBox lawyerCasesBox = new VBox(10);
-    lawyerCasesBox.setStyle(
-            "-fx-alignment: center; -fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-radius: 10px; -fx-background-radius: 10px;");
-    ScrollPane scrollPane = new ScrollPane(lawyerCasesBox);
-    scrollPane.setPrefSize(600, 200);
-    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        // ScrollPane containing the case list
+        ScrollPane formScrollPane = new ScrollPane();
+        formScrollPane.setFitToWidth(true);
+        formScrollPane.setStyle("-fx-background-color: #f4f4f9;");
 
-    boolean exists = false;
-    for (Case c : AllCases) {
-        if (c != null && c.getLawyerId() == lawyerID) {
-            Label caseLabel = new Label(c.toString());
-            caseLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
-            lawyerCasesBox.getChildren().add(caseLabel);
-            exists = true;
-        }
-    }
+        VBox formLayout = new VBox(20); // Increased spacing for clarity
+        formLayout.setStyle("-fx-padding: 20px;");
 
-    if (!exists) {
-        Label NoCase = new Label("You have no Cases.");
-        NoCase.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
-        lawyerCasesBox.getChildren().add(NoCase);
-    }
+        // Iterate over all cases and add only pending cases
+        for (Case cases : AllCases) {
+            if (cases.getLawyerId() == lawyerID) {
 
-    mainLayout.getChildren().add(scrollPane);
+                // Create a GridPane for each case
+                GridPane eachCase = new GridPane();
+                eachCase.setHgap(10); // Horizontal gap between columns
+                eachCase.setVgap(10); // Vertical gap between rows
+                eachCase.setStyle(
+                        "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
 
-    // Case ID input
-    Label caseIdLabel = new Label("Enter Case ID:");
-    caseIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
-    TextField caseIdField = new TextField();
-    caseIdField.setPromptText("Case ID");
-    caseIdField.setPrefWidth(200);
+                // Case Title Label
+                Label caseName = new Label(cases.getCaseTitle());
+                caseName.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-    Button nextButton = new Button("Next");
-    nextButton.setStyle(
-            "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+                Label casetype = new Label("Case Type: " + cases.getCaseType());
+                casetype.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-    // Create the back button
-    Button backButton = new Button("Back");
-    backButton.setStyle("-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #FF6347; -fx-text-fill: white;");
-    backButton.setOnAction(e -> {
-        // Switch back to the previous scene
-        primaryStage.setScene(previousScene);
-    });
+                Label caseplaintiff = new Label("Plaintiff ID: " + cases.getPlaintiffID());
+                caseplaintiff.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-    // Create an HBox to place the back and next buttons in a line
-    HBox buttonLayout = new HBox(20, backButton, nextButton);
-    buttonLayout.setAlignment(Pos.CENTER); // Align buttons to the center
+                Label casedefendant = new Label("Defendant ID: " + cases.getDefendantID());
+                casedefendant.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-    // Create VBox to place everything (title, cases, buttons)
-    VBox caseInputSection = new VBox(10, caseIdLabel, caseIdField, buttonLayout);
-    caseInputSection.setStyle("-fx-alignment: center;");
-    mainLayout.getChildren().add(caseInputSection);
+                Label CaseFiling = new Label("Filing Date ID: " + cases.getFilingDate());
+                CaseFiling.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: red;");
 
-    nextButton.setOnAction(e -> {
-        // Clear previous error or success messages
-        mainLayout.getChildren().removeIf(node -> node instanceof Label);
+                // Add the case title to the first column, first row
+                GridPane.setConstraints(caseName, 0, 0);
+                GridPane.setConstraints(casetype, 0, 1);
+                GridPane.setConstraints(caseplaintiff, 3, 0);
+                GridPane.setConstraints(casedefendant, 3, 1);
+                GridPane.setConstraints(CaseFiling, 5, 0);
+                eachCase.getChildren().add(caseName);
+                eachCase.getChildren().add(casetype);
+                eachCase.getChildren().add(caseplaintiff);
+                eachCase.getChildren().add(casedefendant);
+                eachCase.getChildren().add(CaseFiling);
 
-        try {
-            int caseId = Integer.parseInt(caseIdField.getText());
-            Case caseObj = new Case();
+                // Approve and Reject Buttons
+                Button approveButton = new Button("Select");
+                approveButton.setStyle(
+                        "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5px 15px; -fx-border-radius: 5px;");
 
-            // Check if case exists
-            if (caseObj.doesCaseExist(caseId, AllCases)) {
-                caseObj = caseObj.getCasebyID(caseId, AllCases);
+                // Button Actions (for demonstration purposes, implement logic later)
+                approveButton.setOnAction(e -> {
+                    // showandscheduleslots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
+                    // AllWitnesses, AllCourts,
+                    // primaryStage, gui, cases);
+                    // cases.setCaseStatus("Opened");
+                    // dbHandler.saveOrUpdateCase(cases);
 
-                // Open file dialog to select a file
-                File selectedFile = fileHandler.openFileDialog();
-                if (selectedFile != null) {
-                    try {
-                        // Generate file hash
-                        String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
+                    // Open file dialog to select a file
+                    File selectedFile = fileHandler.openFileDialog();
+                    if (selectedFile != null) {
+                        try {
+                            // Generate file hash
+                            String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
 
-                        CaseFile my_file = new CaseFile(selectedFile.getAbsolutePath(), fileHash);
-                        caseObj.addFile(my_file);
-                        System.out.println("File added to case, waiting for Registrar to approve.");
+                            CaseFile my_file = new CaseFile(selectedFile.getAbsolutePath(), fileHash);
+                            cases.addFile(my_file);
+                            System.out.println("File added to case, waiting for Registrar to approve.");
 
-                        // Update the database with file details
-                        DatabaseHandler dbHandler = new DatabaseHandler();
-                        dbHandler.saveFileDetails(caseObj.getCaseID(), selectedFile.getAbsolutePath(), fileHash,
-                                false);
-                        System.out.println("File Added in Database.");
+                            // // Update the database with file details
+                            DatabaseHandler dbHandler = new DatabaseHandler();
+                            dbHandler.saveFileDetails(cases.getCaseID(), selectedFile.getAbsolutePath(), fileHash,
+                                    false);
+                            System.out.println("File Added in Database.");
 
-                        // Show confirmation message in GUI
-                        Label successLabel = new Label(
-                                "File submitted successfully! Waiting for Registrar approval.");
-                        successLabel
-                                .setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight: bold;");
-                        mainLayout.getChildren().add(successLabel);
+                            // Show confirmation message in GUI
+                            Label successLabel = new Label(
+                                    "File submitted successfully! Waiting for Registrar approval.");
+                            successLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight:bold;");
+                            mainLayout.getChildren().add(successLabel);
 
-                    } catch (IOException | NoSuchAlgorithmException ex) {
-                        ex.printStackTrace();
-                        Label errorLabel = new Label("Error while processing the file.");
-                        errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                        mainLayout.getChildren().add(errorLabel);
+                        } catch (IOException | NoSuchAlgorithmException ex) {
+                            ex.printStackTrace();
+                            Label errorLabel = new Label("Error while processing the file.");
+                            errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                            mainLayout.getChildren().add(errorLabel);
+                        }
+                    } else {
+                        Label noFileLabel = new Label("No file selected.");
+                        noFileLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                        mainLayout.getChildren().add(noFileLabel);
                     }
-                } else {
-                    Label noFileLabel = new Label("No file selected.");
-                    noFileLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                    mainLayout.getChildren().add(noFileLabel);
-                }
 
-            } else {
-                // Show error if case does not exist
-                Label caseNotFoundLabel = new Label("Case with this ID does not exist.");
-                caseNotFoundLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                mainLayout.getChildren().add(caseNotFoundLabel);
+                });
+
+                // Add buttons to GridPane, starting from row 1
+                GridPane.setConstraints(approveButton, 0, 3); // Place in column 1, row 1
+                // GridPane.setConstraints(rejectButton, 1, 3); // Place in column 2, row 1
+
+                eachCase.getChildren().addAll(approveButton);
+
+                // Add the GridPane to the formLayout
+                formLayout.getChildren().add(eachCase);
+
+                // Add the case to the list of pending cases
+                // PendingCases.add(cases);
             }
-
-        } catch (NumberFormatException ex) {
-            // Show error if input is not a valid number
-            Label invalidInputLabel = new Label("Invalid Case ID input.");
-            invalidInputLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-            mainLayout.getChildren().add(invalidInputLabel);
         }
-    });
+        // Set the VBox into the ScrollPane and display it
+        formScrollPane.setContent(formLayout);
 
-    Scene scene = new Scene(mainLayout, 1100, 650);
-    mainLayout.setStyle(
-            "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
-    primaryStage.setScene(scene);
-    primaryStage.show();
-}
+        Button returnButton = new Button(
+                "Close");
+        returnButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        returnButton.setMaxWidth(Double.MAX_VALUE); // Make
+                                                    // button
+                                                    // stretch
+                                                    // to
+                                                    // fill
+                                                    // width
+        returnButton.setOnAction(e -> {
+            // Switch back to the previous scene
+            primaryStage.setScene(previousScene);
+        });
+        // Setting up the scene with the scrollable content
+        VBox rootLayout = new VBox(
+                20);
+        rootLayout.getChildren().addAll(titleLabel, formScrollPane, returnButton);
+        rootLayout.setStyle("-fx-background-color: #f4f4f9; -fx-padding: 20px;");
 
-    public void scheduleWitness(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
-            List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
-            DatabaseHandler databaseHandler, Stage primaryStage,Scene previousScene) {
+        Scene registerScene = new Scene(rootLayout, 1000, 700);
+        primaryStage.setScene(registerScene);
+        primaryStage.show();
 
-        // Main layout container
+        // if (!exists) {
+        // Label NoCase = new Label("You have no Cases.");
+        // NoCase.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+        // lawyerCasesBox.getChildren().add(NoCase);
+        // }
+
+        // mainLayout.getChildren().add(formScrollPane);
+
+        // // Show lawyer's cases in a scrollable VBox
+        // VBox lawyerCasesBox = new VBox(10);
+        // lawyerCasesBox.setStyle(
+        // "-fx-alignment: center; -fx-padding: 10px; -fx-background-color: rgba(0, 0,
+        // 0, 0.5); -fx-border-radius: 10px; -fx-background-radius: 10px;");
+        // ScrollPane scrollPane = new ScrollPane(lawyerCasesBox);
+        // scrollPane.setPrefSize(600, 200);
+        // scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+        // boolean exists = false;
+        // for (Case c : AllCases) {
+        // if (c != null && c.getLawyerId() == lawyerID) {
+        // // Label caseLabel = new Label(c.toString());
+        // // caseLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+        // // lawyerCasesBox.getChildren().add(caseLabel);
+        // exists = true;
+        // }
+        // }
+
+        // if (!exists) {
+        // Label NoCase = new Label("You have no Cases.");
+        // NoCase.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+        // lawyerCasesBox.getChildren().add(NoCase);
+        // }
+
+        // mainLayout.getChildren().add(scrollPane);
+
+        // // Case ID input
+        // Label caseIdLabel = new Label("Enter Case ID:");
+        // caseIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+        // TextField caseIdField = new TextField();
+        // caseIdField.setPromptText("Case ID");
+        // caseIdField.setPrefWidth(200);
+
+        // Button nextButton = new Button("Next");
+        // nextButton.setStyle(
+        // "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px;
+        // -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill:
+        // white;");
+
+        // // Create the back button
+        // Button backButton = new Button("Back");
+        // backButton.setStyle(
+        // "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px;
+        // -fx-background-radius: 10px; -fx-background-color: #FF6347; -fx-text-fill:
+        // white;");
+        // backButton.setOnAction(e -> {
+        // // Switch back to the previous scene
+        // primaryStage.setScene(previousScene);
+        // });
+
+        // // Create an HBox to place the back and next buttons in a line
+        // HBox buttonLayout = new HBox(20, backButton, nextButton);
+        // buttonLayout.setAlignment(Pos.CENTER); // Align buttons to the center
+
+        // // Create VBox to place everything (title, cases, buttons)
+        // VBox caseInputSection = new VBox(10, caseIdLabel, caseIdField, buttonLayout);
+        // caseInputSection.setStyle("-fx-alignment: center;");
+        // mainLayout.getChildren().add(caseInputSection);
+
+        // nextButton.setOnAction(e -> {
+        // // Clear previous error or success messages
+        // mainLayout.getChildren().removeIf(node -> node instanceof Label);
+
+        // try {
+        // int caseId = Integer.parseInt(caseIdField.getText());
+        // Case caseObj = new Case();
+
+        // // Check if case exists
+        // if (caseObj.doesCaseExist(caseId, AllCases)) {
+        // caseObj = caseObj.getCasebyID(caseId, AllCases);
+
+        // // Open file dialog to select a file
+        // File selectedFile = fileHandler.openFileDialog();
+        // if (selectedFile != null) {
+        // try {
+        // // Generate file hash
+        // String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
+
+        // CaseFile my_file = new CaseFile(selectedFile.getAbsolutePath(), fileHash);
+        // caseObj.addFile(my_file);
+        // System.out.println("File added to case, waiting for Registrar to approve.");
+
+        // // Update the database with file details
+        // DatabaseHandler dbHandler = new DatabaseHandler();
+        // dbHandler.saveFileDetails(caseObj.getCaseID(),
+        // selectedFile.getAbsolutePath(), fileHash,
+        // false);
+        // System.out.println("File Added in Database.");
+
+        // // Show confirmation message in GUI
+        // Label successLabel = new Label(
+        // "File submitted successfully! Waiting for Registrar approval.");
+        // successLabel
+        // .setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight:
+        // bold;");
+        // mainLayout.getChildren().add(successLabel);
+
+        // } catch (IOException | NoSuchAlgorithmException ex) {
+        // ex.printStackTrace();
+        // Label errorLabel = new Label("Error while processing the file.");
+        // errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+        // mainLayout.getChildren().add(errorLabel);
+        // }
+        // } else {
+        // Label noFileLabel = new Label("No file selected.");
+        // noFileLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+        // mainLayout.getChildren().add(noFileLabel);
+        // }
+
+        // } else {
+        // // Show error if case does not exist
+        // Label caseNotFoundLabel = new Label("Case with this ID does not exist.");
+        // caseNotFoundLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+        // mainLayout.getChildren().add(caseNotFoundLabel);
+        // }
+
+        // } catch (NumberFormatException ex) {
+        // // Show error if input is not a valid number
+        // Label invalidInputLabel = new Label("Invalid Case ID input.");
+        // invalidInputLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+        // mainLayout.getChildren().add(invalidInputLabel);
+        // }
+        // });
+
+        // Scene scene = new Scene(mainLayout, 1100, 650);
+        // mainLayout.setStyle(
+        // "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch;
+        // -fx-background-position: center; -fx-background-repeat: no-repeat;
+        // -fx-background-image:
+        // url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        // primaryStage.setScene(scene);
+        // primaryStage.show();
+    }
+
+    public void scheduleWitness(DatabaseHandler dbHandler, Scanner scanner, List<Case> AllCases, List<Slot> AllSlots,
+            List<Judge> AllJudges,
+            List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler, Stage primaryStage,
+            Scene previousScene) {
+
+        // Create main layout for the submit document process
         VBox mainLayout = new VBox(20);
         mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
 
         // Title label
-        Label titleLabel = new Label("Schedule a Witness");
-        titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
+        Label titleLabel = new Label("Submit Document for Case");
+        titleLabel.setStyle("-fx-text-fill: black; -fx-font-size: 22px; -fx-font-weight: bold;");
         mainLayout.getChildren().add(titleLabel);
 
-        // Scrollable ViewBox for displaying lawyer's cases
-        ScrollPane caseScrollPane = new ScrollPane();
-        VBox caseViewBox = new VBox(10);
-        caseViewBox.setStyle(
-                "-fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-radius: 10px; -fx-background-radius: 10px;");
+        // ScrollPane containing the case list
+        ScrollPane formScrollPane = new ScrollPane();
+        formScrollPane.setFitToWidth(true);
+        formScrollPane.setStyle("-fx-background-color: #f4f4f9;");
 
-        Label casesLabel = new Label("Your Cases:");
-        casesLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
-        caseViewBox.getChildren().add(casesLabel);
+        VBox formLayout = new VBox(20); // Increased spacing for clarity
+        formLayout.setStyle("-fx-padding: 20px;");
 
-        boolean hasCases = false;
-        for (Case caseObj : AllCases) {
-            if (caseObj.getLawyerId() == lawyerID) {
-                hasCases = true;
-                Label caseEntry = new Label(caseObj.toString());
-                caseEntry.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5;");
-                caseViewBox.getChildren().add(caseEntry);
-            }
-        }
+        // Iterate over all cases and add only pending cases
+        for (Case cases : AllCases) {
+            if (cases.getLawyerId() == lawyerID) {
 
-        if (!hasCases) {
-            Label noCasesLabel = new Label("No cases available for you.");
-            noCasesLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
-            caseViewBox.getChildren().add(noCasesLabel);
-        }
+                // Create a GridPane for each case
+                GridPane eachCase = new GridPane();
+                eachCase.setHgap(10); // Horizontal gap between columns
+                eachCase.setVgap(10); // Vertical gap between rows
+                eachCase.setStyle(
+                        "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
 
-        caseScrollPane.setContent(caseViewBox);
-        caseScrollPane.setFitToWidth(true);
-        caseScrollPane.setPrefHeight(300);
-        mainLayout.getChildren().add(caseScrollPane);
+                // Case Title Label
+                Label caseName = new Label(cases.getCaseTitle());
+                caseName.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-        // Input field for CaseID
-        Label caseIdLabel = new Label("Enter Case ID:");
-        caseIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
-        TextField caseIdField = new TextField();
-        caseIdField.setPromptText("Case ID");
-        caseIdField.setPrefWidth(200);
+                Label casetype = new Label("Case Type: " + cases.getCaseType());
+                casetype.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-        // Create "Back" button
-        Button backButton = new Button("Back");
-        backButton.setStyle(
-                "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #FF6347; -fx-text-fill: white;");
-        backButton.setOnAction(ev -> {
-            primaryStage.setScene(previousScene); // Go back to case selection scene
-        });
+                Label caseplaintiff = new Label("Plaintiff ID: " + cases.getPlaintiffID());
+                caseplaintiff.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-        Button nextButton = new Button("Next");
-        nextButton.setStyle(
-                "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+                Label casedefendant = new Label("Defendant ID: " + cases.getDefendantID());
+                casedefendant.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-        // Create an HBox to place the "Back" and "Submit" buttons in a line
-        HBox buttonLayout1 = new HBox(20, backButton, nextButton);
-        buttonLayout1.setAlignment(Pos.CENTER); // Align buttons to the center
-        
-        VBox caseInputSection = new VBox(10, caseIdLabel, caseIdField, buttonLayout1);
-        caseInputSection.setStyle("-fx-alignment: center;");
-        mainLayout.getChildren().add(caseInputSection);
+                Label CaseFiling = new Label("Filing Date ID: " + cases.getFilingDate());
+                CaseFiling.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: red;");
 
-        nextButton.setOnAction(e -> {
-            try {
-                int caseId = Integer.parseInt(caseIdField.getText());
-                Slot selectedSlot = AllSlots.stream()
-                        .filter(slot -> slot.getCaseID() != null && slot.getCaseID() == caseId)
-                        .findFirst().orElse(null);
+                // Add the case title to the first column, first row
+                GridPane.setConstraints(caseName, 0, 0);
+                GridPane.setConstraints(casetype, 0, 1);
+                GridPane.setConstraints(caseplaintiff, 3, 0);
+                GridPane.setConstraints(casedefendant, 3, 1);
+                GridPane.setConstraints(CaseFiling, 5, 0);
+                eachCase.getChildren().add(caseName);
+                eachCase.getChildren().add(casetype);
+                eachCase.getChildren().add(caseplaintiff);
+                eachCase.getChildren().add(casedefendant);
+                eachCase.getChildren().add(CaseFiling);
 
-                if (selectedSlot == null) {
-                    System.out.println("No slot found for the selected case ID.");
-                    return;
-                }
+                // Approve and Reject Buttons
+                Button approveButton = new Button("Select");
+                approveButton.setStyle(
+                        "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5px 15px; -fx-border-radius: 5px;");
 
-                // Transition to witness selection
-                VBox witnessLayout = new VBox(20);
-                witnessLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+                // Button Actions (for demonstration purposes, implement logic later)
+                approveButton.setOnAction(e -> {
+                    showWitness(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
+                            AllWitnesses, AllCourts,
+                            primaryStage, previousScene, cases);
+                    // cases.setCaseStatus("Opened");
+                    dbHandler.saveOrUpdateCase(cases);
 
-                Label witnessTitleLabel = new Label("Available Witnesses:");
-                witnessTitleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
-                witnessLayout.getChildren().add(witnessTitleLabel);
-
-                ScrollPane witnessScrollPane = new ScrollPane();
-                VBox witnessViewBox = new VBox(10);
-                witnessViewBox.setStyle(
-                        "-fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-radius: 10px; -fx-background-radius: 10px;");
-
-                for (Witness witnessObj : AllWitnesses) {
-                    Label witnessEntry = new Label(witnessObj.toString());
-                    witnessEntry.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5;");
-                    witnessViewBox.getChildren().add(witnessEntry);
-                }
-
-                witnessScrollPane.setContent(witnessViewBox);
-                witnessScrollPane.setFitToWidth(true);
-                witnessScrollPane.setPrefHeight(300);
-                witnessLayout.getChildren().add(witnessScrollPane);
-
-                Label witnessIdLabel = new Label("Enter Witness ID:");
-                witnessIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
-                TextField witnessIdField = new TextField();
-                witnessIdField.setPromptText("Witness ID");
-                witnessIdField.setPrefWidth(200);
-
-                Button submitButton = new Button("Submit");
-                submitButton.setStyle(
-                        "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
-
-                // Create an HBox to place the "Back" and "Submit" buttons in a line
-                HBox buttonLayout = new HBox(20, backButton, submitButton);
-                buttonLayout.setAlignment(Pos.CENTER); // Align buttons to the center
-
-
-                VBox witnessInputSection = new VBox(10, witnessIdLabel, witnessIdField, buttonLayout);
-                witnessInputSection.setStyle("-fx-alignment: center;");
-                witnessLayout.getChildren().add(witnessInputSection);
-
-                Scene witnessScene = new Scene(witnessLayout, 1100, 650);
-                witnessLayout.setStyle(
-                        "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
-                primaryStage.setScene(witnessScene);
-
-                submitButton.setOnAction(ev -> {
-                    try {
-                        int witnessId = Integer.parseInt(witnessIdField.getText());
-                        Witness selectedWitness = AllWitnesses.stream()
-                                .filter(w -> w.getWitnessID() == witnessId)
-                                .findFirst().orElse(null);
-
-                        if (selectedWitness == null) {
-                            System.out.println("Invalid Witness ID.");
-                            return;
-                        }
-
-                        selectedSlot.setWitnessID(witnessId);
-                        selectedWitness.addCaseID(caseId);
-                        databaseHandler.updateWitness(selectedWitness, selectedSlot);
-                        databaseHandler.updateOrInsertSlots(AllSlots);
-
-                        Label successLabel = new Label("Witness scheduled successfully!");
-                        successLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight: bold;");
-                        witnessLayout.getChildren().add(successLabel);
-
-                    } catch (NumberFormatException ex) {
-                        System.out.println("Invalid Witness ID input.");
-                    }
                 });
-            } catch (NumberFormatException ex) {
-                System.out.println("Invalid Case ID input.");
-            }
-        });
 
-        Scene caseScene = new Scene(mainLayout, 1100, 650);
-        mainLayout.setStyle(
-                "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
-        primaryStage.setScene(caseScene);
+                // Add buttons to GridPane, starting from row 1
+                GridPane.setConstraints(approveButton, 0, 3); // Place in column 1, row 1
+                // GridPane.setConstraints(rejectButton, 1, 3); // Place in column 2, row 1
+
+                eachCase.getChildren().addAll(approveButton);
+
+                // Add the GridPane to the formLayout
+                formLayout.getChildren().add(eachCase);
+
+                // Add the case to the list of pending cases
+                // PendingCases.add(cases);
+            }
+        }
+        // Set the VBox into the ScrollPane and display it
+        formScrollPane.setContent(formLayout);
+
+        Button returnButton = new Button(
+                "Close");
+        returnButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        returnButton.setMaxWidth(Double.MAX_VALUE); // Make
+                                                    // button
+                                                    // stretch
+                                                    // to
+                                                    // fill
+                                                    // width
+        returnButton.setOnAction(e -> {
+            // Switch back to the previous scene
+            primaryStage.setScene(previousScene);
+        });
+        // Setting up the scene with the scrollable content
+        VBox rootLayout = new VBox(
+                20);
+        rootLayout.getChildren().addAll(titleLabel, formScrollPane, returnButton);
+        rootLayout.setStyle("-fx-background-color: #f4f4f9; -fx-padding: 20px;");
+
+        Scene registerScene = new Scene(rootLayout, 1000, 700);
+        primaryStage.setScene(registerScene);
         primaryStage.show();
+
+        // // Main layout container
+        // VBox mainLayout = new VBox(20);
+        // mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+
+        // // Title label
+        // Label titleLabel = new Label("Schedule a Witness");
+        // titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px;
+        // -fx-font-weight: bold;");
+        // mainLayout.getChildren().add(titleLabel);
+
+        // // Scrollable ViewBox for displaying lawyer's cases
+        // ScrollPane caseScrollPane = new ScrollPane();
+        // VBox caseViewBox = new VBox(10);
+        // caseViewBox.setStyle(
+        // "-fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5);
+        // -fx-border-radius: 10px; -fx-background-radius: 10px;");
+
+        // Label casesLabel = new Label("Your Cases:");
+        // casesLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;
+        // -fx-font-weight: bold;");
+        // caseViewBox.getChildren().add(casesLabel);
+
+        // boolean hasCases = false;
+        // for (Case caseObj : AllCases) {
+        // if (caseObj.getLawyerId() == lawyerID) {
+        // hasCases = true;
+        // Label caseEntry = new Label(caseObj.toString());
+        // caseEntry.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding:
+        // 5;");
+        // caseViewBox.getChildren().add(caseEntry);
+        // }
+        // }
+
+        // if (!hasCases) {
+        // Label noCasesLabel = new Label("No cases available for you.");
+        // noCasesLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+        // caseViewBox.getChildren().add(noCasesLabel);
+        // }
+
+        // caseScrollPane.setContent(caseViewBox);
+        // caseScrollPane.setFitToWidth(true);
+        // caseScrollPane.setPrefHeight(300);
+        // mainLayout.getChildren().add(caseScrollPane);
+
+        // // Input field for CaseID
+        // Label caseIdLabel = new Label("Enter Case ID:");
+        // caseIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+        // TextField caseIdField = new TextField();
+        // caseIdField.setPromptText("Case ID");
+        // caseIdField.setPrefWidth(200);
+
+        // // Create "Back" button
+        // Button backButton = new Button("Back");
+        // backButton.setStyle(
+        // "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px;
+        // -fx-background-radius: 10px; -fx-background-color: #FF6347; -fx-text-fill:
+        // white;");
+        // backButton.setOnAction(ev -> {
+        // primaryStage.setScene(previousScene); // Go back to case selection scene
+        // });
+
+        // Button nextButton = new Button("Next");
+        // nextButton.setStyle(
+        // "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px;
+        // -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill:
+        // white;");
+
+        // // Create an HBox to place the "Back" and "Submit" buttons in a line
+        // HBox buttonLayout1 = new HBox(20, backButton, nextButton);
+        // buttonLayout1.setAlignment(Pos.CENTER); // Align buttons to the center
+
+        // VBox caseInputSection = new VBox(10, caseIdLabel, caseIdField,
+        // buttonLayout1);
+        // caseInputSection.setStyle("-fx-alignment: center;");
+        // mainLayout.getChildren().add(caseInputSection);
+
+        // nextButton.setOnAction(e -> {
+        // try {
+        // int caseId = Integer.parseInt(caseIdField.getText());
+        // Slot selectedSlot = AllSlots.stream()
+        // .filter(slot -> slot.getCaseID() != null && slot.getCaseID() == caseId)
+        // .findFirst().orElse(null);
+
+        // if (selectedSlot == null) {
+        // System.out.println("No slot found for the selected case ID.");
+        // return;
+        // }
+
+        // // Transition to witness selection
+        // VBox witnessLayout = new VBox(20);
+        // witnessLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+
+        // Label witnessTitleLabel = new Label("Available Witnesses:");
+        // witnessTitleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px;
+        // -fx-font-weight: bold;");
+        // witnessLayout.getChildren().add(witnessTitleLabel);
+
+        // ScrollPane witnessScrollPane = new ScrollPane();
+        // VBox witnessViewBox = new VBox(10);
+        // witnessViewBox.setStyle(
+        // "-fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5);
+        // -fx-border-radius: 10px; -fx-background-radius: 10px;");
+
+        // for (Witness witnessObj : AllWitnesses) {
+        // Label witnessEntry = new Label(witnessObj.toString());
+        // witnessEntry.setStyle("-fx-text-fill: white; -fx-font-size: 14px;
+        // -fx-padding: 5;");
+        // witnessViewBox.getChildren().add(witnessEntry);
+        // }
+
+        // witnessScrollPane.setContent(witnessViewBox);
+        // witnessScrollPane.setFitToWidth(true);
+        // witnessScrollPane.setPrefHeight(300);
+        // witnessLayout.getChildren().add(witnessScrollPane);
+
+        // Label witnessIdLabel = new Label("Enter Witness ID:");
+        // witnessIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+        // TextField witnessIdField = new TextField();
+        // witnessIdField.setPromptText("Witness ID");
+        // witnessIdField.setPrefWidth(200);
+
+        // Button submitButton = new Button("Submit");
+        // submitButton.setStyle(
+        // "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px;
+        // -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill:
+        // white;");
+
+        // // Create an HBox to place the "Back" and "Submit" buttons in a line
+        // HBox buttonLayout = new HBox(20, backButton, submitButton);
+        // buttonLayout.setAlignment(Pos.CENTER); // Align buttons to the center
+
+        // VBox witnessInputSection = new VBox(10, witnessIdLabel, witnessIdField,
+        // buttonLayout);
+        // witnessInputSection.setStyle("-fx-alignment: center;");
+        // witnessLayout.getChildren().add(witnessInputSection);
+
+        // Scene witnessScene = new Scene(witnessLayout, 1100, 650);
+        // witnessLayout.setStyle(
+        // "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch;
+        // -fx-background-position: center; -fx-background-repeat: no-repeat;
+        // -fx-background-image:
+        // url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        // primaryStage.setScene(witnessScene);
+
+        // submitButton.setOnAction(ev -> {
+        // try {
+        // int witnessId = Integer.parseInt(witnessIdField.getText());
+        // Witness selectedWitness = AllWitnesses.stream()
+        // .filter(w -> w.getWitnessID() == witnessId)
+        // .findFirst().orElse(null);
+
+        // if (selectedWitness == null) {
+        // System.out.println("Invalid Witness ID.");
+        // return;
+        // }
+
+        // selectedSlot.setWitnessID(witnessId);
+        // selectedWitness.addCaseID(caseId);
+        // databaseHandler.updateWitness(selectedWitness, selectedSlot);
+        // databaseHandler.updateOrInsertSlots(AllSlots);
+
+        // Label successLabel = new Label("Witness scheduled successfully!");
+        // successLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px;
+        // -fx-font-weight: bold;");
+        // witnessLayout.getChildren().add(successLabel);
+
+        // } catch (NumberFormatException ex) {
+        // System.out.println("Invalid Witness ID input.");
+        // }
+        // });
+        // } catch (NumberFormatException ex) {
+        // System.out.println("Invalid Case ID input.");
+        // }
+        // });
+
+        // Scene caseScene = new Scene(mainLayout, 1100, 650);
+        // mainLayout.setStyle(
+        // "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch;
+        // -fx-background-position: center; -fx-background-repeat: no-repeat;
+        // -fx-background-image:
+        // url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        // primaryStage.setScene(caseScene);
+        // primaryStage.show();
     }
 
-    // public void scheduleWitness(Scanner scanner, List<Case> AllCases, List<Slot>
-    // AllSlots, List<Judge> AllJudges,
-    // List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
-    // DatabaseHandler databaseHandler, Stage primaryStage) {
+    public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler) {
+        Case c = new Case();
 
-    // boolean scheduled = false;
-    // for (Case caseObj : AllCases) {
-    // if (caseObj != null) {
-    // if (caseObj.getLawyerId() == lawyerID) {
-    // scheduled = true;
-    // }
-    // }
-    // }
+        // Prompt for Case ID
+        System.out.print("Enter Case ID: ");
+        int caseID = scanner.nextInt();
 
-    // if (scheduled) {
-    // System.out.println("\nYour Cases:");
-    // for (Case caseObj : AllCases) {
-    // if (caseObj != null) {
-    // if (caseObj.getLawyerId() == lawyerID) {
-    // System.out.println(caseObj.toString());
-    // }
-    // }
-    // }
+        // Check if case exists
+        if (c.doesCaseExist(caseID, AllCases)) {
+            c = c.getCasebyID(caseID, AllCases);
 
-    // System.out.print("Enter Case ID: ");
-    // int cid = scanner.nextInt();
+            // if (c.getLawyerId() == lawyerID) {
+            // Open file dialog to select a file
+            File selectedFile = fileHandler.openFileDialog();
+            if (selectedFile != null) {
+                try {
+                    // Generate file hash
+                    String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
+                    // System.out.println("File hash: " + fileHash);
 
-    // Slot s = new Slot();
-    // boolean scheduled1 = false;
-    // for (Slot slotObj : AllSlots) {
-    // if (slotObj != null) {
-    // if (slotObj.getCaseID() != null) {
-    // if (slotObj.getCaseID() == cid) {
-    // s = slotObj;
-    // scheduled1 = true;
-    // }
-    // }
-    // }
-    // }
+                    CaseFile my_file = new CaseFile(selectedFile.getAbsolutePath(), fileHash);
+                    c.addFile(my_file);
+                    System.out.println("File added to case, waiting for Registrar to approve.");
 
-    // if (scheduled1) {
-    // Witness w;
+                    System.out.println(c.toString());
 
-    // System.out.println("\nExisting Witnesses:");
-    // int count=1;
-    // for (Witness caseObj : AllWitnesses) {
-    // System.out.println(count + ". " + caseObj.toString());
-    // count++;
-    // }
-    // System.out.print("\nEnter WitnessID: ");
-    // int wid = scanner.nextInt();
+                    DatabaseHandler d = new DatabaseHandler();
+                    d.saveFileDetails(c.getCaseID(), selectedFile.getAbsolutePath(), fileHash, false);
+                    System.out.println("File Added in Database.");
+                    return;
 
-    // for (Witness caseObj : AllWitnesses) {
-    // if (caseObj != null) {
-    // if (caseObj.getWitnessID() == wid) {
-    // w = caseObj;
-    // System.out.println("Selected Witness with witnessID " + w.getWitnessID());
-    // s.setWitnessID(w.getWitnessID());
-    // w.addCaseID(cid);
-    // databaseHandler.updateWitness(w, s);
-    // databaseHandler.updateOrInsertSlots(AllSlots);
-    // break;
-    // }
-    // }
-    // }
-    // } else {
-    // System.out.println("No cases scheduled.");
-    // }
-    // } else {
-    // System.out.println("No cases for you.");
-    // }
+                    // Perform further actions if needed
+                } catch (IOException | NoSuchAlgorithmException e) {
+                    System.err.println("Error while processing the file: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("No file selected.");
+            }
+            // } else {
+            // System.out.println("You are not the authorised lawyer of this case.");
+            // }
+        } else {
+            System.out.println("Case with this ID does not exist.");
+        }
+    }
 
-    // // }
+    public void scheduleWitness(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
+            List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
+            DatabaseHandler databaseHandler) {
 
-    // // } else {
-    // // System.out.println("Case not Sheduled.");
-    // // }
-    // }
+        boolean scheduled = false;
+        for (Case caseObj : AllCases) {
+            if (caseObj != null) {
+                if (caseObj.getLawyerId() == lawyerID) {
+                    scheduled = true;
+                }
+            }
+        }
+
+        if (scheduled) {
+            System.out.println("\nYour Cases:");
+            for (Case caseObj : AllCases) {
+                if (caseObj != null) {
+                    if (caseObj.getLawyerId() == lawyerID) {
+                        System.out.println(caseObj.toString());
+                    }
+                }
+            }
+
+            System.out.print("Enter Case ID: ");
+            int cid = scanner.nextInt();
+
+            Slot s = new Slot();
+            boolean scheduled1 = false;
+            for (Slot slotObj : AllSlots) {
+                if (slotObj != null) {
+                    if (slotObj.getCaseID() != null) {
+                        if (slotObj.getCaseID() == cid) {
+                            s = slotObj;
+                            scheduled1 = true;
+                        }
+                    }
+                }
+            }
+
+            if (scheduled1) {
+                Witness w;
+
+                System.out.println("\nExisting Witnesses:");
+                int count = 1;
+                for (Witness caseObj : AllWitnesses) {
+                    System.out.println(count + ". " + caseObj.toString());
+                    count++;
+                }
+                System.out.print("\nEnter WitnessID: ");
+                int wid = scanner.nextInt();
+
+                for (Witness caseObj : AllWitnesses) {
+                    if (caseObj != null) {
+                        if (caseObj.getWitnessID() == wid) {
+                            w = caseObj;
+                            System.out.println("Selected Witness with witnessID " + w.getWitnessID());
+                            s.setWitnessID(w.getWitnessID());
+                            w.addCaseID(cid);
+                            databaseHandler.updateWitness(w, s);
+                            databaseHandler.updateOrInsertSlots(AllSlots);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                System.out.println("No cases scheduled.");
+            }
+        } else {
+            System.out.println("No cases for you.");
+        }
+
+        // }
+
+        // } else {
+        // System.out.println("Case not Sheduled.");
+        // }
+    }
 
     public void RegistertoBar(List<BarAssociation> barassociationlist, List<BarApplication> AllApplications,
             DatabaseHandler dbHandler, Scanner scanner) {

@@ -250,7 +250,7 @@ public class Slot {
                 possibleSlots.add(new_s);
                 System.out.println(s.toString());
             }
-            else if (! (s.getCourtId().equals(null) || s.getCourtId().equals(court.getCourtID())) && s.getJudgeID() == null) {
+            else if (! (s.getCourtId().equals(null) && !(s.getCourtId().equals(court.getCourtID())))) {
                 Slot new_s = new Slot(s);
                 new_s.setJudgeID(judge.getJudgeID());
                 if (witness != null) {
