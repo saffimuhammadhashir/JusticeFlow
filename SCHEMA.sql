@@ -225,7 +225,7 @@ CREATE TABLE CaseFiles (
     CaseID INT,
     FileName VARCHAR(255) NOT NULL,
     FileHash VARCHAR(255) NOT NULL,
-     status TINYINT(1) NOT NULL DEFAULT 0,
+     status INT(1) NOT NULL DEFAULT 0,
     UploadDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (CaseID) REFERENCES Cases(CaseID)
 );
@@ -305,6 +305,3 @@ SELECT * FROM ProbationOfficers;
 SELECT * FROM ITAdmins;
 SELECT * FROM Slots;
 Select * from BarApplication;
-
-
-

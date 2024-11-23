@@ -267,7 +267,7 @@ public class Registrar extends User {
     public void ApproveJudgement(DatabaseHandler dbHandler, Scanner scanner, List<Case> AllCases, FileHandler fileHandler, Stage primaryStage,
             Scene previousScene) {
         // Title Label
-        Label titleLabel = new Label("Approve Document for Case!");
+        Label titleLabel = new Label("Approve Judgement for Case!");
         titleLabel.setStyle(
                 "-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #333333; -fx-padding: 20px 0; -fx-alignment: center;");
 
