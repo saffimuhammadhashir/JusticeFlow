@@ -230,12 +230,12 @@ public class CourtsManagementSystem extends Application {
         }
     }
 
-    public void ReviewUpcomingCaseRequests(Stage primaryStage,GUI_Menu gui) {
+    public void ReviewUpcomingCaseRequests(Stage primaryStage, GUI_Menu gui) {
         Registrar registrar = new Registrar();
         registrar = registrar.getRelevantRegistrar(AllRegistrar, user);
         if (registrar != null) {
             registrar.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
-                    primaryStage,gui);
+                    primaryStage, gui);
             System.out.println("Case has been successfully created.");
 
         } else {
@@ -243,8 +243,9 @@ public class CourtsManagementSystem extends Application {
             CourtAdministrator CourtAdmin = new CourtAdministrator();
             CourtAdmin = CourtAdmin.getRelevantCourtAdministrators(AllCourt_Administrators, user);
             if (CourtAdmin != null) {
-                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
-                primaryStage,gui);
+                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses,
+                        AllCourts,
+                        primaryStage, gui);
                 System.out.println("Case has been successfully created.");
             } else {
                 System.out.println("Invalid User!");
@@ -279,6 +280,10 @@ public class CourtsManagementSystem extends Application {
 
     public void viewMyNotifications() {
         user.viewMyNotifications(AllNotifications, AllCases, dbHandler);
+    }
+
+    public void viewMyNotifications(Stage primaryStage, GUI_Menu gui) {
+        user.viewMyNotifications(AllNotifications, AllCases, dbHandler, primaryStage, gui);
     }
 
     /////////////////////////////////////// Registrar
@@ -429,6 +434,19 @@ public class CourtsManagementSystem extends Application {
         }
     }
 
+    public void TrackManageUpdates(Stage Primarystage, GUI_Menu gui) {
+        // Method to handle tracking and managing updates
+
+        CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
+        if (c != null) {
+            System.out.println("Implement tracking/managing updates logic here.");
+            c.TrackAndManageUpdates(AllCases, AllSlot, AllJudges, AllLawyers, AllClients, AllNotifications, dbHandler,
+                    Primarystage, gui);
+        } else {
+            System.out.println("Invalid User!");
+        }
+    }
+
     public void TrackCase(Scanner scanner) {
         // Method to handle tracking a specific case
         System.out.println("Implement case tracking logic here.");
@@ -459,13 +477,16 @@ public class CourtsManagementSystem extends Application {
 
         if ("Court Administrator".equalsIgnoreCase(role)) {
             CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
-            // c.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler);
+            // c.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts,
+            // AllWitnesses, fileHandler, dbHandler);
         } else if ("Lawyer".equalsIgnoreCase(role)) {
             Lawyer l = user.getRelevantLawyer(AllLawyers, user);
-            // l.scheduleWitness(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler);
+            // l.scheduleWitness(scanner, AllCases, AllSlot, AllJudges, AllCourts,
+            // AllWitnesses, fileHandler, dbHandler);
         } else if ("Registrar".equalsIgnoreCase(role)) {
             Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
-            // r.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler, dbHandler);
+            // r.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts,
+            // AllWitnesses, fileHandler, dbHandler);
         }
     }
 
@@ -1190,12 +1211,12 @@ public class CourtsManagementSystem extends Application {
 
                 caseFilingButton.setOnAction(e -> {
                     System.out.println("Case Filing/Scheduling selected.");
-                    system.ReviewUpcomingCaseRequests(primaryStage,this); // Call your method
+                    system.ReviewUpcomingCaseRequests(primaryStage, this); // Call your method
                 });
 
                 trackUpdatesButton.setOnAction(e -> {
                     System.out.println("Track/Manage Updates selected.");
-                    TrackManageUpdates(scanner); // Call your method
+                    system.TrackManageUpdates(primaryStage, this); // Call your method
                 });
 
                 trackCaseButton.setOnAction(e -> {
@@ -1220,7 +1241,7 @@ public class CourtsManagementSystem extends Application {
 
                 displayNotificationsButton.setOnAction(e -> {
                     System.out.println("Display Notifications selected.");
-                    viewMyNotifications(); // Call your method
+                    system.viewMyNotifications(primaryStage, this); // Call your method
                 });
 
                 logoutButton.setOnAction(e -> {
@@ -1311,7 +1332,7 @@ public class CourtsManagementSystem extends Application {
 
                 notificationButton.setOnAction(e -> {
                     System.out.println("Display Notifications selected.");
-                    viewMyNotifications(); // Call your method
+                    system.viewMyNotifications(primaryStage, this); // Call your method
                 });
 
                 logoutButton.setOnAction(e -> {
@@ -1375,7 +1396,7 @@ public class CourtsManagementSystem extends Application {
                 btnAddWitness.setOnAction(e -> ScheduleHearingWitness(scanner));
 
                 Button btnViewNotifications = new Button("Display Notifications");
-                btnViewNotifications.setOnAction(e -> viewMyNotifications());
+                btnViewNotifications.setOnAction(e -> system.viewMyNotifications(primaryStage, this));
 
                 Button btnLogout = new Button("Log Out");
                 designButton_smaller(btnCaseFiling);
@@ -1461,7 +1482,7 @@ public class CourtsManagementSystem extends Application {
                 btnRequestReOpeningAppeal.setOnAction(e -> RequestCaseReopeningOrAppeal());
 
                 Button btnViewNotifications = new Button("Display Notifications");
-                btnViewNotifications.setOnAction(e -> viewMyNotifications());
+                btnViewNotifications.setOnAction(e -> system.viewMyNotifications(primaryStage, this));
 
                 Button btnLogout = new Button("Log Out");
 
@@ -1486,7 +1507,7 @@ public class CourtsManagementSystem extends Application {
                 titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Registrar");
                 Button btnCaseFiling = new Button("Case Filing/Scheduling");
-                btnCaseFiling.setOnAction(e -> system.ReviewUpcomingCaseRequests(primaryStage,this));
+                btnCaseFiling.setOnAction(e -> system.ReviewUpcomingCaseRequests(primaryStage, this));
 
                 Button btnBarRegistration = new Button("Bar Registration");
                 btnBarRegistration.setOnAction(e -> RegisterToBar(scanner));

@@ -253,5 +253,14 @@ SELECT * FROM CaseFiles;
 SELECT * FROM Notifications;
 
 
+INSERT INTO Notifications (CaseID, RecipientsID, SenderID, SenderType, Notification, CreatedAt)
+VALUES
+    (14, 16, 11, 'Admin', 'Notification 1: Case details have been updated.', '2024-11-22 10:00:00'),
+    (14, 16, 11, 'Admin', 'Notification 2: New hearing date has been scheduled.', '2024-11-22 12:00:00'),
+    (14, 16, 11, 'Admin', 'Notification 3: Your case summary has been uploaded.', '2024-11-22 15:00:00'),
+    (14, 16, 11, 'Admin', 'Notification 4: Important documents are pending review.', '2024-11-22 17:00:00');
+
+
+
 
 update cases set CaseStatus='Pending' where CaseID>=10;
