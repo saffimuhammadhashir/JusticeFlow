@@ -41,8 +41,11 @@ public class FileHandler {
                 if (!caseDirectory.exists()) {
                     caseDirectory.mkdirs();
                 }
-
-                File destinationFile = new File(caseDirectory, selectedFile.getName());
+                String sanitizedFilePath = filePath.replaceAll(":", "_");
+                File destinationFile = new File(caseDirectory, sanitizedFilePath);
+                
+                // File destinationFile = new File(caseDirectory, selectedFile.getName());
+                
                 copyFile(filePath, destinationFile.getAbsolutePath());
 
                 CaseFile file = new CaseFile(selectedFile.getName(), fileHash); // Changed to CaseFile

@@ -224,7 +224,7 @@ public class Juror extends User {
                             System.out.println("Judgement added to case, waiting for Registrar to approve.");
 
                             DatabaseHandler dbHandler = new DatabaseHandler();
-                        dbHandler.addJudgement(cases.getCaseID(), my_file.getFileName(), my_file.getFileHash(), 2);
+                        dbHandler.addJudgement(cases.getCaseID(), selectedFile.getAbsolutePath(), my_file.getFileHash(), 2);
 
                             System.out.println("Judgement Added in Database.");
 
@@ -437,7 +437,7 @@ public class Juror extends User {
         // "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch;
         // -fx-background-position: center; -fx-background-repeat: no-repeat;
         // -fx-background-image:
-        // url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        // url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
         // primaryStage.setScene(scene);
         // primaryStage.show();
     }

@@ -218,7 +218,7 @@ public class Judge extends User {
                         cases.addJudgement(judgmentFile);
 
                         DatabaseHandler dbHandler = new DatabaseHandler();
-                        dbHandler.addJudgement(cases.getCaseID(), judgmentFile.getFileName(), judgmentFile.getFileHash(), 2);
+                        dbHandler.addJudgement(cases.getCaseID(), selectedFile.getAbsolutePath(), judgmentFile.getFileHash(), 2);
 
                         Label successLabel = new Label("Judgment submitted successfully! Waiting for Registrar approval.");
                         successLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight: bold;");

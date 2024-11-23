@@ -29,7 +29,7 @@ import com.mysql.cj.xdevapi.Client;
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "12345678";
+    private final String dbPassword = "test12345";
 
     public void getAllFiles(List<Case> AllCases) {
         // SQL query to retrieve all case files
@@ -1046,6 +1046,7 @@ public class DatabaseHandler {
         }
     }
 
+    
     // Inserts file details (filename and file hash) into the database, linking the
     // file to a case
     // through the specified CaseID. If the file information is saved successfully,
@@ -1136,6 +1137,45 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
+
+    public boolean saveFileDetailssecure(int caseID, String fileName, String fileHash, boolean status) {
+        String insertSQL = "INSERT INTO CaseFiles (CaseID, FileName, FileHash, status) VALUES (?, ?, ?, ?)";
+        
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+             PreparedStatement insertStatement = connection.prepareStatement(insertSQL)) {
+    
+            // Check if the connection is successful
+            if (connection == null) {
+                System.out.println("Connection failed!");
+                return false;
+            }
+    
+            // Set values for the prepared statement
+            insertStatement.setInt(1, caseID);
+            insertStatement.setString(2, fileName);
+            insertStatement.setString(3, fileHash);
+            insertStatement.setInt(4, status ? 1 : 0); // Set status as 1 for true, 0 for false
+    
+            // Execute the insert operation
+            int rowsAffected = insertStatement.executeUpdate();
+    
+            // Check if the insert was successful
+            if (rowsAffected > 0) {
+                System.out.println("File details saved successfully!");
+                return true;
+            } else {
+                System.out.println("Failed to save file details.");
+                return false;
+            }
+    
+        } catch (SQLException e) {
+            // Log the exception and return false if there was an SQL error
+            System.err.println("Error executing SQL query: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
 
     public void updateFileDetails(int caseID, String fileName, String fileHash, boolean oldStatus, boolean newStatus) {
         // SQL query to update the status in CaseFiles
@@ -1298,7 +1338,69 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
+   
+    public void updateWitness(Witness w, int id) {
+        String updateSQL = "INSERT INTO WitnessTable (CaseId, WitnessID) VALUES (?, ?)";
 
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+                PreparedStatement updateStatement = connection.prepareStatement(updateSQL)) {
+
+            // Check if the connection is valid (optional)
+            if (connection != null) {
+                System.out.println("Connection successful!");
+            }
+
+            // Set the values for the prepared statement
+            updateStatement.setInt(1, id); // CaseID
+            updateStatement.setInt(2, w.getWitnessID()); // WitnessID
+
+            // Execute the update query
+            int rowsAffected = updateStatement.executeUpdate();
+
+            // Check if the update was successful
+            if (rowsAffected > 0) {
+                System.out.println("Witness's Cases updated successfully!");
+            } else {
+                System.out.println("No matching record found to update.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+   
+   
+    public void deleteWitness(Witness w, int id) {
+        // Update SQL query to delete the relevant entries
+        String deleteSQL = "DELETE FROM WitnessTable WHERE CaseId = ? AND WitnessID = ?";
+    
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+             PreparedStatement deleteStatement = connection.prepareStatement(deleteSQL)) {
+    
+            // Check if the connection is valid (optional)
+            if (connection != null) {
+                System.out.println("Connection successful!");
+            }
+    
+            // Set the values for the prepared statement
+            deleteStatement.setInt(1, id); // CaseID
+            deleteStatement.setInt(2, w.getWitnessID()); // WitnessID
+    
+            // Execute the delete query
+            int rowsAffected = deleteStatement.executeUpdate();
+    
+            // Check if the deletion was successful
+            if (rowsAffected > 0) {
+                System.out.println("Witness's Cases deleted successfully!");
+            } else {
+                System.out.println("No matching record found to delete.");
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void updateOrCreateNotification(Notification notification) {
         String checkQuery = "SELECT COUNT(*) AS count FROM Notifications WHERE NotificationID = ?";
         String updateQuery = "UPDATE Notifications SET CaseID = ?, RecipientsID = ?, SenderID = ?, SenderType = ?, Notification = ? WHERE NotificationID = ?";

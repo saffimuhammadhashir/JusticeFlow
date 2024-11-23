@@ -288,7 +288,7 @@ public class Lawyer extends User {
                 "-fx-background-size: contain; "
                         + "-fx-background-position: center; "
                         + "-fx-background-repeat: no-repeat; "
-                        + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/pic1.png'); "
+                        + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/pic1.png'); "
                         + "-fx-min-height:200px;"
                         + "-fx-min-width:400px;");
         imagebox.minWidthProperty().bind(grid.widthProperty());
@@ -841,7 +841,7 @@ public class Lawyer extends User {
         // "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch;
         // -fx-background-position: center; -fx-background-repeat: no-repeat;
         // -fx-background-image:
-        // url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        // url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
         // primaryStage.setScene(scene);
         // primaryStage.show();
     }
@@ -1103,7 +1103,7 @@ public class Lawyer extends User {
         // "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch;
         // -fx-background-position: center; -fx-background-repeat: no-repeat;
         // -fx-background-image:
-        // url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        // url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
         // primaryStage.setScene(witnessScene);
 
         // submitButton.setOnAction(ev -> {
@@ -1142,7 +1142,7 @@ public class Lawyer extends User {
         // "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch;
         // -fx-background-position: center; -fx-background-repeat: no-repeat;
         // -fx-background-image:
-        // url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        // url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
         // primaryStage.setScene(caseScene);
         // primaryStage.show();
     }

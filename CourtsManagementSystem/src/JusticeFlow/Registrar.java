@@ -264,7 +264,8 @@ public class Registrar extends User {
         primaryStage.show();
     }
 
-    public void ApproveJudgement(DatabaseHandler dbHandler, Scanner scanner, List<Case> AllCases, FileHandler fileHandler, Stage primaryStage,
+    public void ApproveJudgement(DatabaseHandler dbHandler, Scanner scanner, List<Case> AllCases,
+            FileHandler fileHandler, Stage primaryStage,
             Scene previousScene) {
         // Title Label
         Label titleLabel = new Label("Approve Document for Case!");
@@ -482,7 +483,7 @@ public class Registrar extends User {
                 // Set scene to slot selection
                 Scene slotScene = new Scene(slotLayout, 1100, 650);
                 slotLayout.setStyle(
-                        "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+                        "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
                 primaryStage.setScene(slotScene);
 
                 submitButton.setOnAction(ev -> {
@@ -514,7 +515,7 @@ public class Registrar extends User {
         // Set scene and display
         Scene caseScene = new Scene(mainLayout, 1100, 650);
         mainLayout.setStyle(
-                "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+                "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
         primaryStage.setScene(caseScene);
         primaryStage.show();
     }
@@ -995,7 +996,8 @@ public class Registrar extends User {
                 // Button Actions (for demonstration purposes, implement logic later)
                 approveButton.setOnAction(e -> {
                     try {
-                        dbHandler.updateFileDetails(cases.getCaseID(), file.getFileName(), file.getFileHash(), false, true);
+                        dbHandler.updateFileDetails(cases.getCaseID(), file.getFileName(), file.getFileHash(), false,
+                                true);
                     } catch (NumberFormatException ex) {
                         Label invalidInputLabel = new Label("Invalid input for Document Number.");
                         invalidInputLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
@@ -1077,7 +1079,8 @@ public class Registrar extends User {
                 // Button Actions (for demonstration purposes, implement logic later)
                 approveButton.setOnAction(e -> {
                     try {
-                        dbHandler.updateJudgementDetails(cases.getCaseID(), file.getFileName(), file.getFileHash(), 2, 3);
+                        dbHandler.updateJudgementDetails(cases.getCaseID(), file.getFileName(), file.getFileHash(), 2,
+                                3);
                     } catch (NumberFormatException ex) {
                         Label invalidInputLabel = new Label("Invalid input for Document Number.");
                         invalidInputLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
@@ -1113,7 +1116,6 @@ public class Registrar extends User {
         primaryStage.setScene(registerScene);
         primaryStage.show();
     }
-
 
     private int generateUniqueSlotID(List<Slot> allSlots) {
         return allSlots.stream().mapToInt(Slot::getSlotID).max().orElse(0) + 1;
@@ -1305,6 +1307,135 @@ public class Registrar extends User {
         } else {
             System.out.println("No Pending Requests!");
         }
+    }
+
+    public void UpdateCase(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
+            List<Slot> AllSlots,List<Clients> allclients, List<Judge> AllJudges,List<Lawyer> AllLawyers, List<Witness> AllWitnesses, List<Court> AllCourts,
+            Stage primaryStage, GUI_Menu gui, CourtsManagementSystem system) {
+        List<Case> PendingCases = new ArrayList<>();
+
+        // Title Label
+        Label titleLabel = new Label("Track Cases to be Managed");
+        titleLabel.setStyle(
+                "-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #333333; -fx-padding: 20px 0; -fx-alignment: center;");
+
+        // ScrollPane containing the case list
+        ScrollPane formScrollPane = new ScrollPane();
+        formScrollPane.setFitToWidth(true);
+        formScrollPane.setStyle("-fx-background-color: #f4f4f9;");
+
+        VBox formLayout = new VBox(20); // Increased spacing for clarity
+        formLayout.setStyle("-fx-padding: 20px;");
+
+        // Iterate over all cases and add only pending cases
+        for (Case cases : AllCases) {
+
+
+                // Create a GridPane for each case
+                GridPane eachCase = new GridPane();
+                eachCase.setHgap(15); // Horizontal gap between columns
+                eachCase.setVgap(15); // Vertical gap between rows
+                eachCase.setStyle(
+                        "-fx-padding: 20px; " +
+                                "-fx-background-color: #f9f9f9; " +
+                                "-fx-border-color: #dcdcdc; " +
+                                "-fx-border-width: 1px; " +
+                                "-fx-border-radius: 15px; " +
+                                "-fx-background-radius: 15px; " +
+                                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 2, 2);");
+
+                // Case Title Label
+                Label caseName = new Label(cases.getCaseTitle());
+                caseName.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+
+                Label casetype = new Label("Case Type: " + cases.getCaseType());
+                casetype.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
+
+                Label caseplaintiff = new Label("Plaintiff ID: " + cases.getPlaintiffID());
+                caseplaintiff.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
+
+                Label casedefendant = new Label("Defendant ID: " + cases.getDefendantID());
+                casedefendant.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
+
+                Label CaseFiling = new Label("Filing Date: " + cases.getFilingDate());
+                CaseFiling.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #e74c3c;");
+
+                // Set alignments for the GridPane
+                GridPane.setConstraints(caseName, 0, 0, 2, 1); // Spanning across two columns
+                GridPane.setConstraints(casetype, 0, 1);
+                GridPane.setConstraints(caseplaintiff, 2, 1);
+                GridPane.setConstraints(casedefendant, 0, 2);
+                GridPane.setConstraints(CaseFiling, 2, 2);
+
+                // Add components to the GridPane
+                eachCase.getChildren().addAll(caseName, casetype, caseplaintiff, casedefendant, CaseFiling);
+
+                // Approve and Reject Buttons
+                Button approveButton = new Button("Update Case");
+                approveButton.setStyle(
+                        "-fx-background-color: #27ae60; " +
+                                "-fx-text-fill: white; " +
+                                "-fx-font-size: 14px; " +
+                                "-fx-font-weight: bold; " +
+                                "-fx-padding: 10px 20px; " +
+                                "-fx-border-radius: 8px; " +
+                                "-fx-background-radius: 8px;");
+
+                Button rejectButton = new Button("Block Case");
+                rejectButton.setStyle(
+                        "-fx-background-color: #e74c3c; " +
+                                "-fx-text-fill: white; " +
+                                "-fx-font-size: 14px; " +
+                                "-fx-font-weight: bold; " +
+                                "-fx-padding: 10px 20px; " +
+                                "-fx-border-radius: 8px; " +
+                                "-fx-background-radius: 8px;");
+                approveButton.setOnAction(e -> {
+                    cases.updateCaseData(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges,AllLawyers, AllWitnesses, AllCourts,
+                            primaryStage, gui, system);
+
+                });
+                rejectButton.setOnAction(e -> {
+                    cases.setCaseStatus("Not Allowed");
+                    dbHandler.saveOrUpdateCase(cases);
+                    UpdateCase(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges,AllLawyers, AllWitnesses, AllCourts,
+                    primaryStage, gui, system);
+
+                });
+                // Add spacing and alignment for buttons
+                GridPane.setConstraints(approveButton, 0, 3);
+                GridPane.setConstraints(rejectButton, 1, 3);
+                GridPane.setMargin(approveButton, new Insets(10, 10, 10, 0)); // Add spacing around the buttons
+                GridPane.setMargin(rejectButton, new Insets(10, 0, 10, 10));
+
+                // Add buttons to the GridPane
+                eachCase.getChildren().addAll(approveButton, rejectButton);
+
+                // Add the GridPane to the formLayout
+                formLayout.getChildren().add(eachCase);
+
+                // Add the case to the list of pending cases
+                PendingCases.add(cases);
+            
+        }
+        // Set the VBox into the ScrollPane and display it
+        formScrollPane.setContent(formLayout);
+        Button returnButton = new Button("Close");
+        returnButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        returnButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
+        returnButton.setOnAction(e -> {
+            gui.GUI_startmenu(primaryStage);
+        });
+        // Setting up the scene with the scrollable content
+        VBox rootLayout = new VBox(20);
+        rootLayout.getChildren().addAll(titleLabel, formScrollPane, returnButton);
+        rootLayout.setStyle("-fx-background-color: #f4f4f9; -fx-padding: 20px;");
+
+        Scene registerScene = new Scene(rootLayout, 1000, 700);
+        primaryStage.setScene(registerScene);
+        primaryStage.show();
+
     }
 
     public BarApplication getApplicationById(List<BarApplication> AllApplications, int id) {

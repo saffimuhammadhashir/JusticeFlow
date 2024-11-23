@@ -229,16 +229,16 @@ VALUES
 
 
 
- INSERT INTO WitnessTable (CaseId, WitnessID)
- VALUES 
-    (10, 1),
-     (10, 2),
-     (10, 3),
-     (10, 4),
-     (10, 5);
+	 INSERT INTO WitnessTable (CaseId, WitnessID)
+	 VALUES 
+		(1, 1),
+		 (1, 2),
+		 (1, 3),
+		 (1, 4),
+		 (1, 5);
 
 
-
+SELECT * FROM Witnesses;
 select * From WitnessTable;
 select * from slots;
 SELECT * FROM Users;
@@ -248,7 +248,7 @@ SELECT * FROM BarAssociations;
 SELECT * FROM Lawyers;
 SELECT * FROM CourtAdministrators;
 SELECT * FROM Clients;
-SELECT * FROM Witnesses;
+
 SELECT * FROM Registrar;
 SELECT * FROM Jurors;
 SELECT * FROM ProbationOfficers;
