@@ -743,7 +743,7 @@ public class Lawyer extends User {
         VBox formLayout = new VBox(20); // Increased spacing for clarity
         formLayout.setStyle("-fx-padding: 20px;");
 
-        // Iterate over all cases and add only pending cases
+        // Iterate over all cases and add only lawyer's cases
         for (Case cases : AllCases) {
             if (cases.getLawyerId() == lawyerID) {
 
@@ -800,7 +800,7 @@ public class Lawyer extends User {
                 approveButton.setOnAction(e -> {
                     showWitness(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
                             AllWitnesses, AllCourts,
-                            primaryStage, previousScene, cases);
+                            primaryStage, primaryStage.getScene(), cases);
                     // cases.setCaseStatus("Opened");
                     dbHandler.saveOrUpdateCase(cases);
 
