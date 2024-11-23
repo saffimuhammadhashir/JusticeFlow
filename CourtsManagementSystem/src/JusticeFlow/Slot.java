@@ -250,7 +250,7 @@ public class Slot {
                 possibleSlots.add(new_s);
                 System.out.println(s.toString());
             }
-            else if (! (s.getCourtId().equals(null) || s.getCourtId().equals(court.getCourtID())) ) {
+            else if (! (s.getCourtId().equals(null) || s.getCourtId().equals(court.getCourtID())) && s.getJudgeID() == null) {
                 Slot new_s = new Slot(s);
                 new_s.setJudgeID(judge.getJudgeID());
                 if (witness != null) {
@@ -272,29 +272,29 @@ public class Slot {
             return; // Handle null inputs gracefully
         }
 
-        // Get current time and add 12 hours to it
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime cutoffTime = currentTime.plusHours(12);
-        System.out.println("Cutoff Time: " + cutoffTime); // For debugging purposes
-
         Iterator<Slot> iterator = slotList.iterator(); // Initialize iterator
+        // // Get current time and add 12 hours to it
+        // LocalDateTime currentTime = LocalDateTime.now();
+        // LocalDateTime cutoffTime = currentTime.plusHours(12);
+        // System.out.println("Cutoff Time: " + cutoffTime); // For debugging purposes
+
         
-        // First, remove all slots whose start time is before the current time + 12 hours
-        while (iterator.hasNext()) {
-            Slot currentSlot = iterator.next();
+        // // First, remove all slots whose start time is before the current time + 12 hours
+        // while (iterator.hasNext()) {
+        //     Slot currentSlot = iterator.next();
 
-            // Convert currentSlot's startTime (java.sql.Time) to LocalDateTime
-            LocalTime startTime = currentSlot.getStartTime().toLocalTime();
+        //     // Convert currentSlot's startTime (java.sql.Time) to LocalDateTime
+        //     LocalTime startTime = currentSlot.getStartTime().toLocalTime();
             
-            // Parse the date from dayName (assuming dayName is in the format "yyyy-MM-dd")
-            LocalDateTime slotStartTime = parseSlotStartTime(currentSlot.getDayName(), startTime);
+        //     // Parse the date from dayName (assuming dayName is in the format "yyyy-MM-dd")
+        //     LocalDateTime slotStartTime = parseSlotStartTime(currentSlot.getDayName(), startTime);
 
-            // Remove slots where the start time is before current time and before cutoff time
-            if (slotStartTime.isBefore(currentTime) && slotStartTime.isBefore(cutoffTime)) {
-                iterator.remove();
-                System.out.println("Removed slot with ID (cutoff time condition): " + currentSlot.getSlotID());
-            }
-        }
+        //     // Remove slots where the start time is before current time and before cutoff time
+        //     if (slotStartTime.isBefore(currentTime) && slotStartTime.isBefore(cutoffTime)) {
+        //         iterator.remove();
+        //         System.out.println("Removed slot with ID (cutoff time condition): " + currentSlot.getSlotID());
+        //     }
+        // }
 
         // Now, remove slots with the same slot ID as the target slot
         iterator = slotList.iterator(); // Reinitialize iterator to remove slots by targetSlot ID
@@ -303,7 +303,7 @@ public class Slot {
 
             if (currentSlot.getSlotID() == targetSlot.getSlotID()) {
                 iterator.remove();
-                System.out.println("Removed slot with ID (matching target): " + currentSlot.getSlotID());
+                // System.out.println("Removed slot with ID (matching target): " + currentSlot.getSlotID());
             }
         }
     }
