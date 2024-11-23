@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import com.mysql.cj.xdevapi.Client;
@@ -226,17 +227,23 @@ public class DatabaseHandler {
 
             while (resultSet.next()) {
                 int slotID = resultSet.getInt("SlotID");
-                String dayName = resultSet.getString("DayName");
-                Time startTime = resultSet.getTime("startTime");
-                Time endTime = resultSet.getTime("endTime");
+                LocalDate dayName = LocalDate.parse(resultSet.getString("DayName"));
+
+                // Convert SQL Time to LocalTime
+                LocalTime startTime = resultSet.getTime("startTime").toLocalTime();
+                LocalTime endTime = resultSet.getTime("endTime").toLocalTime();
+
                 int slotNumber = resultSet.getInt("SlotNumber");
+
+                // Handle nullable fields correctly
                 Integer caseID = resultSet.getObject("CaseID") != null ? resultSet.getInt("CaseID") : null;
                 Integer judgeID = resultSet.getObject("JudgeID") != null ? resultSet.getInt("JudgeID") : null;
                 Integer witnessID = resultSet.getObject("WitnessID") != null ? resultSet.getInt("WitnessID") : null;
-                Integer courtid = resultSet.getObject("CourtId") != null ? resultSet.getInt("CourtId") : null;
+                Integer courtID = resultSet.getObject("CourtId") != null ? resultSet.getInt("CourtId") : null;
 
+                // Create Slot object and add to list
                 Slot slot = new Slot(slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID,
-                        courtid);
+                        courtID);
                 allSlots.add(slot);
             }
 
@@ -733,7 +740,8 @@ public class DatabaseHandler {
                 int BarId = resultSet.getInt("BarId");
 
                 // Create BarApplication object and add to list
-                BarApplication application = new BarApplication(applicationTableId, lawyerId, applicationTime, status,BarId);
+                BarApplication application = new BarApplication(applicationTableId, lawyerId, applicationTime, status,
+                        BarId);
                 barApplicationList.add(application);
             }
 
@@ -836,45 +844,27 @@ public class DatabaseHandler {
                 // Check if the slot already exists (based on slotID)
                 if (doesSlotExist(slot.getSlotID(), connection)) {
                     // If slot exists, update it
-                    updateStmt.setString(1, slot.getDayName());
-                    updateStmt.setTime(2, slot.getStartTime());
-                    updateStmt.setTime(3, slot.getEndTime());
+                    updateStmt.setString(1, slot.getDayName().toString());
+                    updateStmt.setTime(2, Time.valueOf(slot.getStartTime())); // Convert LocalTime to java.sql.Time
+                    updateStmt.setTime(3, Time.valueOf(slot.getEndTime())); // Convert LocalTime to java.sql.Time
                     updateStmt.setInt(4, slot.getSlotNumber());
                     updateStmt.setObject(5, slot.getCaseID());
-
-                    // If the caseID is null, set the other values to null
-                    if (slot.getCaseID() == null) {
-                        updateStmt.setObject(6, null); // Set JudgeID as null
-                        updateStmt.setObject(7, null); // Set WitnessID as null
-                        updateStmt.setObject(8, null); // Set CourtID as null
-                    } else {
-                        updateStmt.setObject(6, slot.getJudgeID());
-                        updateStmt.setObject(7, slot.getWitnessID() != null ? slot.getWitnessID() : null);
-                        updateStmt.setObject(8, slot.getCourtId());
-                    }
-
+                    updateStmt.setObject(6, slot.getCaseID() == null ? null : slot.getJudgeID());
+                    updateStmt.setObject(7, slot.getCaseID() == null ? null : slot.getWitnessID());
+                    updateStmt.setObject(8, slot.getCaseID() == null ? null : slot.getCourtId());
                     updateStmt.setInt(9, slot.getSlotID()); // Set slotID for update
                     updateStmt.executeUpdate(); // Execute the update statement
                 } else {
                     // If slot does not exist, insert it
                     insertStmt.setInt(1, slot.getSlotID());
-                    insertStmt.setString(2, slot.getDayName());
-                    insertStmt.setTime(3, slot.getStartTime());
-                    insertStmt.setTime(4, slot.getEndTime());
+                    insertStmt.setString(2, slot.getDayName().toString());
+                    insertStmt.setTime(3, Time.valueOf(slot.getStartTime())); // Convert LocalTime to java.sql.Time
+                    insertStmt.setTime(4, Time.valueOf(slot.getEndTime())); // Convert LocalTime to java.sql.Time
                     insertStmt.setInt(5, slot.getSlotNumber());
                     insertStmt.setObject(6, slot.getCaseID());
-
-                    // If the caseID is null, set the other values to null
-                    if (slot.getCaseID() == null) {
-                        insertStmt.setObject(7, null); // Set JudgeID as null
-                        insertStmt.setObject(8, null); // Set WitnessID as null
-                        insertStmt.setObject(9, null); // Set CourtID as null
-                    } else {
-                        insertStmt.setObject(7, slot.getJudgeID());
-                        insertStmt.setObject(8, slot.getWitnessID() != null ? slot.getWitnessID() : null);
-                        insertStmt.setObject(9, slot.getCourtId());
-                    }
-
+                    insertStmt.setObject(7, slot.getCaseID() == null ? null : slot.getJudgeID());
+                    insertStmt.setObject(8, slot.getCaseID() == null ? null : slot.getWitnessID());
+                    insertStmt.setObject(9, slot.getCaseID() == null ? null : slot.getCourtId());
                     insertStmt.executeUpdate(); // Execute the insert statement
                 }
             }
@@ -883,17 +873,19 @@ public class DatabaseHandler {
         }
     }
 
+    // Assume you have a method to check if a slot exists in the database based on
+    // slotID
     private boolean doesSlotExist(int slotID, Connection connection) {
-        String checkQuery = "SELECT 1 FROM slots WHERE slotID = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(checkQuery)) {
+        String query = "SELECT 1 FROM slots WHERE slotID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, slotID);
             try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next(); // If a result is found, the slot exists
+                return rs.next(); // If a result is returned, the slot exists
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public void getWitnessData(List<Witness> allWitnesses) {
@@ -1066,7 +1058,7 @@ public class DatabaseHandler {
         String insertQuery = "INSERT INTO BarApplication (Applicationtableid, Lawyerid, Applicationtime, Status,BarId) VALUES (?, ?, ?, ?,?)";
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
-          
+
             boolean exists = false;
             try (PreparedStatement selectStmt = connection.prepareStatement(selectQuery)) {
                 selectStmt.setInt(1, barApplication.getApplicationTableId());

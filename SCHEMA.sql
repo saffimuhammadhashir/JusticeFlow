@@ -283,8 +283,8 @@ CREATE TABLE BarApplication (
 	Status INT,
     CONSTRAINT fk_lawyer FOREIGN KEY (Lawyerid) REFERENCES Lawyers(LawyerID)
         ON DELETE SET NULL ON UPDATE CASCADE,
-	CONSTRAINT fk_bar FOREIGN KEY (BarId) REFERENCES BarAssociations(BarAssociationID)
-        ON DELETE SET NULL ON UPDATE CASCADE
+	 FOREIGN KEY (BarId) REFERENCES BarAssociations(BarAssociationID)
+
 
 );
 

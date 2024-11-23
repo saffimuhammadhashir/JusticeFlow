@@ -313,7 +313,7 @@ public class CourtAdministrator extends User {
                         "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
 
                 // Case Title Label
-                Label caseName = new Label(slot.dayName);
+                Label caseName = new Label(slot.dayName.toString());
                 caseName.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
                 Label casetype = new Label("Judge ID : " + slot.getJudgeID());
@@ -370,9 +370,10 @@ public class CourtAdministrator extends User {
 
                     if (isSlotUpdated) {
                         dbHandler.updateOrInsertSlots(AllSlots); // Update the database with changes
-                        ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlots, AllJudges, AllWitnesses,
-                                AllCourts,
-                                primaryStage, gui);
+                        // ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
+                        // AllWitnesses,
+                        // AllCourts,
+                        // primaryStage, gui);
                     }
 
                 });
@@ -418,7 +419,7 @@ public class CourtAdministrator extends User {
 
     public void ReviewCaseRequest(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
             List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, List<Court> AllCourts,
-            Stage primaryStage, GUI_Menu gui) {
+            Stage primaryStage, GUI_Menu gui, CourtsManagementSystem system) {
 
         List<Case> PendingCases = new ArrayList<>();
 
@@ -441,67 +442,85 @@ public class CourtAdministrator extends User {
 
                 // Create a GridPane for each case
                 GridPane eachCase = new GridPane();
-                eachCase.setHgap(10); // Horizontal gap between columns
-                eachCase.setVgap(10); // Vertical gap between rows
+                eachCase.setHgap(15); // Horizontal gap between columns
+                eachCase.setVgap(15); // Vertical gap between rows
                 eachCase.setStyle(
-                        "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
+                        "-fx-padding: 20px; " +
+                                "-fx-background-color: #f9f9f9; " +
+                                "-fx-border-color: #dcdcdc; " +
+                                "-fx-border-width: 1px; " +
+                                "-fx-border-radius: 15px; " +
+                                "-fx-background-radius: 15px; " +
+                                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 2, 2);");
 
                 // Case Title Label
                 Label caseName = new Label(cases.getCaseTitle());
-                caseName.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+                caseName.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
                 Label casetype = new Label("Case Type: " + cases.getCaseType());
-                casetype.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+                casetype.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
 
                 Label caseplaintiff = new Label("Plaintiff ID: " + cases.getPlaintiffID());
-                caseplaintiff.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+                caseplaintiff.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
 
                 Label casedefendant = new Label("Defendant ID: " + cases.getDefendantID());
-                casedefendant.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+                casedefendant.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
 
-                Label CaseFiling = new Label("Filing Date ID: " + cases.getFilingDate());
-                CaseFiling.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: red;");
+                Label CaseFiling = new Label("Filing Date: " + cases.getFilingDate());
+                CaseFiling.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #e74c3c;");
 
-                // Add the case title to the first column, first row
-                GridPane.setConstraints(caseName, 1, 0);
-                GridPane.setConstraints(casetype, 1, 1);
-                GridPane.setConstraints(caseplaintiff, 4, 0);
-                GridPane.setConstraints(casedefendant, 4, 1);
-                GridPane.setConstraints(CaseFiling, 7, 0);
-                eachCase.getChildren().add(caseName);
-                eachCase.getChildren().add(casetype);
-                eachCase.getChildren().add(caseplaintiff);
-                eachCase.getChildren().add(casedefendant);
-                eachCase.getChildren().add(CaseFiling);
+                // Set alignments for the GridPane
+                GridPane.setConstraints(caseName, 0, 0, 2, 1); // Spanning across two columns
+                GridPane.setConstraints(casetype, 0, 1);
+                GridPane.setConstraints(caseplaintiff, 2, 1);
+                GridPane.setConstraints(casedefendant, 0, 2);
+                GridPane.setConstraints(CaseFiling, 2, 2);
+
+                // Add components to the GridPane
+                eachCase.getChildren().addAll(caseName, casetype, caseplaintiff, casedefendant, CaseFiling);
 
                 // Approve and Reject Buttons
                 Button approveButton = new Button("Approve");
                 approveButton.setStyle(
-                        "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5px 15px; -fx-border-radius: 5px;");
+                        "-fx-background-color: #27ae60; " +
+                                "-fx-text-fill: white; " +
+                                "-fx-font-size: 14px; " +
+                                "-fx-font-weight: bold; " +
+                                "-fx-padding: 10px 20px; " +
+                                "-fx-border-radius: 8px; " +
+                                "-fx-background-radius: 8px;");
+
                 Button rejectButton = new Button("Reject");
                 rejectButton.setStyle(
-                        "-fx-background-color: #f44336; -fx-text-fill: white; -fx-padding: 5px 15px; -fx-border-radius: 5px;");
+                        "-fx-background-color: #e74c3c; " +
+                                "-fx-text-fill: white; " +
+                                "-fx-font-size: 14px; " +
+                                "-fx-font-weight: bold; " +
+                                "-fx-padding: 10px 20px; " +
+                                "-fx-border-radius: 8px; " +
+                                "-fx-background-radius: 8px;");
 
-                // Button Actions (for demonstration purposes, implement logic later)
+                // Add spacing and alignment for buttons
+                GridPane.setConstraints(approveButton, 0, 3);
+                GridPane.setConstraints(rejectButton, 1, 3);
+                GridPane.setMargin(approveButton, new Insets(10, 10, 10, 0)); // Add spacing around the buttons
+                GridPane.setMargin(rejectButton, new Insets(10, 0, 10, 10));
                 approveButton.setOnAction(e -> {
-                    showandscheduleslots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges, AllWitnesses, AllCourts,
-                            primaryStage, gui, cases);
-                    cases.setCaseStatus("Opened");
-                    dbHandler.saveOrUpdateCase(cases);
+                    // showandscheduleslots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
+                    // AllWitnesses, AllCourts,
+                    // primaryStage, gui, cases);
+                    Slot.newSlotCreation(AllSlots, AllJudges, AllCourts, AllWitnesses, cases, dbHandler, primaryStage,
+                            gui, system);
 
                 });
                 rejectButton.setOnAction(e -> {
                     cases.setCaseStatus("Not Allowed");
                     dbHandler.saveOrUpdateCase(cases);
                     ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlots, AllJudges, AllWitnesses, AllCourts,
-                            primaryStage, gui);
+                            primaryStage, gui, system);
 
                 });
-
-                // Add buttons to GridPane, starting from row 1
-                GridPane.setConstraints(approveButton, 0, 0); // Place in column 1, row 1
-                GridPane.setConstraints(rejectButton, 0, 1); // Place in column 2, row 1
-
+                // Add buttons to the GridPane
                 eachCase.getChildren().addAll(approveButton, rejectButton);
 
                 // Add the GridPane to the formLayout
@@ -509,6 +528,7 @@ public class CourtAdministrator extends User {
 
                 // Add the case to the list of pending cases
                 PendingCases.add(cases);
+
             }
         }
         // Set the VBox into the ScrollPane and display it
@@ -817,7 +837,8 @@ public class CourtAdministrator extends User {
         // Scroll Pane for Stakeholders
         ScrollPane stakeholderScrollPane = new ScrollPane();
         stakeholderScrollPane.setFitToWidth(true);
-        stakeholderScrollPane.setStyle("-fx-background: #f7f8fc; -fx-border-color: #ddd; -fx-padding: 10px;-fx-max-height:200px;");
+        stakeholderScrollPane
+                .setStyle("-fx-background: #f7f8fc; -fx-border-color: #ddd; -fx-padding: 10px;-fx-max-height:200px;");
 
         // Stakeholder Container
         VBox stakeholderLayout = new VBox(15); // Spacing between each stakeholder card
@@ -951,52 +972,64 @@ public class CourtAdministrator extends User {
 
             // Create a GridPane for each case
             GridPane eachCase = new GridPane();
-            eachCase.setHgap(10); // Horizontal gap between columns
-            eachCase.setVgap(10); // Vertical gap between rows
+            eachCase.setHgap(15); // Horizontal gap between columns
+            eachCase.setVgap(15); // Vertical gap between rows
             eachCase.setStyle(
-                    "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
+                    "-fx-padding: 20px; " +
+                            "-fx-background-color: #f9f9f9; " +
+                            "-fx-border-color: #dcdcdc; " +
+                            "-fx-border-width: 1px; " +
+                            "-fx-border-radius: 15px; " +
+                            "-fx-background-radius: 15px; " +
+                            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 2, 2);");
 
             // Case Title Label
             Label caseName = new Label(cases.getCaseTitle());
-            caseName.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+            caseName.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
             Label casetype = new Label("Case Type: " + cases.getCaseType());
-            casetype.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+            casetype.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
 
             Label caseplaintiff = new Label("Plaintiff ID: " + cases.getPlaintiffID());
-            caseplaintiff.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+            caseplaintiff.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
 
             Label casedefendant = new Label("Defendant ID: " + cases.getDefendantID());
-            casedefendant.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+            casedefendant.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
 
-            Label CaseFiling = new Label("Filing Date ID: " + cases.getFilingDate());
-            CaseFiling.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: red;");
+            Label CaseFiling = new Label("Filing Date: " + cases.getFilingDate());
+            CaseFiling.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #e74c3c;");
 
-            // Add the case title to the first column, first row
-            GridPane.setConstraints(caseName, 0, 0);
+            // Set alignments for the GridPane
+            GridPane.setConstraints(caseName, 0, 0, 2, 1); // Spanning across two columns
             GridPane.setConstraints(casetype, 0, 1);
-            GridPane.setConstraints(caseplaintiff, 4, 0);
-            GridPane.setConstraints(casedefendant, 4, 1);
-            GridPane.setConstraints(CaseFiling, 7, 0);
-            eachCase.getChildren().add(caseName);
-            eachCase.getChildren().add(casetype);
-            eachCase.getChildren().add(caseplaintiff);
-            eachCase.getChildren().add(casedefendant);
-            eachCase.getChildren().add(CaseFiling);
+            GridPane.setConstraints(caseplaintiff, 2, 1);
+            GridPane.setConstraints(casedefendant, 0, 2);
+            GridPane.setConstraints(CaseFiling, 2, 2);
+
+            // Add components to the GridPane
+            eachCase.getChildren().addAll(caseName, casetype, caseplaintiff, casedefendant, CaseFiling);
+
             // Approve and Reject Buttons
             Button approveButton = new Button("Send Notification");
             approveButton.setStyle(
-                    "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5px 15px; -fx-border-radius: 5px;");
+                    "-fx-background-color: #27ae60; " +
+                            "-fx-text-fill: white; " +
+                            "-fx-font-size: 14px; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-padding: 10px 20px; " +
+                            "-fx-border-radius: 8px; " +
+                            "-fx-background-radius: 8px;");
 
-            // Button Actions (for demonstration purposes, implement logic later)
             approveButton.setOnAction(e -> {
                 sendnotification(AllCases, AllSlots, AllJudges, AllLawyers, AllClients, AllNotifications, dbHandler,
                         primaryStage, gui, cases);
             });
 
-            // Add buttons to GridPane, starting from row 1
-            GridPane.setConstraints(approveButton, 0, 3); // Place in column 1, row 1
+            // Add spacing and alignment for the button
+            GridPane.setConstraints(approveButton, 0, 3);
+            GridPane.setMargin(approveButton, new Insets(15, 10, 15, 0)); // Add spacing around the button
 
+            // Add button to the GridPane
             eachCase.getChildren().addAll(approveButton);
 
             // Add the GridPane to the formLayout

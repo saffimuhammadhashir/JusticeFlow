@@ -235,7 +235,7 @@ public class CourtsManagementSystem extends Application {
         registrar = registrar.getRelevantRegistrar(AllRegistrar, user);
         if (registrar != null) {
             registrar.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
-                    primaryStage, gui);
+                    primaryStage, gui,this);
             System.out.println("Case has been successfully created.");
 
         } else {
@@ -243,9 +243,8 @@ public class CourtsManagementSystem extends Application {
             CourtAdministrator CourtAdmin = new CourtAdministrator();
             CourtAdmin = CourtAdmin.getRelevantCourtAdministrators(AllCourt_Administrators, user);
             if (CourtAdmin != null) {
-                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses,
-                        AllCourts,
-                        primaryStage, gui);
+                CourtAdmin.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
+                         primaryStage, gui,this);
                 System.out.println("Case has been successfully created.");
             } else {
                 System.out.println("Invalid User!");
