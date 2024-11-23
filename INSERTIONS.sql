@@ -219,7 +219,13 @@ VALUES
 (9, 'file_9.pdf', 'hash_9', 1),
 (10, 'file_10.pdf', 'hash_10', 1);
 
-
+INSERT INTO BarApplication (Lawyerid, Applicationtime, Status)
+VALUES
+    (1, '10:15:00', 0), -- Approved
+    (2, '11:00:00', 0), -- Rejected
+    (3, '12:30:00', 0), -- Pending
+    (4, '09:45:00', 0), -- Approved
+    (5, '14:20:00', 0); -- Rejected
 
 
 
@@ -251,7 +257,7 @@ SELECT * FROM UserApplication;
 SELECT * FROM Cases;
 SELECT * FROM CaseFiles;
 SELECT * FROM Notifications;
-
+Select * FROM BarApplication;
 
 INSERT INTO Notifications (CaseID, RecipientsID, SenderID, SenderType, Notification, CreatedAt)
 VALUES

@@ -345,6 +345,29 @@ public class CourtsManagementSystem extends Application {
 
     }
 
+    public void RegisterToBar(Stage primaryStage,GUI_Menu gui) {
+        // Method to handle lawyer's registration to the bar
+        System.out.println("Implement lawyer registration to bar logic here.");
+        String role = user.getRole();
+        if ("Lawyer".equalsIgnoreCase(role)) {
+            Lawyer l = user.getRelevantLawyer(AllLawyers, user);
+            if (l != null) {
+                l.RegistertoBar(AllBarAssociations, AllBarApplications, dbHandler,  primaryStage,gui);
+            } else {
+                System.out.println("Invalid User!");
+            }
+
+        } else if ("Registrar".equalsIgnoreCase(role)) {
+            Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
+            if (r != null) {
+                r.RegistertoBar(AllBarAssociations, AllBarApplications, dbHandler, primaryStage,gui);
+            } else {
+                System.out.println("Invalid Userr!");
+            }
+        }
+
+    }
+
     public void SubmitDocument(Scanner scanner) {
         // Method to handle document submission
         String role = user.getRole();
@@ -436,7 +459,6 @@ public class CourtsManagementSystem extends Application {
 
     public void TrackManageUpdates(Stage Primarystage, GUI_Menu gui) {
         // Method to handle tracking and managing updates
-
         CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
         if (c != null) {
             System.out.println("Implement tracking/managing updates logic here.");
@@ -464,6 +486,30 @@ public class CourtsManagementSystem extends Application {
             if (CourtAdmin != null) {
                 CourtAdmin.UpdateCase(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses,
                         AllCourts, scanner);
+                System.out.println("Case has been successfully updated.");
+            } else {
+                System.out.println("Invalid User!");
+            }
+        }
+    }
+
+    public void TrackCase(Stage primaryStage,GUI_Menu gui) {
+        // Method to handle tracking a specific case
+        System.out.println("Implement case tracking logic here.");
+        Registrar registrar = new Registrar();
+        registrar = registrar.getRelevantRegistrar(AllRegistrar, user);
+        if (registrar != null) {
+            // registrar.UpdateCase(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
+            //         scanner);
+            System.out.println("Case has been successfully updated.");
+
+        } else {
+
+            CourtAdministrator CourtAdmin = new CourtAdministrator();
+            CourtAdmin = CourtAdmin.getRelevantCourtAdministrators(AllCourt_Administrators, user);
+            if (CourtAdmin != null) {
+                // CourtAdmin.UpdateCase(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses,
+                //         AllCourts, scanner);
                 System.out.println("Case has been successfully updated.");
             } else {
                 System.out.println("Invalid User!");
@@ -908,54 +954,54 @@ public class CourtsManagementSystem extends Application {
         Scanner scanner;
         Stage primaryStage;
         private static final String BASE_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.1); "
-                + "-fx-text-fill: white; "
-                + "-fx-font-size: 18px; "
-                + "-fx-font-family: 'Segoe UI', sans-serif; "
-                + "-fx-padding: 10px 15px; "
-                + "-fx-border-radius: 10px; "
-                + "-fx-border-color: rgba(255, 255, 255, 0.2); "
-                + "-fx-border-width: 1px; "
-                + "-fx-background-radius: 10px; "
-                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 8); "
-                + "-fx-transition: all 0.3s ease-in-out;";
+                                                + "-fx-text-fill: white; "
+                                                + "-fx-font-size: 18px; "
+                                                + "-fx-font-family: 'Segoe UI', sans-serif; "
+                                                + "-fx-padding: 10px 15px; "
+                                                + "-fx-border-radius: 10px; "
+                                                + "-fx-border-color: rgba(255, 255, 255, 0.2); "
+                                                + "-fx-border-width: 1px; "
+                                                + "-fx-background-radius: 10px; "
+                                                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 8); "
+                                                + "-fx-transition: all 0.3s ease-in-out;";
 
         private static final String FOCUSED_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.2); "
-                + "-fx-text-fill: white; "
-                + "-fx-font-size: 18px; "
-                + "-fx-font-family: 'Segoe UI', sans-serif; "
-                + "-fx-padding: 10px 15px; "
-                + "-fx-border-radius: 20px; "
-                + "-fx-border-color: rgba(255, 255, 255, 0.7); "
-                + "-fx-border-width: 1px; "
-                + "-fx-background-radius: 20px; "
-                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 10); "
-                + "-fx-transition: all 0.3s ease-in-out;";
+                                                    + "-fx-text-fill: white; "
+                                                    + "-fx-font-size: 18px; "
+                                                    + "-fx-font-family: 'Segoe UI', sans-serif; "
+                                                    + "-fx-padding: 10px 15px; "
+                                                    + "-fx-border-radius: 20px; "
+                                                    + "-fx-border-color: rgba(255, 255, 255, 0.7); "
+                                                    + "-fx-border-width: 1px; "
+                                                    + "-fx-background-radius: 20px; "
+                                                    + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 10); "
+                                                    + "-fx-transition: all 0.3s ease-in-out;";
 
         private static final String COMBOBOX_BASE_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.1); "
-                + "-fx-text-fill: white; "
-                + "-fx-font-size: 18px; "
-                + "-fx-font-family: 'Segoe UI', sans-serif; "
-                + "-fx-padding: 5px 15px; "
-                + "-fx-border-radius: 10px; "
-                + "-fx-border-color: rgba(255, 255, 255, 0.2); "
-                + "-fx-border-width: 1px; "
-                + "-fx-background-radius: 10px; "
-                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 8); "
-                + "-fx-transition: all 0.3s ease-in-out;"
-                + "-fx-prompt-text-fill: white;";
+                                                            + "-fx-text-fill: white; "
+                                                            + "-fx-font-size: 18px; "
+                                                            + "-fx-font-family: 'Segoe UI', sans-serif; "
+                                                            + "-fx-padding: 5px 15px; "
+                                                            + "-fx-border-radius: 10px; "
+                                                            + "-fx-border-color: rgba(255, 255, 255, 0.2); "
+                                                            + "-fx-border-width: 1px; "
+                                                            + "-fx-background-radius: 10px; "
+                                                            + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 8); "
+                                                            + "-fx-transition: all 0.3s ease-in-out;"
+                                                            + "-fx-prompt-text-fill: white;";
 
         private static final String COMBOBOX_FOCUSED_STYLE = "-fx-background-color: rgba(255, 255, 255, 0.2); "
-                + "-fx-text-fill: white; "
-                + "-fx-font-size: 18px; "
-                + "-fx-font-family: 'Segoe UI', sans-serif; "
-                + "-fx-padding: 5px 15px; "
-                + "-fx-border-radius: 20px; "
-                + "-fx-border-color: rgba(255, 255, 255, 0.7); "
-                + "-fx-border-width: 1px; "
-                + "-fx-background-radius: 20px; "
-                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 10); "
-                + "-fx-transition: all 0.3s ease-in-out;"
-                + "-fx-prompt-text-fill: white;";
+                                                                + "-fx-text-fill: white; "
+                                                                + "-fx-font-size: 18px; "
+                                                                + "-fx-font-family: 'Segoe UI', sans-serif; "
+                                                                + "-fx-padding: 5px 15px; "
+                                                                + "-fx-border-radius: 20px; "
+                                                                + "-fx-border-color: rgba(255, 255, 255, 0.7); "
+                                                                + "-fx-border-width: 1px; "
+                                                                + "-fx-background-radius: 20px; "
+                                                                + "-fx-effect: dropshadow(gaussian, #000000, 6, 0, 0, 10); "
+                                                                + "-fx-transition: all 0.3s ease-in-out;"
+                                                                + "-fx-prompt-text-fill: white;";
 
         public void designComboBox(ComboBox<String> comboBox) {
             comboBox.setStyle(COMBOBOX_BASE_STYLE);
@@ -1220,8 +1266,8 @@ public class CourtsManagementSystem extends Application {
                 });
 
                 trackCaseButton.setOnAction(e -> {
-                    System.out.println("Track Case selected.");
-                    TrackCase(scanner); // Call your method
+                    System.out.println("Update Case selection.");
+                    system.TrackCase(scanner); // Call your method
                 });
 
                 scheduleHearingButton.setOnAction(e -> {
@@ -1381,7 +1427,7 @@ public class CourtsManagementSystem extends Application {
                 btnTrackUpdates.setOnAction(e -> TrackUpdates());
 
                 Button btnRegisterBar = new Button("Register to Bar");
-                btnRegisterBar.setOnAction(e -> RegisterToBar(scanner));
+                btnRegisterBar.setOnAction(e -> system.RegisterToBar(primaryStage,this));
 
                 Button btnSubmitDoc = new Button("Submit Document");
                 btnSubmitDoc.setOnAction(e -> SubmitDocument(scanner));
@@ -1510,7 +1556,7 @@ public class CourtsManagementSystem extends Application {
                 btnCaseFiling.setOnAction(e -> system.ReviewUpcomingCaseRequests(primaryStage, this));
 
                 Button btnBarRegistration = new Button("Bar Registration");
-                btnBarRegistration.setOnAction(e -> RegisterToBar(scanner));
+                btnBarRegistration.setOnAction(e -> system.RegisterToBar(primaryStage,this));
 
                 Button btnTrackCase = new Button("Track Case");
                 btnTrackCase.setOnAction(e -> TrackCase(scanner));

@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS UserApplication;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Notifications;
 DROP TABLE IF EXISTS Slots;
+DROP TABLE IF EXISTS BarApplication;
 -- Create tables for the system
 
 -- Actor Table
@@ -277,9 +278,12 @@ FOREIGN KEY (WitnessID) REFERENCES Witnesses(WitnessID)
 CREATE TABLE BarApplication (
 	Applicationtableid INT AUTO_INCREMENT PRIMARY KEY,
 	Lawyerid INT,
-    Applicationtime time Not Null,
+    BarId INT,
+    Applicationtime VARCHAR(255),
 	Status INT,
     CONSTRAINT fk_lawyer FOREIGN KEY (Lawyerid) REFERENCES Lawyers(LawyerID)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+	CONSTRAINT fk_bar FOREIGN KEY (BarId) REFERENCES BarAssociations(BarAssociationID)
         ON DELETE SET NULL ON UPDATE CASCADE
 
 );

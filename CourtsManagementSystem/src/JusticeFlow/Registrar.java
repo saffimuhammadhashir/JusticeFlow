@@ -1056,7 +1056,7 @@ public class Registrar extends User {
 
     private boolean ValidSlotTime(List<Slot> AllSlots, Slot slot) {
         for (Slot s : AllSlots) {
-            if ( s.getCourtId() == slot.getCourtId() &&
+            if (s.getCourtId() == slot.getCourtId() &&
                     s.getDayName().equals(slot.getDayName()) && // Use equals() for string comparison
                     s.getStartTime().equals(slot.getStartTime())) { // Use equals() for time comparison
                 return false;
@@ -1271,7 +1271,7 @@ public class Registrar extends User {
 
                     BarApplication rejectedApp = getApplicationById(AllApplications, Id);
                     if (rejectedApp != null) {
-                        rejectedApp.setStatus(0); // Assuming -1 means rejected
+                        rejectedApp.setStatus(2); // Assuming -1 means rejected
                         print("Rejected Application ID: " + Id);
                         dbHandler.updateBarApplication(rejectedApp);
                     } else {
@@ -1287,6 +1287,92 @@ public class Registrar extends User {
                     break;
             }
         }
+    }
+
+    public void RegistertoBar(List<BarAssociation> barAssociationList, List<BarApplication> AllApplications,
+            DatabaseHandler dbHandler, Stage primaryStage, GUI_Menu gui) {
+
+        // Create the primary layout
+        VBox mainLayout = new VBox(20);
+        mainLayout.setPadding(new Insets(20));
+        mainLayout.setStyle("-fx-background-color: #f9f9f9; -fx-alignment: center;");
+
+        // Title label
+        Label titleLabel = new Label("Bar Association Applications");
+        titleLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+        mainLayout.getChildren().add(titleLabel);
+
+        // ScrollPane for the list of applications
+        VBox applicationList = new VBox(15);
+        applicationList.setStyle("-fx-alignment: center;");
+
+        for (BarApplication application : AllApplications) {
+            HBox applicationBox = new HBox(15);
+            applicationBox.setPadding(new Insets(10));
+            applicationBox.setStyle("-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 1px;");
+            applicationBox.setAlignment(Pos.CENTER);
+
+            // Display application details
+            Label applicationLabel = new Label(
+                    "Application ID: " + application.getApplicationTableId() +
+                            " | Name: " + application.getLawyerId() +" | Barid: " + application.getBarId() +
+                            " | Status: " + (application.getStatus() == 0 ? "Pending"
+                                    : (application.getStatus() == 2 ? "Rejected" : "Approved")));
+            applicationLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #555555;-fx-alignment: center;");
+            applicationLabel.setWrapText(true);
+            applicationLabel.setMaxWidth(400);
+
+            // Approve button
+            Button approveButton = new Button("Approve");
+            approveButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            approveButton.setOnAction(event -> {
+                application.setStatus(1);
+                dbHandler.updateBarApplication(application);
+                applicationLabel.setText(
+                        "Application ID: " + application.getApplicationTableId() +
+                                " | Name: " + application.getLawyerId() +
+                                " | Status: Approved");
+            });
+
+            // Reject button
+            Button rejectButton = new Button("Reject");
+            rejectButton.setStyle("-fx-background-color: #F44336; -fx-text-fill: white;");
+            rejectButton.setOnAction(event -> {
+                application.setStatus(2);
+                dbHandler.updateBarApplication(application);
+                applicationLabel.setText(
+                        "Application ID: " + application.getApplicationTableId() +
+                                " | Name: " + application.getLawyerId() +
+                                " | Status: Rejected");
+            });
+
+            // Add components to the application box
+            applicationBox.getChildren().addAll(applicationLabel, approveButton, rejectButton);
+            applicationList.getChildren().add(applicationBox);
+        }
+
+        // ScrollPane to handle the dynamic content
+        ScrollPane scrollPane = new ScrollPane(applicationList);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: transparent;");
+
+        // Close button
+        Button returnButton = new Button("Close");
+        returnButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        returnButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
+        returnButton.setOnAction(e -> {
+            gui.GUI_startmenu(primaryStage);
+        });
+
+        // Add elements to the main layout
+        mainLayout.getChildren().addAll(scrollPane, returnButton);
+
+        // Set up the scene and show the stage
+        Scene scene = new Scene(mainLayout, 1000, 600);
+        primaryStage.setTitle("Register to Bar");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
 }

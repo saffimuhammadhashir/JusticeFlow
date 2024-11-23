@@ -6,8 +6,11 @@ import java.util.Scanner;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -16,6 +19,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ListCell;
+import javafx.scene.input.MouseEvent;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -261,40 +267,39 @@ public class Lawyer extends User {
         System.out.println("Case has been successfully created.");
     }
 
-    // public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler, Stage primaryStage, Scene previousScene) {
+    // public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler
+    // fileHandler, Stage primaryStage, Scene previousScene) {
     // // Create main layout for the submit document process
     // VBox mainLayout = new VBox(20);
     // mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
-    public void FileNewCase(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases, Stage primaryStage,GUI_Menu gui) {
+    public void FileNewCase(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases, Stage primaryStage,
+            GUI_Menu gui) {
         primaryStage.setTitle("File New Case");
         Label PageTitle = new Label("File New Case");
         PageTitle.setStyle("-fx-font-size: 44px;-fx-alignment:center center;");
         // Create a GridPane to hold the UI elements
-        VBox outerlayout=new VBox(25);
-        HBox horizontalbox=new HBox(25);
+        VBox outerlayout = new VBox(25);
+        HBox horizontalbox = new HBox(25);
         GridPane grid = new GridPane();
-        VBox imagebox=new VBox(15);
+        VBox imagebox = new VBox(15);
         imagebox.setStyle(
-            "-fx-background-size: contain; "
-            + "-fx-background-position: center; "
-            + "-fx-background-repeat: no-repeat; "
-            + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/pic1.png'); "
-            + "-fx-min-height:200px;"
-            + "-fx-min-width:400px;"
-        );
+                "-fx-background-size: contain; "
+                        + "-fx-background-position: center; "
+                        + "-fx-background-repeat: no-repeat; "
+                        + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/pic1.png'); "
+                        + "-fx-min-height:200px;"
+                        + "-fx-min-width:400px;");
         imagebox.minWidthProperty().bind(grid.widthProperty());
         grid.setStyle(
-            "-fx-background-color: rgba(0,0,0,0.8); "
-            + "-fx-background-radius: 20px; "
-            + "-fx-padding: 20px 50px; "
-        );
+                "-fx-background-color: rgba(0,0,0,0.8); "
+                        + "-fx-background-radius: 20px; "
+                        + "-fx-padding: 20px 50px; ");
         outerlayout.setStyle("-fx-alignment:center center;-fx-background-color: #f4f4f9;padding:10px 80px;");
         grid.setVgap(25);
         grid.setHgap(25);
         horizontalbox.setStyle("-fx-spacing:50px;");
-        horizontalbox.getChildren().addAll(grid,imagebox);
-        outerlayout.getChildren().addAll(PageTitle,horizontalbox);
-
+        horizontalbox.getChildren().addAll(grid, imagebox);
+        outerlayout.getChildren().addAll(PageTitle, horizontalbox);
 
         // Labels and Input Fields with a minimalistic design
         Label titleLabel = new Label("Case Title:");
@@ -308,7 +313,8 @@ public class Lawyer extends User {
         ComboBox<String> typeComboBox = new ComboBox<>();
         typeComboBox.getItems().addAll("Civil", "Criminal", "Family", "Other");
         typeComboBox.setValue("Civil");
-        typeComboBox.setStyle("-fx-font-size: 14px; -fx-background-color: #ffffff; -fx-border-radius: 5px;-fx-text-fill: white;");
+        typeComboBox.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #ffffff; -fx-border-radius: 5px;-fx-text-fill: white;");
 
         Label filingDateLabel = new Label("Filing Date:");
         filingDateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;-fx-text-fill: white; ");
@@ -329,16 +335,17 @@ public class Lawyer extends User {
         defendantIDLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;-fx-text-fill: white;");
         TextField defendantIDField = new TextField();
         defendantIDField.setPromptText("Defendant ID");
-        
+
         // Submit Button
         Button submitButton = new Button("Submit");
-        submitButton.setStyle("-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        submitButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
         submitButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
 
         Button returnButton = new Button("Close");
-        returnButton.setStyle("-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        returnButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
         returnButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
-
 
         Label confirmationLabel = new Label();
         confirmationLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #4CAF50;");
@@ -372,7 +379,9 @@ public class Lawyer extends User {
 
         VBox vbox = new VBox(20, outerlayout, confirmationLabel);
         vbox.setStyle("-fx-padding: 20; -fx-background-color: #f4f4f9;"); // Minimal background for vbox
-        returnButton.setOnAction(event -> { gui.GUI_startmenu(primaryStage);});
+        returnButton.setOnAction(event -> {
+            gui.GUI_startmenu(primaryStage);
+        });
         // Event handler for the submit button
         submitButton.setOnAction(event -> {
             // Get inputs
@@ -382,7 +391,7 @@ public class Lawyer extends User {
             Date courtDate = convertToDate(courtDatePicker.getValue());
             int plaintiffID = parseID(plaintiffIDField.getText());
             int defendantID = parseID(defendantIDField.getText());
-            
+
             // Case Status
             String caseStatus = "Pending";
 
@@ -420,7 +429,6 @@ public class Lawyer extends User {
         }
         return java.sql.Date.valueOf(localDate); // Convert LocalDate to java.sql.Date
     }
-    
 
     private Date getDateFromString(String dateInput) {
         if (dateInput.isEmpty()) {
@@ -437,143 +445,145 @@ public class Lawyer extends User {
         return idInput.isEmpty() ? 0 : Integer.parseInt(idInput); // default to 0 if empty
     }
 
-    public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler, Stage primaryStage, Scene previousScene) {
+    public void SubmitDocument(Scanner scanner, List<Case> AllCases, FileHandler fileHandler, Stage primaryStage,
+            Scene previousScene) {
         // Create main layout for the submit document process
         VBox mainLayout = new VBox(20);
         mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
 
-    // Title label
-    Label titleLabel = new Label("Submit Document for Case");
-    titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
-    mainLayout.getChildren().add(titleLabel);
+        // Title label
+        Label titleLabel = new Label("Submit Document for Case");
+        titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
+        mainLayout.getChildren().add(titleLabel);
 
-    // Show lawyer's cases in a scrollable VBox
-    VBox lawyerCasesBox = new VBox(10);
-    lawyerCasesBox.setStyle(
-            "-fx-alignment: center; -fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-radius: 10px; -fx-background-radius: 10px;");
-    ScrollPane scrollPane = new ScrollPane(lawyerCasesBox);
-    scrollPane.setPrefSize(600, 200);
-    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        // Show lawyer's cases in a scrollable VBox
+        VBox lawyerCasesBox = new VBox(10);
+        lawyerCasesBox.setStyle(
+                "-fx-alignment: center; -fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-radius: 10px; -fx-background-radius: 10px;");
+        ScrollPane scrollPane = new ScrollPane(lawyerCasesBox);
+        scrollPane.setPrefSize(600, 200);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-    boolean exists = false;
-    for (Case c : AllCases) {
-        if (c != null && c.getLawyerId() == lawyerID) {
-            Label caseLabel = new Label(c.toString());
-            caseLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
-            lawyerCasesBox.getChildren().add(caseLabel);
-            exists = true;
+        boolean exists = false;
+        for (Case c : AllCases) {
+            if (c != null && c.getLawyerId() == lawyerID) {
+                Label caseLabel = new Label(c.toString());
+                caseLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+                lawyerCasesBox.getChildren().add(caseLabel);
+                exists = true;
+            }
         }
-    }
 
-    if (!exists) {
-        Label NoCase = new Label("You have no Cases.");
-        NoCase.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
-        lawyerCasesBox.getChildren().add(NoCase);
-    }
+        if (!exists) {
+            Label NoCase = new Label("You have no Cases.");
+            NoCase.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+            lawyerCasesBox.getChildren().add(NoCase);
+        }
 
-    mainLayout.getChildren().add(scrollPane);
+        mainLayout.getChildren().add(scrollPane);
 
-    // Case ID input
-    Label caseIdLabel = new Label("Enter Case ID:");
-    caseIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
-    TextField caseIdField = new TextField();
-    caseIdField.setPromptText("Case ID");
-    caseIdField.setPrefWidth(200);
+        // Case ID input
+        Label caseIdLabel = new Label("Enter Case ID:");
+        caseIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+        TextField caseIdField = new TextField();
+        caseIdField.setPromptText("Case ID");
+        caseIdField.setPrefWidth(200);
 
-    Button nextButton = new Button("Next");
-    nextButton.setStyle(
-            "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+        Button nextButton = new Button("Next");
+        nextButton.setStyle(
+                "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
 
-    // Create the back button
-    Button backButton = new Button("Back");
-    backButton.setStyle("-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #FF6347; -fx-text-fill: white;");
-    backButton.setOnAction(e -> {
-        // Switch back to the previous scene
-        primaryStage.setScene(previousScene);
-    });
+        // Create the back button
+        Button backButton = new Button("Back");
+        backButton.setStyle(
+                "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #FF6347; -fx-text-fill: white;");
+        backButton.setOnAction(e -> {
+            // Switch back to the previous scene
+            primaryStage.setScene(previousScene);
+        });
 
-    // Create an HBox to place the back and next buttons in a line
-    HBox buttonLayout = new HBox(20, backButton, nextButton);
-    buttonLayout.setAlignment(Pos.CENTER); // Align buttons to the center
+        // Create an HBox to place the back and next buttons in a line
+        HBox buttonLayout = new HBox(20, backButton, nextButton);
+        buttonLayout.setAlignment(Pos.CENTER); // Align buttons to the center
 
-    // Create VBox to place everything (title, cases, buttons)
-    VBox caseInputSection = new VBox(10, caseIdLabel, caseIdField, buttonLayout);
-    caseInputSection.setStyle("-fx-alignment: center;");
-    mainLayout.getChildren().add(caseInputSection);
+        // Create VBox to place everything (title, cases, buttons)
+        VBox caseInputSection = new VBox(10, caseIdLabel, caseIdField, buttonLayout);
+        caseInputSection.setStyle("-fx-alignment: center;");
+        mainLayout.getChildren().add(caseInputSection);
 
-    nextButton.setOnAction(e -> {
-        // Clear previous error or success messages
-        mainLayout.getChildren().removeIf(node -> node instanceof Label);
+        nextButton.setOnAction(e -> {
+            // Clear previous error or success messages
+            mainLayout.getChildren().removeIf(node -> node instanceof Label);
 
-        try {
-            int caseId = Integer.parseInt(caseIdField.getText());
-            Case caseObj = new Case();
+            try {
+                int caseId = Integer.parseInt(caseIdField.getText());
+                Case caseObj = new Case();
 
-            // Check if case exists
-            if (caseObj.doesCaseExist(caseId, AllCases)) {
-                caseObj = caseObj.getCasebyID(caseId, AllCases);
+                // Check if case exists
+                if (caseObj.doesCaseExist(caseId, AllCases)) {
+                    caseObj = caseObj.getCasebyID(caseId, AllCases);
 
-                // Open file dialog to select a file
-                File selectedFile = fileHandler.openFileDialog();
-                if (selectedFile != null) {
-                    try {
-                        // Generate file hash
-                        String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
+                    // Open file dialog to select a file
+                    File selectedFile = fileHandler.openFileDialog();
+                    if (selectedFile != null) {
+                        try {
+                            // Generate file hash
+                            String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
 
-                        CaseFile my_file = new CaseFile(selectedFile.getAbsolutePath(), fileHash);
-                        caseObj.addFile(my_file);
-                        System.out.println("File added to case, waiting for Registrar to approve.");
+                            CaseFile my_file = new CaseFile(selectedFile.getAbsolutePath(), fileHash);
+                            caseObj.addFile(my_file);
+                            System.out.println("File added to case, waiting for Registrar to approve.");
 
-                        // Update the database with file details
-                        DatabaseHandler dbHandler = new DatabaseHandler();
-                        dbHandler.saveFileDetails(caseObj.getCaseID(), selectedFile.getAbsolutePath(), fileHash,
-                                false);
-                        System.out.println("File Added in Database.");
+                            // Update the database with file details
+                            DatabaseHandler dbHandler = new DatabaseHandler();
+                            dbHandler.saveFileDetails(caseObj.getCaseID(), selectedFile.getAbsolutePath(), fileHash,
+                                    false);
+                            System.out.println("File Added in Database.");
 
-                        // Show confirmation message in GUI
-                        Label successLabel = new Label(
-                                "File submitted successfully! Waiting for Registrar approval.");
-                        successLabel
-                                .setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight: bold;");
-                        mainLayout.getChildren().add(successLabel);
+                            // Show confirmation message in GUI
+                            Label successLabel = new Label(
+                                    "File submitted successfully! Waiting for Registrar approval.");
+                            successLabel
+                                    .setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight: bold;");
+                            mainLayout.getChildren().add(successLabel);
 
-                    } catch (IOException | NoSuchAlgorithmException ex) {
-                        ex.printStackTrace();
-                        Label errorLabel = new Label("Error while processing the file.");
-                        errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                        mainLayout.getChildren().add(errorLabel);
+                        } catch (IOException | NoSuchAlgorithmException ex) {
+                            ex.printStackTrace();
+                            Label errorLabel = new Label("Error while processing the file.");
+                            errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                            mainLayout.getChildren().add(errorLabel);
+                        }
+                    } else {
+                        Label noFileLabel = new Label("No file selected.");
+                        noFileLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                        mainLayout.getChildren().add(noFileLabel);
                     }
+
                 } else {
-                    Label noFileLabel = new Label("No file selected.");
-                    noFileLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                    mainLayout.getChildren().add(noFileLabel);
+                    // Show error if case does not exist
+                    Label caseNotFoundLabel = new Label("Case with this ID does not exist.");
+                    caseNotFoundLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                    mainLayout.getChildren().add(caseNotFoundLabel);
                 }
 
-            } else {
-                // Show error if case does not exist
-                Label caseNotFoundLabel = new Label("Case with this ID does not exist.");
-                caseNotFoundLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                mainLayout.getChildren().add(caseNotFoundLabel);
+            } catch (NumberFormatException ex) {
+                // Show error if input is not a valid number
+                Label invalidInputLabel = new Label("Invalid Case ID input.");
+                invalidInputLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                mainLayout.getChildren().add(invalidInputLabel);
             }
+        });
 
-        } catch (NumberFormatException ex) {
-            // Show error if input is not a valid number
-            Label invalidInputLabel = new Label("Invalid Case ID input.");
-            invalidInputLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-            mainLayout.getChildren().add(invalidInputLabel);
-        }
-    });
-
-    Scene scene = new Scene(mainLayout, 1100, 650);
-    mainLayout.setStyle(
-            "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
-    primaryStage.setScene(scene);
-    primaryStage.show();
-}
+        Scene scene = new Scene(mainLayout, 1100, 650);
+        mainLayout.setStyle(
+                "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 
     public void scheduleWitness(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
             List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
-            DatabaseHandler databaseHandler, Stage primaryStage,Scene previousScene) {
+            DatabaseHandler databaseHandler, Stage primaryStage, Scene previousScene) {
 
         // Main layout container
         VBox mainLayout = new VBox(20);
@@ -637,7 +647,7 @@ public class Lawyer extends User {
         // Create an HBox to place the "Back" and "Submit" buttons in a line
         HBox buttonLayout1 = new HBox(20, backButton, nextButton);
         buttonLayout1.setAlignment(Pos.CENTER); // Align buttons to the center
-        
+
         VBox caseInputSection = new VBox(10, caseIdLabel, caseIdField, buttonLayout1);
         caseInputSection.setStyle("-fx-alignment: center;");
         mainLayout.getChildren().add(caseInputSection);
@@ -691,7 +701,6 @@ public class Lawyer extends User {
                 // Create an HBox to place the "Back" and "Submit" buttons in a line
                 HBox buttonLayout = new HBox(20, backButton, submitButton);
                 buttonLayout.setAlignment(Pos.CENTER); // Align buttons to the center
-
 
                 VBox witnessInputSection = new VBox(10, witnessIdLabel, witnessIdField, buttonLayout);
                 witnessInputSection.setStyle("-fx-alignment: center;");
@@ -830,8 +839,8 @@ public class Lawyer extends User {
             BarAssociation bar = BarAssociation.getbar(barassociationlist, id);
             if (bar != null) {
                 // Use LocalDateTime.now() for the current machine time
-                BarApplication barrequest = new BarApplication(AllApplications.size(), this.lawyerID,
-                        LocalDateTime.now().toString(), 0);
+                BarApplication barrequest = new BarApplication(AllApplications.size() + 1, this.lawyerID,
+                        LocalDateTime.now().toString(), 0, bar.getBarAssociationID());
                 AllApplications.add(barrequest); // Add the new BarApplication to the list
                 dbHandler.updateBarApplication(barrequest);
 
@@ -840,4 +849,92 @@ public class Lawyer extends User {
             }
         }
     }
+
+    public void RegistertoBar(List<BarAssociation> barassociationlist, List<BarApplication> AllApplications,
+            DatabaseHandler dbHandler, Stage primaryStage, GUI_Menu gui) {
+
+        // Create the main layout for the UI
+        VBox mainLayout = new VBox(20);
+        mainLayout.setPadding(new Insets(20));
+        mainLayout.setStyle("-fx-background-color: #f4f4f9; -fx-alignment: center;");
+
+        // Title Label
+        Label titleLabel = new Label("Register to Bar Association");
+        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+
+        // List all Bar Associations in a scrollable list
+        ListView<BarAssociation> barListView = new ListView<>();
+        barListView.getItems().addAll(barassociationlist);
+        barListView.setCellFactory(param -> new ListCell<BarAssociation>() {
+            @Override
+            protected void updateItem(BarAssociation item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText("Bar ID: " + item.getBarAssociationID() + " | " + item.getAssociationName());
+                }
+            }
+        });
+
+        // Scroll pane to make the list scrollable
+        ScrollPane barScrollPane = new ScrollPane(barListView);
+        barScrollPane.setFitToWidth(true);
+        barScrollPane.setStyle("-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 1px;");
+
+        // Button to confirm registration
+        Button registerButton = new Button("Register to Selected Bar");
+        registerButton.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-size: 14px;");
+        registerButton.setOnAction(event -> {
+            // Get selected bar ID from ListView
+            BarAssociation selectedBar = barListView.getSelectionModel().getSelectedItem();
+
+            if (selectedBar != null) {
+                // Correct the application time handling with proper LocalDateTime formatting
+                LocalDateTime now = LocalDateTime.now(); // Get the current date and time
+                String applicationTime = now.toString(); // Convert it to the correct ISO format
+
+                // Create BarApplication object and add it to the list
+                // BarApplication barrequest = new BarApplication(AllApplications.size() + 1,
+                // this.lawyerID,
+                // applicationTime, 0); // 0 indicating pending status
+                // AllApplications.add(barrequest);
+                // dbHandler.updateBarApplication(barrequest); // Update the DB
+
+                BarApplication barrequest = new BarApplication(AllApplications.size() + 1, this.lawyerID,
+                        LocalDateTime.now().toString(), 0, selectedBar.getBarAssociationID());
+                AllApplications.add(barrequest); // Add the new BarApplication to the list
+                dbHandler.updateBarApplication(barrequest);
+
+                // Confirmation
+                Alert confirmationAlert = new Alert(AlertType.INFORMATION);
+                confirmationAlert.setTitle("Registration Successful");
+                confirmationAlert.setHeaderText("You have successfully registered to the Bar Association.");
+                confirmationAlert.setContentText(
+                        "Bar ID: " + selectedBar.getBarAssociationID() + " | " + selectedBar.getAssociationName());
+                confirmationAlert.showAndWait();
+            } else {
+                // Show error if no bar is selected
+                Alert errorAlert = new Alert(AlertType.ERROR);
+                errorAlert.setTitle("No Bar Selected");
+                errorAlert.setHeaderText("Please select a Bar Association to register.");
+                errorAlert.showAndWait();
+            }
+        });
+
+        // Button to close the registration window
+        Button closeButton = new Button("Close");
+        closeButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 14px;");
+        closeButton.setOnAction(event -> primaryStage.close());
+
+        // Layout
+        mainLayout.getChildren().addAll(titleLabel, barScrollPane, registerButton, closeButton);
+
+        // Scene setup
+        Scene scene = new Scene(mainLayout, 1000, 600);
+        primaryStage.setTitle("Register to Bar Association");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
 }

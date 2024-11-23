@@ -19,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -729,9 +730,10 @@ public class DatabaseHandler {
                 int lawyerId = resultSet.getInt("Lawyerid");
                 String applicationTime = resultSet.getString("Applicationtime");
                 int status = resultSet.getInt("Status");
+                int BarId = resultSet.getInt("BarId");
 
                 // Create BarApplication object and add to list
-                BarApplication application = new BarApplication(applicationTableId, lawyerId, applicationTime, status);
+                BarApplication application = new BarApplication(applicationTableId, lawyerId, applicationTime, status,BarId);
                 barApplicationList.add(application);
             }
 
@@ -1060,25 +1062,11 @@ public class DatabaseHandler {
     // accessible by related cases.
     public void updateBarApplication(BarApplication barApplication) {
         String selectQuery = "SELECT COUNT(*) FROM BarApplication WHERE Applicationtableid = ?";
-        String updateQuery = "UPDATE BarApplication SET Lawyerid = ?, Applicationtime = ?, Status = ? WHERE Applicationtableid = ?";
-        String insertQuery = "INSERT INTO BarApplication (Applicationtableid, Lawyerid, Applicationtime, Status) VALUES (?, ?, ?, ?)";
-    
+        String updateQuery = "UPDATE BarApplication SET Lawyerid = ?, Applicationtime = ?, Status = ?, BarId = ? WHERE Applicationtableid = ?";
+        String insertQuery = "INSERT INTO BarApplication (Applicationtableid, Lawyerid, Applicationtime, Status,BarId) VALUES (?, ?, ?, ?,?)";
+
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
-            // Assuming barApplication.getApplicationTime() is a time-only string like "04:40:59"
-            String applicationTimeStr = barApplication.getApplicationTime(); // Get the time-only String value
-    
-            // Default date to combine with the time
-            String defaultDate = "2024-11-21"; // Example default date, you can use the current date or another one
-            String combinedDateTimeStr = defaultDate + "T" + applicationTimeStr;
-    
-            // Parse the combined string into LocalDateTime
-            DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // Format "yyyy-MM-dd'T'HH:mm:ss"
-            LocalDateTime applicationTime = LocalDateTime.parse(combinedDateTimeStr, inputFormatter);
-    
-            // Convert LocalDateTime to Timestamp (MySQL DATETIME format)
-            Timestamp timestamp = Timestamp.valueOf(applicationTime);
-    
-            // Check if record exists
+          
             boolean exists = false;
             try (PreparedStatement selectStmt = connection.prepareStatement(selectQuery)) {
                 selectStmt.setInt(1, barApplication.getApplicationTableId());
@@ -1088,14 +1076,15 @@ public class DatabaseHandler {
                     }
                 }
             }
-    
+
             // Perform update or insert
             if (exists) {
                 try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
                     updateStmt.setInt(1, barApplication.getLawyerId());
-                    updateStmt.setTimestamp(2, timestamp); // Pass the Timestamp object
+                    updateStmt.setString(2, barApplication.getApplicationTime()); // Store as String
                     updateStmt.setInt(3, barApplication.getStatus());
                     updateStmt.setInt(4, barApplication.getApplicationTableId());
+                    updateStmt.setInt(5, barApplication.getBarId());
                     updateStmt.executeUpdate();
                     System.out.println("Record updated successfully.");
                 }
@@ -1103,13 +1092,14 @@ public class DatabaseHandler {
                 try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
                     insertStmt.setInt(1, barApplication.getApplicationTableId());
                     insertStmt.setInt(2, barApplication.getLawyerId());
-                    insertStmt.setTimestamp(3, timestamp); // Pass the Timestamp object
+                    insertStmt.setString(3, barApplication.getApplicationTime()); // Store as String
                     insertStmt.setInt(4, barApplication.getStatus());
+                    insertStmt.setInt(5, barApplication.getBarId());
                     insertStmt.executeUpdate();
                     System.out.println("Record inserted successfully.");
                 }
             }
-    
+
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
         } catch (DateTimeParseException e) {
@@ -1117,7 +1107,6 @@ public class DatabaseHandler {
         }
     }
 
-    
     public void saveFileDetails(int caseID, String fileName, String fileHash, boolean status) {
         // SQL query to insert file details into CaseFiles
         String insertSQL = "INSERT INTO CaseFiles (CaseID, FileName, FileHash, status) VALUES (?, ?, ?, ?)";
