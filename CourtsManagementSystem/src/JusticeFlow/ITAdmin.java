@@ -217,17 +217,17 @@ public class ITAdmin extends User {
             contentStream.setFont(font, 10);
             for (Case c : cases) {
                 // Start a new page for each case
-                if (yPosition < 50) {
-                    contentStream.endText();
-                    contentStream.close();
-                    page = new PDPage();
-                    document.addPage(page);
-                    contentStream = new PDPageContentStream(document, page);
-                    contentStream.setFont(font, 10);
-                    contentStream.beginText();
-                    contentStream.newLineAtOffset(50, 750);
-                    yPosition = 750; // Reset Y position for the new page
-                }
+                // if (yPosition < 50) {
+                // contentStream.endText(); // End the current text block
+                // contentStream.close(); // Close the current content stream
+                // page = new PDPage(); // Create a new page
+                // document.addPage(page);
+                // contentStream = new PDPageContentStream(document, page);
+                // contentStream.setFont(font, 10);
+                // contentStream.beginText(); // Begin a new text block
+                // contentStream.newLineAtOffset(50, 750);
+                // yPosition = 750; // Reset Y position for the new page
+                // }
 
                 // Add Case details
                 contentStream.newLineAtOffset(0, -30);
@@ -250,58 +250,53 @@ public class ITAdmin extends User {
                 yPosition -= 15;
                 contentStream.newLineAtOffset(0, -15); // Move to next line
                 contentStream.showText("Defendant ID: " + c.getDefendantID());
+
                 List<CaseFile> f = c.getFiles();
                 if (!f.isEmpty()) {
                     yPosition -= 15;
                     contentStream.newLineAtOffset(0, -15); // Move to next line
                     contentStream.showText("Case Files: ");
                     for (CaseFile file : f) {
-                        StringBuilder fileDetails = new StringBuilder();
-                        fileDetails.append("").append(file.getFileName());
-                        contentStream.newLineAtOffset(15, -15);
-                        contentStream.showText(fileDetails.toString());
+                        contentStream.newLineAtOffset(15, -15); // Indent each file name
+                        contentStream.showText(file.getFileName());
+                        contentStream.newLineAtOffset(-15, 0); // Reset indentation
                     }
-                    contentStream.newLineAtOffset(-15, 0);
+
                 } else {
-                    yPosition -= 15;
+                    // yPosition -= 15;
                     contentStream.newLineAtOffset(0, -15); // Move to next line
                     contentStream.showText("No Files Uploaded.");
                 }
+
                 List<CaseFile> j = c.getJudgements();
                 if (!j.isEmpty()) {
                     yPosition -= 15;
                     contentStream.newLineAtOffset(0, -15); // Move to next line
                     contentStream.showText("Case Judgements: ");
                     for (CaseFile file : j) {
-                        StringBuilder fileDetails = new StringBuilder();
-                        fileDetails.append("").append(file.getFileName());
-                        contentStream.newLineAtOffset(15, -15);
-                        contentStream.showText(fileDetails.toString());
+                        contentStream.newLineAtOffset(15, -15); // Indent each judgment file name
+                        contentStream.showText(file.getFileName());
+                        contentStream.newLineAtOffset(-15, 0); // Reset indentation
                     }
-                    contentStream.newLineAtOffset(-15, 0);
                 } else {
-                    yPosition -= 15;
+                    // yPosition -= 15;
                     contentStream.newLineAtOffset(0, -15); // Move to next line
                     contentStream.showText("No Judgements Uploaded.");
                 }
-                // yPosition -= 15;
-                // contentStream.newLineAtOffset(0, -15); // Move to next line
-                // contentStream.showText("Case Files: " + c.getFiles().toString());
-                // yPosition -= 15;
-                // contentStream.newLineAtOffset(0, -15); // Move to next line
-                // contentStream.showText("Judgements: " + c.getJudgements().toString());
+
                 yPosition -= 15;
                 contentStream.newLineAtOffset(0, -15); // Move to next line
                 contentStream.showText("Lawyer ID: " + c.getLawyerId());
+                contentStream.newLineAtOffset(0, -15); // Move to next line
 
                 Slot slot = null;
                 for (Slot s : slots) {
-                    if (s.getCaseID() != null) {
-                        if (s.getCaseID() == c.getCaseID()) {
-                            slot = s;
-                        }
+                    if (s.getCaseID() != null && s.getCaseID().equals(c.getCaseID())) {
+                        slot = s;
+                        break;
                     }
                 }
+
                 if (slot != null) {
                     contentStream.showText("Slot Day: " + slot.getDayName());
                     yPosition -= 15;
@@ -341,7 +336,18 @@ public class ITAdmin extends User {
                 }
 
                 yPosition -= 50; // Adjust Y position after each case
+                contentStream.endText(); // End the current text block
+                contentStream.close(); // Close the current content stream
+                page = new PDPage(); // Create a new page
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.setFont(font, 10);
+                contentStream.beginText(); // Begin a new text block
+                contentStream.newLineAtOffset(50, 750);
+                yPosition = 750; // Reset Y position for the new page
             }
+
+            contentStream.endText(); // End the text block after all content is added
             contentStream.close(); // Close the content stream after adding all the content
 
             // Save the document
@@ -440,31 +446,29 @@ public class ITAdmin extends User {
                                 contentStream.newLineAtOffset(0, -15); // Move to next line
                                 contentStream.showText("Case Files: ");
                                 for (CaseFile file : f) {
-                                    StringBuilder fileDetails = new StringBuilder();
-                                    fileDetails.append("").append(file.getFileName());
-                                    contentStream.newLineAtOffset(15, -15);
-                                    contentStream.showText(fileDetails.toString());
+                                    contentStream.newLineAtOffset(15, -15); // Indent each file name
+                                    contentStream.showText(file.getFileName());
+                                    contentStream.newLineAtOffset(-15, 0); // Reset indentation
                                 }
-                                contentStream.newLineAtOffset(-15, 0);
+
                             } else {
-                                yPosition -= 15;
+                                // yPosition -= 15;
                                 contentStream.newLineAtOffset(0, -15); // Move to next line
                                 contentStream.showText("No Files Uploaded.");
                             }
+
                             List<CaseFile> j = c.getJudgements();
                             if (!j.isEmpty()) {
                                 yPosition -= 15;
                                 contentStream.newLineAtOffset(0, -15); // Move to next line
                                 contentStream.showText("Case Judgements: ");
                                 for (CaseFile file : j) {
-                                    StringBuilder fileDetails = new StringBuilder();
-                                    fileDetails.append("").append(file.getFileName());
-                                    contentStream.newLineAtOffset(15, -15);
-                                    contentStream.showText(fileDetails.toString());
+                                    contentStream.newLineAtOffset(15, -15); // Indent each judgment file name
+                                    contentStream.showText(file.getFileName());
+                                    contentStream.newLineAtOffset(-15, 0); // Reset indentation
                                 }
-                                contentStream.newLineAtOffset(-15, 0);
                             } else {
-                                yPosition -= 15;
+                                // yPosition -= 15;
                                 contentStream.newLineAtOffset(0, -15); // Move to next line
                                 contentStream.showText("No Judgements Uploaded.");
                             }
@@ -481,6 +485,7 @@ public class ITAdmin extends User {
                             }
 
                             if (slot != null) {
+                                contentStream.newLineAtOffset(0, -15); // Move to next line
                                 contentStream.showText("Slot Day: " + slot.getDayName());
                                 yPosition -= 15;
                                 contentStream.newLineAtOffset(0, -15); // Move to next line
@@ -528,8 +533,15 @@ public class ITAdmin extends User {
                     contentStream.newLineAtOffset(0, -15); // Move to next line
                 }
 
-                // Add a line gap before the next lawyer
-                yPosition -= 20;
+                contentStream.endText(); // End the current text block
+                contentStream.close(); // Close the current content stream
+                page = new PDPage(); // Create a new page
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.setFont(font, 10);
+                contentStream.beginText(); // Begin a new text block
+                contentStream.newLineAtOffset(50, 750);
+                yPosition = 750; // Reset Y position for the new page
             }
 
             contentStream.endText();
@@ -669,31 +681,29 @@ public class ITAdmin extends User {
                                     contentStream.newLineAtOffset(0, -15); // Move to next line
                                     contentStream.showText("Case Files: ");
                                     for (CaseFile file : f) {
-                                        StringBuilder fileDetails = new StringBuilder();
-                                        fileDetails.append("").append(file.getFileName());
-                                        contentStream.newLineAtOffset(15, -15);
-                                        contentStream.showText(fileDetails.toString());
+                                        contentStream.newLineAtOffset(15, -15); // Indent each file name
+                                        contentStream.showText(file.getFileName());
+                                        contentStream.newLineAtOffset(-15, 0); // Reset indentation
                                     }
-                                    contentStream.newLineAtOffset(-15, 0);
+
                                 } else {
-                                    yPosition -= 15;
-                                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                                    // yPosition -= 15;
+                                    // contentStream.newLineAtOffset(0, -15); // Move to next line
                                     contentStream.showText("No Files Uploaded.");
                                 }
+
                                 List<CaseFile> jj = caseForSlot.getJudgements();
                                 if (!jj.isEmpty()) {
                                     yPosition -= 15;
                                     contentStream.newLineAtOffset(0, -15); // Move to next line
                                     contentStream.showText("Case Judgements: ");
                                     for (CaseFile file : jj) {
-                                        StringBuilder fileDetails = new StringBuilder();
-                                        fileDetails.append("").append(file.getFileName());
-                                        contentStream.newLineAtOffset(15, -15);
-                                        contentStream.showText(fileDetails.toString());
+                                        contentStream.newLineAtOffset(15, -15); // Indent each judgment file name
+                                        contentStream.showText(file.getFileName());
+                                        contentStream.newLineAtOffset(-15, 0); // Reset indentation
                                     }
-                                    contentStream.newLineAtOffset(-15, 0);
                                 } else {
-                                    yPosition -= 15;
+                                    // yPosition -= 15;
                                     contentStream.newLineAtOffset(0, -15); // Move to next line
                                     contentStream.showText("No Judgements Uploaded.");
                                 }
@@ -711,7 +721,15 @@ public class ITAdmin extends User {
                     yPosition -= 20;
                 }
 
-                yPosition -= 50; // Adjust Y position after each judge's report
+                contentStream.endText(); // End the current text block
+                contentStream.close(); // Close the current content stream
+                page = new PDPage(); // Create a new page
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.setFont(font, 10);
+                contentStream.beginText(); // Begin a new text block
+                contentStream.newLineAtOffset(50, 750);
+                yPosition = 750; // Reset Y position for the new page
             }
 
             contentStream.endText();
