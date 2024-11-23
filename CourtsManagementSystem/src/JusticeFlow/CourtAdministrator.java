@@ -697,10 +697,10 @@ public class CourtAdministrator extends User {
 
     public void scheduleHearing(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
             List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
-            DatabaseHandler dbHandler, Stage primaryStage, GUI_Menu gui) {
+            DatabaseHandler dbHandler, Stage primaryStage, GUI_Menu gui, CourtsManagementSystem system) {
 
         // Title Label
-        Label titleLabel = new Label("Approve Document for Case!");
+        Label titleLabel = new Label("Choose Case to Schedule Hearing!");
         titleLabel.setStyle(
                 "-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #333333; -fx-padding: 20px 0; -fx-alignment: center;");
 
@@ -761,8 +761,26 @@ public class CourtAdministrator extends User {
                     // showandscheduleslots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
                     // AllWitnesses, AllCourts,
                     // primaryStage, gui, cases);
-                    showHearingSlots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges, AllWitnesses, AllCourts,
-                            primaryStage, gui, cases);
+                    // showHearingSlots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges, AllWitnesses, AllCourts,
+                    //         primaryStage, gui, cases);
+                    Judge judges=null;
+                    int i=0;
+                    for (Slot s: AllSlots){
+                        if (s.getCaseID()!=null){
+                            if (s.getCaseID()==cases.getCaseID()){
+                                i=s.getJudgeID();
+                                break;
+                            }
+                        }
+                    }
+                    for (Judge j:AllJudges){
+                        if (j.getJudgeID()==i){
+                            judges=j;
+                            break;
+                        }
+                    }
+                    Slot.newSlotCreation_Hearing(AllSlots, judges, AllCourts, AllWitnesses, cases, dbHandler, primaryStage, gui, system);
+
                     // cases.setCaseStatus("Opened");
                     dbHandler.saveOrUpdateCase(cases);
                     // showFiles(dbHandler, fileHandler, AllCases, primaryStage, previousScene,
@@ -1362,6 +1380,9 @@ public class CourtAdministrator extends User {
 
         // Title Label
         Label titleLabel = new Label("Track Cases to be Managed");
+    public void closeCase(List<Case> AllCases, FileHandler fileHandler, DatabaseHandler dbHandler, Stage primaryStage, Scene previousScene){
+        // Title Label
+        Label titleLabel = new Label("Close Case!");
         titleLabel.setStyle(
                 "-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #333333; -fx-padding: 20px 0; -fx-alignment: center;");
 
@@ -1472,7 +1493,7 @@ public class CourtAdministrator extends User {
                 "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
         returnButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
         returnButton.setOnAction(e -> {
-            gui.GUI_startmenu(primaryStage);
+            primaryStage.setScene(previousScene);
         });
         // Setting up the scene with the scrollable content
         VBox rootLayout = new VBox(20);
@@ -1482,7 +1503,110 @@ public class CourtAdministrator extends User {
         Scene registerScene = new Scene(rootLayout, 1000, 700);
         primaryStage.setScene(registerScene);
         primaryStage.show();
+    }
 
+    public void Re_OpenCase(List<Case> AllCases, FileHandler fileHandler, DatabaseHandler dbHandler, Stage primaryStage, Scene previousScene){
+        // Title Label
+        Label titleLabel = new Label("Re-Open Case!");
+        titleLabel.setStyle(
+                "-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #333333; -fx-padding: 20px 0; -fx-alignment: center;");
+
+        // ScrollPane containing the case list
+        ScrollPane formScrollPane = new ScrollPane();
+        formScrollPane.setFitToWidth(true);
+        formScrollPane.setStyle("-fx-background-color: #f4f4f9;");
+
+        VBox formLayout = new VBox(20); // Increased spacing for clarity
+        formLayout.setStyle("-fx-padding: 20px;");
+
+        // Iterate over all cases and add only pending cases
+        for (Case cases : AllCases) {
+            if ("Appeal".equalsIgnoreCase(cases.getCaseStatus())) {
+
+                // Create a GridPane for each case
+                GridPane eachCase = new GridPane();
+                eachCase.setHgap(15); // Horizontal gap between columns
+                eachCase.setVgap(15); // Vertical gap between rows
+                eachCase.setStyle(
+                        "-fx-padding: 20px; " +
+                                "-fx-background-color: #f9f9f9; " +
+                                "-fx-border-color: #dcdcdc; " +
+                                "-fx-border-width: 1px; " +
+                                "-fx-border-radius: 15px; " +
+                                "-fx-background-radius: 15px; " +
+                                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 2, 2);");
+
+                // Case Title Label
+                Label caseName = new Label(cases.getCaseTitle());
+                caseName.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+
+                Label casetype = new Label("Case Type: " + cases.getCaseType());
+                casetype.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
+
+                Label caseplaintiff = new Label("Plaintiff ID: " + cases.getPlaintiffID());
+                caseplaintiff.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
+
+                Label casedefendant = new Label("Defendant ID: " + cases.getDefendantID());
+                casedefendant.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #34495e;");
+
+                Label CaseFiling = new Label("Filing Date: " + cases.getFilingDate());
+                CaseFiling.setStyle("-fx-font-size: 16px; -fx-font-weight: normal; -fx-text-fill: #e74c3c;");
+
+                // Set alignments for the GridPane
+                GridPane.setConstraints(caseName, 0, 0, 2, 1); // Spanning across two columns
+                GridPane.setConstraints(casetype, 0, 1);
+                GridPane.setConstraints(caseplaintiff, 2, 1);
+                GridPane.setConstraints(casedefendant, 0, 2);
+                GridPane.setConstraints(CaseFiling, 2, 2);
+
+                // Add components to the GridPane
+                eachCase.getChildren().addAll(caseName, casetype, caseplaintiff, casedefendant, CaseFiling);
+
+                // Approve and Reject Buttons
+                Button approveButton = new Button("Re-Open");
+                approveButton.setStyle(
+                        "-fx-background-color: #27ae60; " +
+                                "-fx-text-fill: white; " +
+                                "-fx-font-size: 14px; " +
+                                "-fx-font-weight: bold; " +
+                                "-fx-padding: 10px 20px; " +
+                                "-fx-border-radius: 8px; " +
+                                "-fx-background-radius: 8px;");
+
+                // Add spacing and alignment for buttons
+                GridPane.setConstraints(approveButton, 0, 3);
+                // GridPane.setConstraints(rejectButton, 1, 3);
+                GridPane.setMargin(approveButton, new Insets(10, 10, 10, 0)); // Add spacing around the buttons
+                approveButton.setOnAction(e -> {
+                    cases.setCaseStatus("Opened");
+                    dbHandler.saveOrUpdateCase(cases);
+                    System.out.println("Case Status set to Opened in Database");
+                });
+
+                // Add buttons to the GridPane
+                eachCase.getChildren().addAll(approveButton);
+
+                // Add the GridPane to the formLayout
+                formLayout.getChildren().add(eachCase);
+            }
+        }
+        // Set the VBox into the ScrollPane and display it
+        formScrollPane.setContent(formLayout);
+        Button returnButton = new Button("Close");
+        returnButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5px; -fx-padding: 10px;");
+        returnButton.setMaxWidth(Double.MAX_VALUE); // Make button stretch to fill width
+        returnButton.setOnAction(e -> {
+            primaryStage.setScene(previousScene);
+        });
+        // Setting up the scene with the scrollable content
+        VBox rootLayout = new VBox(20);
+        rootLayout.getChildren().addAll(titleLabel, formScrollPane, returnButton);
+        rootLayout.setStyle("-fx-background-color: #f4f4f9; -fx-padding: 20px;");
+
+        Scene registerScene = new Scene(rootLayout, 1000, 700);
+        primaryStage.setScene(registerScene);
+        primaryStage.show();
     }
 
 }

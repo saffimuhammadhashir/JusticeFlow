@@ -305,6 +305,3 @@ SELECT * FROM ProbationOfficers;
 SELECT * FROM ITAdmins;
 SELECT * FROM Slots;
 Select * from BarApplication;
-
-
-

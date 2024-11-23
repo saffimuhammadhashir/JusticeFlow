@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
+
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,6 +21,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import org.apache.pdfbox.debugger.ui.ArrayEntry;
 
 import java.util.List;
@@ -237,6 +241,7 @@ public class CourtsManagementSystem extends Application {
         if (registrar != null) {
             registrar.ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlot, AllJudges, AllWitnesses, AllCourts,
                     primaryStage, gui, this);
+                    primaryStage, gui, this);
             System.out.println("Case has been successfully created.");
 
         } else {
@@ -401,14 +406,31 @@ public class CourtsManagementSystem extends Application {
         }
     }
 
-    public void ReOpenCaseOrAppeal() {
+    public void ReOpenCaseOrAppeal(Stage primaryStage) {
         // Method to handle re-opening a case or appeal
-        System.out.println("Implement case reopening/appeal logic here.");
+        System.out.println("Implement Re-Open Case logic here.");
+        String role = user.getRole();
+
+        if ("Lawyer".equalsIgnoreCase(role)) {
+            Lawyer l = user.getRelevantLawyer(AllLawyers, user);
+            l.Re_OpenCase(AllCases, fileHandler, dbHandler, primaryStage, primaryStage.getScene());
+        }
+        else if ("Court Administrator".equalsIgnoreCase(role)) {
+        CourtAdministrator c =
+        user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
+        c.Re_OpenCase(AllCases, fileHandler, dbHandler, primaryStage, primaryStage.getScene());
+        }
     }
 
-    public void RequestToRetrieveRecord() {
+    public void closeCase(Stage primaryStage) {
         // Method to handle requesting to retrieve record
-        System.out.println("Implement request to retrieve record logic here.");
+        System.out.println("Implement Close Case logic here.");
+        String role = user.getRole();
+
+        if ("Court Administrator".equalsIgnoreCase(role)) {
+            CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
+            c.closeCase(AllCases, fileHandler, dbHandler, primaryStage, primaryStage.getScene());
+        }
     }
 
     /////////////////////////////////////// Judge
@@ -461,6 +483,52 @@ public class CourtsManagementSystem extends Application {
         i.CaseReport(AllCases, AllSlot);
     }
 
+    public void CaseReport(Scanner scanner, Stage primaryStage) {
+        // Method to handle scheduling IT system maintenance
+
+        loadData();
+        ITAdmin ii = new ITAdmin();
+        ii.CaseReport(AllCases, AllSlot);
+
+        // Create a green label to display "Successful Download"
+        Label successLabel = new Label("Case Report successfully downloaded in Project Directory!");
+        successLabel.setStyle("-fx-text-fill: green; -fx-font-size: 16px; -fx-font-weight: bold;");
+
+        // Get the current scene and layout of the primary stage
+        Scene currentScene = primaryStage.getScene();
+        VBox currentLayout = (VBox) currentScene.getRoot(); // Assuming your layout is a VBox
+
+        // Check if the "Successful Download" label already exists and remove it
+        for (int i = 0; i < currentLayout.getChildren().size(); i++) {
+            if (currentLayout.getChildren().get(i) instanceof Label) {
+                Label existingLabel = (Label) currentLayout.getChildren().get(i);
+                if (existingLabel.getText().equals("Successful Download")) {
+                    currentLayout.getChildren().remove(i);
+                    break; // Stop after removing the label
+                }
+            }
+        }
+
+        // Add the new success label to the existing layout
+        currentLayout.getChildren().add(successLabel);
+
+        // Create a PauseTransition to hide the label after a delay (e.g., 3 seconds)
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event -> {
+            // Remove the success label after 3 seconds
+            currentLayout.getChildren().remove(successLabel);
+        });
+        pause.play(); // Start the timer
+
+        // Optional: Add some space before the label
+        successLabel
+                .setStyle("-fx-text-fill: green; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 20px 0 0 0;");
+
+        // Update the scene with the modified layout
+        primaryStage.setScene(currentScene);
+        primaryStage.show();
+    }
+
     public void LawyerReport(Scanner scanner) {
         // Method to handle scheduling IT system maintenance
 
@@ -468,11 +536,103 @@ public class CourtsManagementSystem extends Application {
         i.LawyerReport(AllCases, AllSlot, AllLawyers);
     }
 
+    public void LawyerReport(Scanner scanner, Stage primaryStage) {
+        // Method to handle scheduling IT system maintenance
+
+        loadData();
+        ITAdmin ii = new ITAdmin();
+        ii.LawyerReport(AllCases, AllSlot,AllLawyers);
+
+        // Create a green label to display "Successful Download"
+        Label successLabel = new Label("Lawyer Report successfully downloaded in Project Directory!");
+        successLabel.setStyle("-fx-text-fill: green; -fx-font-size: 16px; -fx-font-weight: bold;");
+
+        // Get the current scene and layout of the primary stage
+        Scene currentScene = primaryStage.getScene();
+        VBox currentLayout = (VBox) currentScene.getRoot(); // Assuming your layout is a VBox
+
+        // Check if the "Successful Download" label already exists and remove it
+        for (int i = 0; i < currentLayout.getChildren().size(); i++) {
+            if (currentLayout.getChildren().get(i) instanceof Label) {
+                Label existingLabel = (Label) currentLayout.getChildren().get(i);
+                if (existingLabel.getText().equals("Successful Download")) {
+                    currentLayout.getChildren().remove(i);
+                    break; // Stop after removing the label
+                }
+            }
+        }
+
+        // Add the new success label to the existing layout
+        currentLayout.getChildren().add(successLabel);
+
+        // Create a PauseTransition to hide the label after a delay (e.g., 3 seconds)
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event -> {
+            // Remove the success label after 3 seconds
+            currentLayout.getChildren().remove(successLabel);
+        });
+        pause.play(); // Start the timer
+
+        // Optional: Add some space before the label
+        successLabel
+                .setStyle("-fx-text-fill: green; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 20px 0 0 0;");
+
+        // Update the scene with the modified layout
+        primaryStage.setScene(currentScene);
+        primaryStage.show();
+    }    
+
     public void JudgeReport(Scanner scanner) {
         // Method to handle scheduling IT system maintenance
 
         ITAdmin i = new ITAdmin();
         i.JudgeReport(AllCases, AllSlot, AllJudges);
+    }
+
+    public void JudgeReport(Scanner scanner, Stage primaryStage) {
+        // Method to handle scheduling IT system maintenance
+
+        loadData();
+        ITAdmin ii = new ITAdmin();
+        ii.JudgeReport(AllCases, AllSlot,AllJudges);
+
+        // Create a green label to display "Successful Download"
+        Label successLabel = new Label("Judge Report successfully downloaded in Project Directory!");
+        successLabel.setStyle("-fx-text-fill: green; -fx-font-size: 16px; -fx-font-weight: bold;");
+
+        // Get the current scene and layout of the primary stage
+        Scene currentScene = primaryStage.getScene();
+        VBox currentLayout = (VBox) currentScene.getRoot(); // Assuming your layout is a VBox
+
+        // Check if the "Successful Download" label already exists and remove it
+        for (int i = 0; i < currentLayout.getChildren().size(); i++) {
+            if (currentLayout.getChildren().get(i) instanceof Label) {
+                Label existingLabel = (Label) currentLayout.getChildren().get(i);
+                if (existingLabel.getText().equals("Successful Download")) {
+                    currentLayout.getChildren().remove(i);
+                    break; // Stop after removing the label
+                }
+            }
+        }
+
+        // Add the new success label to the existing layout
+        currentLayout.getChildren().add(successLabel);
+
+        // Create a PauseTransition to hide the label after a delay (e.g., 3 seconds)
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event -> {
+            // Remove the success label after 3 seconds
+            currentLayout.getChildren().remove(successLabel);
+        });
+        pause.play(); // Start the timer
+
+        // Optional: Add some space before the label
+        successLabel
+                .setStyle("-fx-text-fill: green; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 20px 0 0 0;");
+
+        // Update the scene with the modified layout
+        primaryStage.setScene(currentScene);
+        primaryStage.show();
     }
 
     /////////////////////////////////////// Court
@@ -534,7 +694,7 @@ public class CourtsManagementSystem extends Application {
             CourtAdministrator c = user.getRelevantCourtAdministrators(AllCourt_Administrators, user);
             if (c != null) {
                 c.scheduleHearing(scanner, AllCases, AllSlot, AllJudges, AllCourts, AllWitnesses, fileHandler,
-                        dbHandler, primaryStage, gui);
+                        dbHandler, primaryStage, gui,this);
             }
         } else if ("Lawyer".equalsIgnoreCase(role)) {
             Lawyer l = user.getRelevantLawyer(AllLawyers, user);
@@ -821,12 +981,12 @@ public class CourtsManagementSystem extends Application {
                         case 5:
                             // Re-open Case/Appeal
                             System.out.println("Re-open Case/Appeal selected.");
-                            ReOpenCaseOrAppeal(); // Calling method to reopen case or appeal
+                            // ReOpenCaseOrAppeal(); // Calling method to reopen case or appeal
                             break;
                         case 6:
                             // Request to Retrieve Record
                             System.out.println("Request to Retrieve Record selected.");
-                            RequestToRetrieveRecord(); // Calling method to request record retrieval
+                            // RequestToRetrieveRecord(); // Calling method to request record retrieval
                             break;
                         case 7:
                             // Request to Retrieve Record
@@ -1329,16 +1489,16 @@ public class CourtsManagementSystem extends Application {
                 Button trackUpdatesButton = new Button("Track/Manage Updates");
                 Button trackCaseButton = new Button("Track Case");
                 Button scheduleHearingButton = new Button("Schedule Hearing");
-                Button viewITScheduleButton = new Button("View IT System Maintenance Schedule");
-                Button retrieveRecordButton = new Button("Retrieve Record");
+                Button ReOpenCaseButton = new Button("Re-Open Case");
+                Button closeCaseButton = new Button("Close Case");
                 Button displayNotificationsButton = new Button("Display Notifications");
                 Button logoutButton = new Button("Log Out");
                 designButton_smaller(caseFilingButton);
                 designButton_smaller(trackUpdatesButton);
                 designButton_smaller(trackCaseButton);
                 designButton_smaller(scheduleHearingButton);
-                designButton_smaller(viewITScheduleButton);
-                designButton_smaller(retrieveRecordButton);
+                designButton_smaller(ReOpenCaseButton);
+                designButton_smaller(closeCaseButton);
                 designButton_smaller(displayNotificationsButton);
                 styleLogoutButton(logoutButton);
 
@@ -1362,14 +1522,14 @@ public class CourtsManagementSystem extends Application {
                     system.ScheduleHearingWitness(scanner, primaryStage, this); // Call your method
                 });
 
-                viewITScheduleButton.setOnAction(e -> {
-                    System.out.println("View IT System Maintenance Schedule selected.");
-                    ViewITMaintenanceSchedule(); // Call your method
+                ReOpenCaseButton.setOnAction(e -> {
+                    System.out.println("Re-Open Case selected.");
+                    system.ReOpenCaseOrAppeal(primaryStage); // Call your method
                 });
 
-                retrieveRecordButton.setOnAction(e -> {
-                    System.out.println("Retrieve Record selected.");
-                    RetrieveRecord(); // Call your method
+                closeCaseButton.setOnAction(e -> {
+                    System.out.println("Close Case selected.");
+                    system.closeCase(primaryStage); // Call your method
                 });
 
                 displayNotificationsButton.setOnAction(e -> {
@@ -1385,8 +1545,8 @@ public class CourtsManagementSystem extends Application {
                 // Add buttons to the layout
                 layout.getChildren().addAll(titleLabel, layoutinner);
                 layoutinner.getChildren().addAll(caseFilingButton, trackUpdatesButton, trackCaseButton,
-                        scheduleHearingButton, viewITScheduleButton,
-                        retrieveRecordButton, displayNotificationsButton, logoutButton);
+                        scheduleHearingButton, ReOpenCaseButton,
+                        closeCaseButton, displayNotificationsButton, logoutButton);
 
             } else if ("IT Admin".equalsIgnoreCase(role)) {
                 primaryStage.setTitle("Main Menu for IT Administrator");
@@ -1405,7 +1565,7 @@ public class CourtsManagementSystem extends Application {
 
                 caseReportButton.setOnAction(e -> {
                     System.out.println("Generate Report of Cases selected.");
-                    CaseReport(scanner); // Call your method
+                    CaseReport(scanner,primaryStage); // Call your method
                 });
 
                 caseNotificationButton.setOnAction(e -> {
@@ -1415,12 +1575,12 @@ public class CourtsManagementSystem extends Application {
 
                 lawyerReportButton.setOnAction(e -> {
                     System.out.println("Generate Report for Lawyers selected.");
-                    LawyerReport(scanner); // Call your method
+                    LawyerReport(scanner,primaryStage); // Call your method
                 });
 
                 judgeReportButton.setOnAction(e -> {
                     System.out.println("Generate Report for Judges selected.");
-                    JudgeReport(scanner); // Call your method
+                    JudgeReport(scanner,primaryStage); // Call your method
                 });
 
                 logoutButton.setOnAction(e -> {
@@ -1519,11 +1679,11 @@ public class CourtsManagementSystem extends Application {
                 Button btnSubmitDoc = new Button("Submit Document");
                 btnSubmitDoc.setOnAction(e -> system.SubmitDocument(scanner, primaryStage));
 
-                Button btnReopenCase = new Button("Re-open Case/Appeal");
-                btnReopenCase.setOnAction(e -> ReOpenCaseOrAppeal());
+                Button btnReopenCase = new Button("Re-open Case");
+                btnReopenCase.setOnAction(e -> system.ReOpenCaseOrAppeal(primaryStage));
 
-                Button btnRetrieveRecord = new Button("Request to Retrieve Record");
-                btnRetrieveRecord.setOnAction(e -> RequestToRetrieveRecord());
+                // Button btnRetrieveRecord = new Button("Request to Retrieve Record");
+                // btnRetrieveRecord.setOnAction(e -> RequestToRetrieveRecord());
 
                 Button btnAddWitness = new Button("Add Witness to Case");
                 btnAddWitness.setOnAction(e -> system.ScheduleHearingWitness(scanner, primaryStage, this));
@@ -1537,7 +1697,7 @@ public class CourtsManagementSystem extends Application {
                 designButton_smaller(btnRegisterBar);
                 designButton_smaller(btnSubmitDoc);
                 designButton_smaller(btnReopenCase);
-                designButton_smaller(btnRetrieveRecord);
+                // designButton_smaller(btnRetrieveRecord);
                 designButton_smaller(btnAddWitness);
                 designButton_smaller(btnViewNotifications);
                 styleLogoutButton(btnLogout);
@@ -1549,7 +1709,7 @@ public class CourtsManagementSystem extends Application {
 
                 layout.getChildren().addAll(titleLabel, layoutinner);
                 layoutinner.getChildren().addAll(btnCaseFiling, btnTrackUpdates, btnRegisterBar, btnSubmitDoc,
-                        btnReopenCase, btnRetrieveRecord, btnAddWitness, btnViewNotifications, btnLogout);
+                        btnReopenCase, btnAddWitness, btnViewNotifications, btnLogout);
             } else if ("Probation Officer".equalsIgnoreCase(role)) {
                 // Probation Officer role buttons
                 Label titleLabel = new Label("Probation Officer's Menu");
