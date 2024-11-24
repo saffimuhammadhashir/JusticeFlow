@@ -179,9 +179,17 @@ public class Judge extends User {
             GridPane eachCase = new GridPane();
             eachCase.setHgap(10);
             eachCase.setVgap(10);
+            // eachCase.setStyle(
+            //         "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
             eachCase.setStyle(
-                    "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
-
+                "-fx-padding: 20px; " +
+                        "-fx-background-color: #f9f9f9; " +
+                        "-fx-border-color: #dcdcdc; " +
+                        "-fx-border-width: 1px; " +
+                        "-fx-border-radius: 15px; " +
+                        "-fx-background-radius: 15px; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 2, 2);");
+                        
             // Case details
             Label caseName = new Label(cases.getCaseTitle());
             caseName.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
@@ -218,7 +226,7 @@ public class Judge extends User {
                         cases.addJudgement(judgmentFile);
 
                         DatabaseHandler dbHandler = new DatabaseHandler();
-                        dbHandler.addJudgement(cases.getCaseID(), selectedFile.getAbsolutePath(), judgmentFile.getFileHash(), 2);
+                        dbHandler.addJudgement(cases.getCaseID(), judgmentFile.getFileName(), judgmentFile.getFileHash(), 2);
 
                         Label successLabel = new Label("Judgment submitted successfully! Waiting for Registrar approval.");
                         successLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight: bold;");

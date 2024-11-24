@@ -97,92 +97,7 @@ public class Slot {
         this.CourtID = other.CourtID;
     }
 
-    // Custom implementation of isBefore
-    public boolean isBefore(LocalTime otherTime) {
-        return this.startTime.isBefore(otherTime);
-    }
-
-    // Custom implementation of isAfter
-    public boolean isAfter(LocalTime otherTime) {
-        return this.startTime.isAfter(otherTime);
-    }
-
-    // Getters and Setters
-    public int getSlotID() {
-        return slotID;
-    }
-
-    public void setSlotID(int slotID) {
-        this.slotID = slotID;
-    }
-
-    public LocalDate getDayName() {
-        return dayName;
-    }
-
-    public LocalDate getDate() {
-        return dayName;
-    }
-
-    public void setDayName(LocalDate dayName) {
-        this.dayName = dayName;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public int getSlotNumber() {
-        return slotNumber;
-    }
-
-    public void setSlotNumber(int slotNumber) {
-        this.slotNumber = slotNumber;
-    }
-
-    public Integer getCaseID() {
-        return caseID;
-    }
-
-    public void setCaseID(Integer caseID) {
-        this.caseID = caseID;
-    }
-
-    public Integer getJudgeID() {
-        return judgeID;
-    }
-
-    public void setJudgeID(Integer judgeID) {
-        this.judgeID = judgeID;
-    }
-
-    public Integer getWitnessID() {
-        return witnessID;
-    }
-
-    public Integer getCourtId() {
-        return this.CourtID;
-    }
-
-    public void setCourtId(Integer courtid) {
-        this.CourtID = courtid;
-    }
-
-    public void setWitnessID(Integer witnessID) {
-        this.witnessID = witnessID;
-    }
+    
 
     public static void newSlotCreation(List<Slot> AllSlot, List<Judge> AllJudges, List<Court> AllCourt,
             List<Witness> AllWitnesses, Case cases, DatabaseHandler dbHandler,
@@ -331,6 +246,190 @@ public class Slot {
         VBox dd1 = new VBox(25, courtLabel, courtComboBox), dd2 = new VBox(25, judgeLabel, judgeComboBox),
                 dd3 = new VBox(25, WitnessLabel, WitnessComboBox);
         HBox dropdowns = new HBox(25, dd1, dd2, dd3);
+        VBox dateSection = new VBox(10, dateLabel, datePicker, timeSlotLabel, timeSlotComboBox, searchButton);
+        VBox courtSection = new VBox(10, dropdowns);
+        HBox buttonLayout = new HBox(15, scheduleButton, rejectButton);
+        outerbox.setAlignment(Pos.CENTER);
+        dateSection.setAlignment(Pos.CENTER_LEFT);
+        courtSection.setAlignment(Pos.CENTER_LEFT);
+        buttonLayout.setAlignment(Pos.CENTER);
+        outerbox.getChildren().addAll(headingLabel, dateSection, courtSection, buttonLayout);
+        mainLayout.getChildren().add(outerbox);
+        outerbox.setStyle(
+                "-fx-padding: 20px 150px;" +
+                        "-fx-background-color: #E8F0FE;" + // Light blue background for a soft touch
+                        "-fx-border-color: #0078D7;" + // Border color for emphasis
+                        "-fx-border-width: 2px;" + // Subtle border width
+                        "-fx-border-radius: 25px;" + // Rounded corners for border
+                        "-fx-background-radius: 25px;" // Matching rounded corners for background
+        );
+
+        mainLayout.setStyle(
+                "-fx-padding: 20px 50px;" +
+                        "-fx-background-color: #F0F0F0;" + // Clean white background for content
+                        "-fx-background-radius: 15px;" + // Rounded corners for background
+                        "-fx-border-radius: 15px;" + // Matching rounded corners for border
+                        "-fx-border-width: 1px;" + // Thin border for a clean outline
+                        "-fx-border-color: #D6D6D6;" + // Soft gray border for subtle separation
+                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0.5, 0, 5);" // Light shadow for depth
+        );
+        Scene scene = new Scene(mainLayout, 1000, 600);
+
+        primaryStage.setTitle("Slot Scheduler");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void newSlotCreation_Hearing(List<Slot> AllSlot, Judge judges, List<Court> AllCourt,
+            List<Witness> AllWitnesses, Case cases, DatabaseHandler dbHandler,
+            Stage primaryStage, GUI_Menu gui, CourtsManagementSystem system) {
+
+        for (Slot s : AllSlot) {
+            System.out.println(s.toString());
+        }
+
+        // Create UI components
+        VBox outerbox = new VBox(25);
+
+        Label headingLabel = new Label("Slot Scheduler");
+        headingLabel.setFont(Font.font("Arial", FontWeight.BOLD, 44));
+        headingLabel.setTextAlignment(TextAlignment.CENTER);
+
+        Label dateLabel = new Label("Select Date:");
+        dateLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+
+        Label timeSlotLabel = new Label("Select Time Slot:");
+        timeSlotLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+
+        Label courtLabel = new Label("Available Courts:");
+        courtLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+
+        // Label judgeLabel = new Label("Available Judges:");
+        // judgeLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+
+        Label WitnessLabel = new Label("Available Witnesses:");
+        WitnessLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+
+        DatePicker datePicker = new DatePicker();
+        ComboBox<String> timeSlotComboBox = new ComboBox<>();
+        ComboBox<Integer> courtComboBox = new ComboBox<>();
+        // ComboBox<Integer> judgeComboBox = new ComboBox<>();
+        ComboBox<Integer> WitnessComboBox = new ComboBox<>();
+
+        Button searchButton = new Button("Search Slot");
+        Button scheduleButton = new Button("Schedule");
+        Button rejectButton = new Button("Cancel");
+
+        // Style buttons
+        searchButton.setStyle(
+                "-fx-background-color: #0078D7; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5 15;");
+        scheduleButton.setStyle(
+                "-fx-background-color: #28A745; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5 15;");
+        rejectButton.setStyle(
+                "-fx-background-color: #DC3545; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5 15;");
+
+        // Set uniform widths for ComboBoxes and buttons
+        timeSlotComboBox.setPrefWidth(300);
+        courtComboBox.setPrefWidth(300);
+        // judgeComboBox.setPrefWidth(300);
+        WitnessComboBox.setPrefWidth(300);
+        searchButton.setPrefWidth(120);
+        scheduleButton.setPrefWidth(120);
+        rejectButton.setPrefWidth(120);
+
+        // Restrict DatePicker to future dates
+        datePicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(LocalDate.now().plusDays(1))); // Disable past dates
+            }
+        });
+
+        // Populate time slots when a date is selected
+        datePicker.setOnAction(e -> {
+            LocalDate selectedDate = datePicker.getValue();
+            if (selectedDate != null) {
+                List<String> timeSlots = generateTimeSlots(selectedDate);
+                timeSlotComboBox.getItems().setAll(timeSlots);
+            }
+        });
+        courtComboBox.setVisible(false);
+        courtLabel.setVisible(false);
+        // judgeComboBox.setVisible(false);
+        // judgeLabel.setVisible(false);
+        WitnessComboBox.setVisible(false);
+        WitnessLabel.setVisible(false);
+        rejectButton.setOnAction(e -> {
+            system.ReviewUpcomingCaseRequests(primaryStage, gui);
+        });
+        // Populate available courts and judges based on the selected date and time slot
+        searchButton.setOnAction(e -> {
+            LocalDate selectedDate = datePicker.getValue();
+            String selectedTimeSlot = timeSlotComboBox.getValue();
+            if (selectedDate != null && selectedTimeSlot != null) {
+                String[] times = selectedTimeSlot.split(" - ");
+                LocalTime startTime = LocalTime.parse(times[0]);
+                LocalTime endTime = LocalTime.parse(times[1]);
+
+                List<Integer> availableCourts = new ArrayList<>();
+                List<Integer> availableJudges = new ArrayList<>();
+                List<Integer> availablewitnesses = new ArrayList<>();
+                searchAvailableSlots_Hearing(AllSlot, judges, AllCourt, AllWitnesses, selectedDate, startTime, endTime,
+                        availableCourts,availablewitnesses, cases.getCaseID());
+
+                if(judges!=null){
+                availableJudges.add(judges.getJudgeID());
+                }
+                courtComboBox.getItems().setAll(availableCourts);
+                // judgeComboBox.getItems().setAll(availableJudges);
+                WitnessComboBox.getItems().setAll(availablewitnesses);
+
+                // Make the court and judge dropdowns visible
+                courtComboBox.setVisible(true);
+                courtLabel.setVisible(true);
+                // judgeComboBox.setVisible(true);
+                // judgeLabel.setVisible(true);
+                WitnessComboBox.setVisible(true);
+                WitnessLabel.setVisible(true);
+            }
+        });
+
+        // Schedule the slot when user selects and clicks "Schedule"
+        scheduleButton.setOnAction(e -> {
+            LocalDate selectedDate = datePicker.getValue();
+            String selectedTimeSlot = timeSlotComboBox.getValue();
+            Integer selectedCourt = courtComboBox.getValue();
+            // Integer selectedJudge = judgeComboBox.getValue();
+            Integer selectedJudge = judges.getJudgeID();
+            Integer selectedwitness = WitnessComboBox.getValue();
+
+            if (selectedDate != null && selectedTimeSlot != null && selectedCourt != null && judges.getJudgeID() != 0) {
+                String[] times = selectedTimeSlot.split(" - ");
+                LocalTime startTime = LocalTime.parse(times[0]);
+                LocalTime endTime = LocalTime.parse(times[1]);
+
+                Slot newSlot = new Slot(AllSlot.size() + 1, selectedDate, startTime, endTime, 0, cases.getCaseID(),
+                        judges.getJudgeID(), selectedwitness, selectedCourt);
+
+                AllSlot.add(newSlot);
+                dbHandler.updateOrInsertSlots(AllSlot);
+                cases.setCaseStatus("Opened");
+                dbHandler.saveOrUpdateCase(cases);
+                // system.ReviewUpcomingCaseRequests(primaryStage, gui);
+                System.out.println("New slot scheduled: " + newSlot);
+            }
+        });
+
+        // Layout for the scene
+        VBox mainLayout = new VBox(20);
+        mainLayout.setPadding(new Insets(20));
+        mainLayout.setAlignment(Pos.CENTER);
+
+        // Group components into sections
+        VBox dd1 = new VBox(25, courtLabel, courtComboBox), 
+                dd3 = new VBox(25, WitnessLabel, WitnessComboBox);
+        HBox dropdowns = new HBox(25, dd1, dd3);
         VBox dateSection = new VBox(10, dateLabel, datePicker, timeSlotLabel, timeSlotComboBox, searchButton);
         VBox courtSection = new VBox(10, dropdowns);
         HBox buttonLayout = new HBox(15, scheduleButton, rejectButton);
@@ -614,6 +713,140 @@ public class Slot {
         System.out.println("Available Courts: " + availableCourtIds);
         System.out.println("Available Judges: " + availableJudgeIds);
         System.out.println("Available Witnesses: " + availableWitnessIds);
+    }
+
+    private static void searchAvailableSlots_Hearing(
+            List<Slot> allSlots,
+            Judge judges,
+            List<Court> AllCourt,
+            List<Witness> AllWitnesses,
+            LocalDate selectedDate,
+            LocalTime startTime,
+            LocalTime endTime,
+            List<Integer> availableCourtIds,
+            // List<Integer> availableJudgeIds,
+            List<Integer> availableWitnessIds,
+            int caseId) {
+
+        // Initialize available courts, judges, and witnesses
+        for (Court court : AllCourt) {
+            availableCourtIds.add(court.getCourtID());
+        }
+            // availableJudgeIds.add(judges.getJudgeID());
+        for (Witness witness : AllWitnesses) {
+            // Only consider witnesses affiliated with the given case
+            if (witness.CaseID.contains(caseId)) {
+                availableWitnessIds.add(witness.getWitnessID());
+            }
+        }
+
+        // Traverse through all slots and check for availability
+        for (Slot slot : allSlots) {
+            // Check if the slot overlaps with the selected date and time
+            if (slot.getDate().equals(selectedDate) &&
+                    (slot.startTime.equals(startTime) || slot.endTime.equals(endTime) ||
+                            (slot.startTime.isBefore(endTime) && slot.endTime.isAfter(startTime)))) {
+
+                // Remove courts, judges, and witnesses already booked in the slot
+                availableCourtIds.remove(Integer.valueOf(slot.getCourtId()));
+                // availableJudgeIds.remove(Integer.valueOf(slot.judgeID));
+                if (slot.getWitnessID() != null) {
+                    availableWitnessIds.remove(Integer.valueOf(slot.getWitnessID()));
+                }
+            }
+        }
+
+        // Debugging output to check results
+        System.out.println("Available Courts: " + availableCourtIds);
+        System.out.println("Available Judges: " + judges.getJudgeID());
+        System.out.println("Available Witnesses: " + availableWitnessIds);
+    }
+
+    // Custom implementation of isBefore
+    public boolean isBefore(LocalTime otherTime) {
+        return this.startTime.isBefore(otherTime);
+    }
+
+    // Custom implementation of isAfter
+    public boolean isAfter(LocalTime otherTime) {
+        return this.startTime.isAfter(otherTime);
+    }
+
+    // Getters and Setters
+    public int getSlotID() {
+        return slotID;
+    }
+
+    public void setSlotID(int slotID) {
+        this.slotID = slotID;
+    }
+
+    public LocalDate getDayName() {
+        return dayName;
+    }
+
+    public LocalDate getDate() {
+        return dayName;
+    }
+
+    public void setDayName(LocalDate dayName) {
+        this.dayName = dayName;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public int getSlotNumber() {
+        return slotNumber;
+    }
+
+    public void setSlotNumber(int slotNumber) {
+        this.slotNumber = slotNumber;
+    }
+
+    public Integer getCaseID() {
+        return caseID;
+    }
+
+    public void setCaseID(Integer caseID) {
+        this.caseID = caseID;
+    }
+
+    public Integer getJudgeID() {
+        return judgeID;
+    }
+
+    public void setJudgeID(Integer judgeID) {
+        this.judgeID = judgeID;
+    }
+
+    public Integer getWitnessID() {
+        return witnessID;
+    }
+
+    public Integer getCourtId() {
+        return this.CourtID;
+    }
+
+    public void setCourtId(Integer courtid) {
+        this.CourtID = courtid;
+    }
+
+    public void setWitnessID(Integer witnessID) {
+        this.witnessID = witnessID;
     }
 
     // toString() method

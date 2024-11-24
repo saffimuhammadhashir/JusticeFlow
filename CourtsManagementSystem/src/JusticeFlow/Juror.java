@@ -139,7 +139,7 @@ public class Juror extends User {
         mainLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
 
         // Title label
-        Label titleLabel = new Label("Submit Document for Case");
+        Label titleLabel = new Label("Log Judgement for Case");
         titleLabel.setStyle("-fx-text-fill: black; -fx-font-size: 22px; -fx-font-weight: bold;");
         mainLayout.getChildren().add(titleLabel);
 
@@ -168,8 +168,16 @@ public class Juror extends User {
                 GridPane eachCase = new GridPane();
                 eachCase.setHgap(10); // Horizontal gap between columns
                 eachCase.setVgap(10); // Vertical gap between rows
+                // eachCase.setStyle(
+                //         "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
                 eachCase.setStyle(
-                        "-fx-padding: 10px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-effect: innershadow(gaussian, #000000, 5, 0.5, 0, 0);");
+                    "-fx-padding: 20px; " +
+                            "-fx-background-color: #f9f9f9; " +
+                            "-fx-border-color: #dcdcdc; " +
+                            "-fx-border-width: 1px; " +
+                            "-fx-border-radius: 15px; " +
+                            "-fx-background-radius: 15px; " +
+                            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 2, 2);");
 
                 // Case Title Label
                 Label caseName = new Label(cases.getCaseTitle());
@@ -224,7 +232,7 @@ public class Juror extends User {
                             System.out.println("Judgement added to case, waiting for Registrar to approve.");
 
                             DatabaseHandler dbHandler = new DatabaseHandler();
-                        dbHandler.addJudgement(cases.getCaseID(), selectedFile.getAbsolutePath(), my_file.getFileHash(), 2);
+                        dbHandler.addJudgement(cases.getCaseID(), my_file.getFileName(), my_file.getFileHash(), 2);
 
                             System.out.println("Judgement Added in Database.");
 

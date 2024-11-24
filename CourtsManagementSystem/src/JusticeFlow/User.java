@@ -289,26 +289,29 @@ public class User {
         notificationLayout.setStyle("-fx-background-color: #f9f9f9;");
 
         for (Notification notification : myNotifications) {
-            // Create a container for each notification
-            HBox notificationBox = new HBox(20);
-            notificationBox.setStyle(
-                    "-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 1px; -fx-padding: 10px;");
-            notificationBox.setAlignment(Pos.CENTER); // Center-align contents of the HBox
-            notificationBox.setPadding(new Insets(10));
 
-            // Display notification summary
-            Label notificationSummary = new Label("Notification ID: " + notification.getNotificationID() +
-                    " | Case Title: " + dbHandler.findCaseByID(AllCases, notification.getCaseID()).getCaseTitle());
-            notificationSummary.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
+            if (dbHandler.findCaseByID(AllCases, notification.getCaseID()) != null) {
+                // Create a container for each notification
+                HBox notificationBox = new HBox(20);
+                notificationBox.setStyle(
+                        "-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 1px; -fx-padding: 10px;");
+                notificationBox.setAlignment(Pos.CENTER); // Center-align contents of the HBox
+                notificationBox.setPadding(new Insets(10));
 
-            // Button to show details
-            Button detailsButton = new Button("Show Details");
-            detailsButton.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-size: 12px;");
-            detailsButton.setOnAction(event -> showNotificationDetails(notification, dbHandler, AllCases));
+                // Display notification summary
+                Label notificationSummary = new Label("Notification ID: " + notification.getNotificationID() +
+                        " | Case Title: " + dbHandler.findCaseByID(AllCases, notification.getCaseID()).getCaseTitle());
+                notificationSummary.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
 
-            // Add elements to the notification box
-            notificationBox.getChildren().addAll(notificationSummary, detailsButton);
-            notificationLayout.getChildren().add(notificationBox);
+                // Button to show details
+                Button detailsButton = new Button("Show Details");
+                detailsButton.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-size: 12px;");
+                detailsButton.setOnAction(event -> showNotificationDetails(notification, dbHandler, AllCases));
+
+                // Add elements to the notification box
+                notificationBox.getChildren().addAll(notificationSummary, detailsButton);
+                notificationLayout.getChildren().add(notificationBox);
+            }
         }
 
         Button returnButton = new Button(

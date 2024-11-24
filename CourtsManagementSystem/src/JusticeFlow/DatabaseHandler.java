@@ -1046,7 +1046,6 @@ public class DatabaseHandler {
         }
     }
 
-    
     // Inserts file details (filename and file hash) into the database, linking the
     // file to a case
     // through the specified CaseID. If the file information is saved successfully,
@@ -1175,7 +1174,6 @@ public class DatabaseHandler {
             return false;
         }
     }
-    
 
     public void updateFileDetails(int caseID, String fileName, String fileHash, boolean oldStatus, boolean newStatus) {
         // SQL query to update the status in CaseFiles
@@ -1338,7 +1336,7 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
-   
+
     public void updateWitness(Witness w, int id) {
         String updateSQL = "INSERT INTO WitnessTable (CaseId, WitnessID) VALUES (?, ?)";
 
@@ -1368,7 +1366,6 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
-   
    
     public void deleteWitness(Witness w, int id) {
         // Update SQL query to delete the relevant entries

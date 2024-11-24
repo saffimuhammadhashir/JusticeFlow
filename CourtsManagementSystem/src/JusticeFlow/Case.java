@@ -1,39 +1,18 @@
 package JusticeFlow;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 
+import JusticeFlow.CourtsManagementSystem.GUI_Menu;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import JusticeFlow.CourtsManagementSystem.GUI_Menu;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -53,8 +32,7 @@ public class Case {
     private int defendantID = 0;
     private List<CaseFile> files;
     private List<CaseFile> judgements;
-    private int Lawyerid = 0;
-    private List<Witness> linkedWitnesses;
+    private int Lawyerid=0;
     // Changed to CaseFile from File
     // New attribute for CaseState (e.g., Pending, Filed)
 
@@ -183,14 +161,14 @@ public class Case {
         this.judgements.add(file);
     }
 
+    public void setLawyerId(int id) {
+        this.Lawyerid = id;
+    }
+    
     // Adds a new file to the case's list of files, representing a document or item
     // associated with the case.
     public void addFile(CaseFile file) {
         this.files.add(file);
-    }
-
-    public void setLawyerId(int id) {
-        this.Lawyerid = id;
     }
 
     // Updates case files by first saving the files through the FileHandler,
@@ -1025,10 +1003,9 @@ public class Case {
         return null;
     }
 
-    public List<Integer> getStakeholders(List<Clients> AllClients, List<Slot> AllSlots, List<Judge> AllJudges,
-            List<Lawyer> AllLawyers) {
+    public List<Integer> getStakeholders(List<Clients> AllClients, List<Slot> AllSlots,List<Judge> AllJudges,List<Lawyer> AllLawyers) {
         List<Integer> output = new ArrayList<>();
-
+        
         for (Clients c : AllClients) {
 
             if (plaintiffID != 0 && this.plaintiffID == c.getclientID()) {
@@ -1046,10 +1023,10 @@ public class Case {
             }
 
         }
-        for (Slot s : AllSlots) {
-            if (s.getJudgeID() != null && s.getCaseID() == this.caseID) {
-                for (Judge j : AllJudges) {
-                    if (s.getJudgeID().equals(j.getJudgeID())) {
+        for(Slot s: AllSlots){
+            if(s.getJudgeID()!=null && s.getCaseID()==this.caseID){
+                for(Judge j:AllJudges){
+                    if(s.getJudgeID().equals(j.getJudgeID())){
                         output.add(j.getUserID());
                         return output;
                     }
@@ -1057,7 +1034,7 @@ public class Case {
             }
         }
 
+
         return output;
     }
-
 }
