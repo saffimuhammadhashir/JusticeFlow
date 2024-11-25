@@ -103,4 +103,27 @@ public class FileHandler {
         Path destination = Paths.get(destinationPath);
         Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
     }
+
+
+    public String getFilePathFromCase(String fileName, Case caseObj) {
+        // Construct the directory path using the Case object's details
+        File caseFolder = new File("File Storage/" + caseObj.getCaseID() + "_" + caseObj.getCaseTitle());
+
+        // Check if the folder exists
+        if (caseFolder.exists() && caseFolder.isDirectory()) {
+            // Search for the file by name inside the folder
+            File[] files = caseFolder.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.getName().equals(fileName)) {
+                        // If the file is found, return its absolute path
+                        return file.getAbsolutePath();
+                    }
+                }
+            }
+        }
+
+        // If the file is not found, return null
+        return null;
+    }
 }
