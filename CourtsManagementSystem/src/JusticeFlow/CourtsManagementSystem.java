@@ -1853,7 +1853,7 @@ public class CourtsManagementSystem extends Application {
                     + "-fx-background-size: stretch; " // Ensures the image covers the entire area
                     + "-fx-background-position: center ; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "
-                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); ");
+                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); ");
 
             layoutinner.setStyle(
                     """
@@ -1896,7 +1896,7 @@ public class CourtsManagementSystem extends Application {
                     + "-fx-border-radius: 15px; "
                     + "-fx-border-color: #e0e0e0; "
                     + "-fx-border-width: 0px;"
-                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
+                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
                     + "-fx-background-size: cover; " // Ensures the image covers the entire area
                     + "-fx-background-position: center center; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
@@ -2122,7 +2122,7 @@ public class CourtsManagementSystem extends Application {
             VBox layout = new VBox(25); // Vertical box layout with spacing of 25
             layout.setStyle("-fx-padding:0px 300px;"
                     + " -fx-alignment: center;"
-                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
+                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
                     + "-fx-background-size: cover; " // Ensures the image covers the entire area
                     + "-fx-background-position: center center; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
@@ -2257,7 +2257,7 @@ public class CourtsManagementSystem extends Application {
         layout.setStyle("-fx-padding: 50px; "
                 + "-fx-alignment: center; "
                 + "-fx-fill-width: true; "
-                + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/awesome%207.jpg');"
+                + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/awesome%207.jpg');"
                 + "-fx-background-size: cover; " // Ensures the image covers the entire area
                 + "-fx-background-position: center center; " // Centers the image
                 + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
