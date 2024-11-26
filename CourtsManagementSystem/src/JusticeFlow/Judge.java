@@ -447,7 +447,10 @@ public class Judge extends User {
             });
 
             rejectButton.setOnAction(e -> {
-                cases.setCaseStatus("Not Allowed");
+                                    cases.setCaseStatus("Not Allowed");
+                    Notification.createNotification(cases,
+                    "Case : " + cases.getCaseTitle() + " is Blocked by : " + system.user.getUsername() + "("+system.user.getRole()+")",
+                    system);
                 dbHandler.saveOrUpdateCase(cases);
                 TrackCase(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges, AllLawyers, AllWitnesses,
                         AllCourts,
@@ -627,7 +630,10 @@ public class Judge extends User {
             });
 
             rejectButton.setOnAction(e -> {
-                cases.setCaseStatus("Not Allowed");
+                                    cases.setCaseStatus("Not Allowed");
+                    Notification.createNotification(cases,
+                    "Case : " + cases.getCaseTitle() + " is Blocked by : " + system.user.getUsername() + "("+system.user.getRole()+")",
+                    system);
                 dbHandler.saveOrUpdateCase(cases);
                 TrackUpdates(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges, AllLawyers,
                         AllWitnesses,
