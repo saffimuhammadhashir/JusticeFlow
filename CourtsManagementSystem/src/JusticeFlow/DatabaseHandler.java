@@ -29,7 +29,7 @@ import com.mysql.cj.xdevapi.Client;
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "12345678";
+    private final String dbPassword = "test12345";
 
     public void getAllFiles(List<Case> AllCases) {
         // SQL query to retrieve all case files
