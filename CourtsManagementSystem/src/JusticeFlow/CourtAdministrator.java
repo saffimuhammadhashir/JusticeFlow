@@ -1553,6 +1553,7 @@ public class CourtAdministrator extends User {
                 approveButton.setOnAction(e -> {
                     cases.setCaseStatus("Closed");
                     dbHandler.saveOrUpdateCase(cases);
+                    formLayout.getChildren().remove(eachCase);
                     System.out.println("Case Status set to Closed in Database");
                 });
 
@@ -1657,6 +1658,7 @@ public class CourtAdministrator extends User {
                 approveButton.setOnAction(e -> {
                     cases.setCaseStatus("Opened");
                     dbHandler.saveOrUpdateCase(cases);
+                    formLayout.getChildren().remove(eachCase);
                     System.out.println("Case Status set to Opened in Database");
                 });
 

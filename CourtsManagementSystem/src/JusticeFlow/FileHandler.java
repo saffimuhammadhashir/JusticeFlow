@@ -98,7 +98,7 @@ public class FileHandler {
     // Copies a file from a specified source path to a destination path, replacing
     // the existing
     // file if it already exists.
-    private void copyFile(String sourcePath, String destinationPath) throws IOException {
+    public void copyFile(String sourcePath, String destinationPath) throws IOException {
         Path source = Paths.get(sourcePath);
         Path destination = Paths.get(destinationPath);
         Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);

@@ -219,7 +219,7 @@ public class ITAdmin extends User {
 
             // Create the content stream
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(font, 14);
+            contentStream.setFont(font, 18);
             contentStream.beginText();
             contentStream.newLineAtOffset(50, 750); // Start at the top of the page
 
@@ -246,31 +246,34 @@ public class ITAdmin extends User {
                 // }
 
                 // Add Case details
-                contentStream.newLineAtOffset(0, -30);
+                contentStream.newLineAtOffset(0, -50);
+                contentStream.setFont(font, 15);
                 contentStream.showText("Case Title: " + c.getCaseTitle());
-                yPosition -= 15;
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                contentStream.setFont(font, 10);
+                contentStream.newLineAtOffset(30, 0);
+                yPosition -= 20;
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Case Type: " + c.getCaseType());
-                yPosition -= 15;
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                yPosition -= 20;
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Case Status: " + c.getCaseStatus());
-                yPosition -= 15;
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                yPosition -= 20;
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Case Filing Date: " + c.getFilingDate());
-                yPosition -= 15;
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                yPosition -= 20;
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Case Court Date: " + c.getCourtDate());
-                yPosition -= 15;
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                yPosition -= 20;
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Plaintiff ID: " + c.getPlaintiffID());
-                yPosition -= 15;
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                yPosition -= 20;
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Defendant ID: " + c.getDefendantID());
 
                 List<CaseFile> f = c.getFiles();
                 if (!f.isEmpty()) {
-                    yPosition -= 15;
-                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                    yPosition -= 20;
+                    contentStream.newLineAtOffset(0, -20); // Move to next line
                     contentStream.showText("Case Files: ");
                     for (CaseFile file : f) {
                         contentStream.newLineAtOffset(15, -15); // Indent each file name
@@ -279,15 +282,15 @@ public class ITAdmin extends User {
                     }
 
                 } else {
-                    // yPosition -= 15;
-                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                    // yPosition -= 20;
+                    contentStream.newLineAtOffset(0, -20); // Move to next line
                     contentStream.showText("No Files Uploaded.");
                 }
 
                 List<CaseFile> j = c.getJudgements();
                 if (!j.isEmpty()) {
-                    yPosition -= 15;
-                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                    yPosition -= 20;
+                    contentStream.newLineAtOffset(0, -20); // Move to next line
                     contentStream.showText("Case Judgements: ");
                     for (CaseFile file : j) {
                         contentStream.newLineAtOffset(15, -15); // Indent each judgment file name
@@ -295,15 +298,15 @@ public class ITAdmin extends User {
                         contentStream.newLineAtOffset(-15, 0); // Reset indentation
                     }
                 } else {
-                    // yPosition -= 15;
-                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                    // yPosition -= 20;
+                    contentStream.newLineAtOffset(0, -20); // Move to next line
                     contentStream.showText("No Judgements Uploaded.");
                 }
 
-                yPosition -= 15;
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                yPosition -= 20;
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Lawyer ID: " + c.getLawyerId());
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                contentStream.newLineAtOffset(0, -20); // Move to next line
 
                 Slot slot = null;
                 for (Slot s : slots) {
@@ -315,43 +318,44 @@ public class ITAdmin extends User {
 
                 if (slot != null) {
                     contentStream.showText("Slot Day: " + slot.getDayName());
-                    yPosition -= 15;
-                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                    yPosition -= 20;
+                    contentStream.newLineAtOffset(0, -20); // Move to next line
                     contentStream.showText("Slot ID: " + slot.getSlotID());
-                    yPosition -= 15;
-                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                    yPosition -= 20;
+                    contentStream.newLineAtOffset(0, -20); // Move to next line
                     contentStream.showText("Start Time: " + slot.getStartTime());
-                    yPosition -= 15;
-                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                    yPosition -= 20;
+                    contentStream.newLineAtOffset(0, -20); // Move to next line
                     contentStream.showText("End Time: " + slot.getEndTime());
                     if (slot.getCaseID() != null) {
-                        yPosition -= 15;
-                        contentStream.newLineAtOffset(0, -15); // Move to next line
+                        yPosition -= 20;
+                        contentStream.newLineAtOffset(0, -20); // Move to next line
                         contentStream.showText("Case ID: " + slot.getCaseID());
                     }
                     if (slot.getJudgeID() != null) {
-                        yPosition -= 15;
-                        contentStream.newLineAtOffset(0, -15); // Move to next line
+                        yPosition -= 20;
+                        contentStream.newLineAtOffset(0, -20); // Move to next line
                         contentStream.showText("Judge ID: " + slot.getJudgeID());
                     }
                     if (slot.getWitnessID() != null) {
-                        yPosition -= 15;
-                        contentStream.newLineAtOffset(0, -15); // Move to next line
+                        yPosition -= 20;
+                        contentStream.newLineAtOffset(0, -20); // Move to next line
                         contentStream.showText("Witness ID: " + slot.getWitnessID());
                     }
                     if (slot.getCourtId() != null) {
-                        yPosition -= 15;
-                        contentStream.newLineAtOffset(0, -15); // Move to next line
+                        yPosition -= 20;
+                        contentStream.newLineAtOffset(0, -20); // Move to next line
                         contentStream.showText("Court ID: " + slot.getCourtId());
                     }
                     yPosition -= 50; // Adjust Y position after each slot
                 } else {
-                    yPosition -= 15;
-                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                    yPosition -= 20;
+                    contentStream.newLineAtOffset(0, -20); // Move to next line
                     contentStream.showText("CASE NOT SCHEDULED");
                 }
 
                 yPosition -= 50; // Adjust Y position after each case
+                contentStream.newLineAtOffset(-30, 0);
                 contentStream.endText(); // End the current text block
                 contentStream.close(); // Close the current content stream
                 page = new PDPage(); // Create a new page
@@ -396,7 +400,7 @@ public class ITAdmin extends User {
 
             // Create the content stream
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(font, 14);
+            contentStream.setFont(font, 18);
             contentStream.beginText();
             contentStream.newLineAtOffset(50, 750); // Start at the top of the page
 
@@ -409,7 +413,7 @@ public class ITAdmin extends User {
             // Iterate through each lawyer
             contentStream.setFont(font, 10);
             for (Lawyer lawyer : lawyers) {
-                contentStream.newLineAtOffset(0, -30);
+                // contentStream.newLineAtOffset(0, -30);
                 // Check if the lawyer has any cases
                 boolean hasCase = false;
                 for (Case c : cases) {
@@ -419,15 +423,19 @@ public class ITAdmin extends User {
                     }
                 }
 
+                contentStream.newLineAtOffset(0, -50);
+                contentStream.setFont(font, 15);
                 contentStream.showText("Lawyer Name: " + lawyer.getFirstName() + " " + lawyer.getLastName());
-                yPosition -= 15;
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                contentStream.setFont(font, 10);
+                contentStream.newLineAtOffset(30,0);
+                yPosition -= 20;
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("License Number: " + lawyer.getLicenseNumber());
-                yPosition -= 15;
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                yPosition -= 20;
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Bar Association: " + lawyer.getBarAssociationID());
-                yPosition -= 15;
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                yPosition -= 20;
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 // If the lawyer has a case, add their details
                 if (hasCase) {
                     // Iterate through all the cases and slots related to this lawyer
@@ -448,28 +456,28 @@ public class ITAdmin extends User {
 
                             // Add case details
                             contentStream.showText("Case Title: " + c.getCaseTitle());
-                            yPosition -= 15;
-                            contentStream.newLineAtOffset(0, -15); // Move to next line
+                            yPosition -= 20;
+                            contentStream.newLineAtOffset(0, -20); // Move to next line
                             contentStream.showText("Case Type: " + c.getCaseType());
-                            yPosition -= 15;
-                            contentStream.newLineAtOffset(0, -15); // Move to next line
+                            yPosition -= 20;
+                            contentStream.newLineAtOffset(0, -20); // Move to next line
                             contentStream.showText("Case Status: " + c.getCaseStatus());
-                            yPosition -= 15;
-                            contentStream.newLineAtOffset(0, -15); // Move to next line
+                            yPosition -= 20;
+                            contentStream.newLineAtOffset(0, -20); // Move to next line
                             contentStream.showText("Case Filing Date: " + c.getFilingDate());
-                            yPosition -= 15;
-                            contentStream.newLineAtOffset(0, -15); // Move to next line
+                            yPosition -= 20;
+                            contentStream.newLineAtOffset(0, -20); // Move to next line
                             contentStream.showText("Case Court Date: " + c.getCourtDate());
-                            yPosition -= 15;
-                            contentStream.newLineAtOffset(0, -15); // Move to next line
+                            yPosition -= 20;
+                            contentStream.newLineAtOffset(0, -20); // Move to next line
                             contentStream.showText("Plaintiff ID: " + c.getPlaintiffID());
-                            yPosition -= 15;
-                            contentStream.newLineAtOffset(0, -15); // Move to next line
+                            yPosition -= 20;
+                            contentStream.newLineAtOffset(0, -20); // Move to next line
                             contentStream.showText("Defendant ID: " + c.getDefendantID());
                             List<CaseFile> f = c.getFiles();
                             if (!f.isEmpty()) {
-                                yPosition -= 15;
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                yPosition -= 20;
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Case Files: ");
                                 for (CaseFile file : f) {
                                     contentStream.newLineAtOffset(15, -15); // Indent each file name
@@ -478,15 +486,15 @@ public class ITAdmin extends User {
                                 }
 
                             } else {
-                                // yPosition -= 15;
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                // yPosition -= 20;
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("No Files Uploaded.");
                             }
 
                             List<CaseFile> j = c.getJudgements();
                             if (!j.isEmpty()) {
-                                yPosition -= 15;
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                yPosition -= 20;
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Case Judgements: ");
                                 for (CaseFile file : j) {
                                     contentStream.newLineAtOffset(15, -15); // Indent each judgment file name
@@ -494,12 +502,12 @@ public class ITAdmin extends User {
                                     contentStream.newLineAtOffset(-15, 0); // Reset indentation
                                 }
                             } else {
-                                // yPosition -= 15;
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                // yPosition -= 20;
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("No Judgements Uploaded.");
                             }
-                            yPosition -= 15;
-                            contentStream.newLineAtOffset(0, -15); // Move to next line
+                            yPosition -= 20;
+                            contentStream.newLineAtOffset(0, -20); // Move to next line
 
                             // Add slot details if available
                             Slot slot = null;
@@ -511,42 +519,42 @@ public class ITAdmin extends User {
                             }
 
                             if (slot != null) {
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Slot Day: " + slot.getDayName());
-                                yPosition -= 15;
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                yPosition -= 20;
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Slot ID: " + slot.getSlotID());
-                                yPosition -= 15;
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                yPosition -= 20;
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Start Time: " + slot.getStartTime());
-                                yPosition -= 15;
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                yPosition -= 20;
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("End Time: " + slot.getEndTime());
                                 if (slot.getCaseID() != null) {
-                                    yPosition -= 15;
-                                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                                    yPosition -= 20;
+                                    contentStream.newLineAtOffset(0, -20); // Move to next line
                                     contentStream.showText("Case ID: " + slot.getCaseID());
                                 }
                                 if (slot.getJudgeID() != null) {
-                                    yPosition -= 15;
-                                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                                    yPosition -= 20;
+                                    contentStream.newLineAtOffset(0, -20); // Move to next line
                                     contentStream.showText("Judge ID: " + slot.getJudgeID());
                                 }
                                 if (slot.getWitnessID() != null) {
-                                    yPosition -= 15;
-                                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                                    yPosition -= 20;
+                                    contentStream.newLineAtOffset(0, -20); // Move to next line
                                     contentStream.showText("Witness ID: " + slot.getWitnessID());
                                 }
                                 if (slot.getCourtId() != null) {
-                                    yPosition -= 15;
-                                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                                    yPosition -= 20;
+                                    contentStream.newLineAtOffset(0, -20); // Move to next line
                                     contentStream.showText("Court ID: " + slot.getCourtId());
                                 }
                                 yPosition -= 30; // Adjust Y position after each slot
                             } else {
                                 contentStream.showText("No Slot Assigned");
-                                yPosition -= 15;
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                yPosition -= 20;
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                             }
 
                             yPosition -= 50; // Adjust Y position after each case
@@ -555,10 +563,11 @@ public class ITAdmin extends User {
                 } else {
                     // If the lawyer has no cases, print a message
                     contentStream.showText("Lawyer has no cases assigned.");
-                    yPosition -= 15;
-                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                    yPosition -= 20;
+                    contentStream.newLineAtOffset(0, -20); // Move to next line
                 }
 
+                contentStream.newLineAtOffset(-30, 0);
                 contentStream.endText(); // End the current text block
                 contentStream.close(); // Close the current content stream
                 page = new PDPage(); // Create a new page
@@ -602,7 +611,7 @@ public class ITAdmin extends User {
 
             // Create the content stream
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(font, 14);
+            contentStream.setFont(font, 18);
             contentStream.beginText();
 
             // Define left and right margins
@@ -619,7 +628,7 @@ public class ITAdmin extends User {
             yPosition -= 20; // Adjust Y position after printing title
 
             // Write Judge details (one per page)
-            contentStream.setFont(font, 10);
+            contentStream.setFont(font, 15);
             for (Judge j : judges) {
                 // Check for page overflow and create a new page if necessary
                 if (yPosition < 50) {
@@ -635,25 +644,27 @@ public class ITAdmin extends User {
                 }
 
                 // Add Judge details
-                contentStream.newLineAtOffset(0, -30);
+                contentStream.newLineAtOffset(0, -50);
                 contentStream.showText("Judge Name: " + j.getFirstName() + " " + j.getLastName());
-                yPosition -= 15;
+                contentStream.newLineAtOffset(30, 0);
+                contentStream.setFont(font, 10);
+                yPosition -= 20;
 
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Judge ID: " + j.getJudgeID());
-                yPosition -= 15;
+                yPosition -= 20;
 
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Date of Birth: " + j.getDateOfBirth());
-                yPosition -= 15;
+                yPosition -= 20;
 
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Appointment Date: " + j.getAppointmentDate());
-                yPosition -= 15;
+                yPosition -= 20;
 
-                contentStream.newLineAtOffset(0, -15); // Move to next line
+                contentStream.newLineAtOffset(0, -20); // Move to next line
                 contentStream.showText("Court ID: " + j.getCourtID());
-                yPosition -= 15;
+                yPosition -= 20;
 
                 // Check if the judge has any associated case
                 boolean hasCases = false;
@@ -684,36 +695,36 @@ public class ITAdmin extends User {
                             }
 
                             if (caseForSlot != null) {
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Case Title: " + caseForSlot.getCaseTitle());
-                                yPosition -= 15;
+                                yPosition -= 20;
 
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Case Type: " + caseForSlot.getCaseType());
-                                yPosition -= 15;
+                                yPosition -= 20;
 
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Case Status: " + caseForSlot.getCaseStatus());
-                                yPosition -= 15;
+                                yPosition -= 20;
 
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Case Filing Date: " + caseForSlot.getFilingDate());
-                                yPosition -= 15;
+                                yPosition -= 20;
 
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Case Court Date: " + caseForSlot.getCourtDate());
-                                yPosition -= 15;
+                                yPosition -= 20;
 
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Plaintiff ID: " + caseForSlot.getPlaintiffID());
-                                yPosition -= 15;
+                                yPosition -= 20;
 
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Defendant ID: " + caseForSlot.getDefendantID());
                                 List<CaseFile> f = caseForSlot.getFiles();
                                 if (!f.isEmpty()) {
-                                    yPosition -= 15;
-                                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                                    yPosition -= 20;
+                                    contentStream.newLineAtOffset(0, -20); // Move to next line
                                     contentStream.showText("Case Files: ");
                                     for (CaseFile file : f) {
                                         contentStream.newLineAtOffset(15, -15); // Indent each file name
@@ -722,15 +733,15 @@ public class ITAdmin extends User {
                                     }
 
                                 } else {
-                                    // yPosition -= 15;
-                                    // contentStream.newLineAtOffset(0, -15); // Move to next line
+                                    // yPosition -= 20;
+                                    // contentStream.newLineAtOffset(0, -20); // Move to next line
                                     contentStream.showText("No Files Uploaded.");
                                 }
 
                                 List<CaseFile> jj = caseForSlot.getJudgements();
                                 if (!jj.isEmpty()) {
-                                    yPosition -= 15;
-                                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                                    yPosition -= 20;
+                                    contentStream.newLineAtOffset(0, -20); // Move to next line
                                     contentStream.showText("Case Judgements: ");
                                     for (CaseFile file : jj) {
                                         contentStream.newLineAtOffset(15, -15); // Indent each judgment file name
@@ -738,24 +749,25 @@ public class ITAdmin extends User {
                                         contentStream.newLineAtOffset(-15, 0); // Reset indentation
                                     }
                                 } else {
-                                    // yPosition -= 15;
-                                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                                    // yPosition -= 20;
+                                    contentStream.newLineAtOffset(0, -20); // Move to next line
                                     contentStream.showText("No Judgements Uploaded.");
                                 }
-                                yPosition -= 15;
+                                yPosition -= 20;
 
-                                contentStream.newLineAtOffset(0, -15); // Move to next line
+                                contentStream.newLineAtOffset(0, -20); // Move to next line
                                 contentStream.showText("Lawyer ID: " + caseForSlot.getLawyerId());
-                                yPosition -= 15;
+                                yPosition -= 20;
                             }
                         }
                     }
                 } else {
-                    contentStream.newLineAtOffset(0, -15); // Move to next line
+                    contentStream.newLineAtOffset(0, -20); // Move to next line
                     contentStream.showText("No Assigned Cases");
                     yPosition -= 20;
                 }
 
+                contentStream.newLineAtOffset(-30, 0);
                 contentStream.endText(); // End the current text block
                 contentStream.close(); // Close the current content stream
                 page = new PDPage(); // Create a new page

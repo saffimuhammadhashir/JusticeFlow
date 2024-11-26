@@ -521,7 +521,6 @@ public class CourtsManagementSystem extends Application {
         // i.CaseReport(AllCases, AllSlot,stage,scanner);
     }
 
-
     public void displayCaseFiles(Stage stage, GUI_Menu gui, Scanner scanner) {
         String hardcodedPath = "report/case_report"; // Replace with your hardcoded path
         File folder = new File(hardcodedPath);
@@ -624,7 +623,6 @@ public class CourtsManagementSystem extends Application {
         stage.show();
     }
     
-
     public void displayLawyerFiles(Stage stage, GUI_Menu gui, Scanner scanner) {
         String hardcodedPath = "report/Lawyer_report"; // Replace with your hardcoded path
         File folder = new File(hardcodedPath);
@@ -727,7 +725,6 @@ public class CourtsManagementSystem extends Application {
         stage.show();
     }
     
-    
     public void displayJudgeFiles(Stage stage, GUI_Menu gui, Scanner scanner) {
         String hardcodedPath = "report/Judge_report"; // Replace with your hardcoded path
         File folder = new File(hardcodedPath);
@@ -829,7 +826,6 @@ public class CourtsManagementSystem extends Application {
         stage.setScene(scene);
         stage.show();
     }
-    
     
     public void CaseReport(Scanner scanner, Stage primaryStage,GUI_Menu gui) {
         // Method to handle scheduling IT system maintenance
@@ -2353,7 +2349,7 @@ public class CourtsManagementSystem extends Application {
                             + "-fx-background-size: stretch; "
                             + "-fx-background-position: center center; "
                             + "-fx-background-repeat: no-repeat; "
-                            + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); "
+                            + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); "
                             + "-fx-background-color: rgba(0, 0, 0, 0.35); "
                             + "-fx-blur: 8px; "
                             + "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 40, 0.4, 0, 25); ");
@@ -2374,23 +2370,23 @@ public class CourtsManagementSystem extends Application {
                             """);
 
             // Main layout (Larger rounded corners with gradient and shadow)
-            layout.setStyle(
-                    """
-                                    -fx-alignment: center;
-                                    -fx-spacing: 30px;
-                                    -fx-background-size: cover;
-                                    -fx-background-position: center center;
-                                    -fx-background-radius: 30px;
-                                    -fx-border-radius: 30px;
+            // layout.setStyle(
+            //         """
+            //                         -fx-alignment: center;
+            //                         -fx-spacing: 30px;
+            //                         -fx-background-size: cover;
+            //                         -fx-background-position: center center;
+            //                         -fx-background-radius: 30px;
+            //                         -fx-border-radius: 30px;
 
-                                    -fx-border-color: rgba(255, 255, 255, 0.4);
-                                    -fx-border-width: 3px;
-                                    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 25, 0.1, 0, 20);
-                                    -fx-background-color: rgba(0, 0, 0, 0.55);
-                                    -fx-blur: 10px;
-                                    -fx-transition: all 0.5s ease-in-out;
-                                    -fx-background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.3));
-                            """);
+            //                         -fx-border-color: rgba(255, 255, 255, 0.4);
+            //                         -fx-border-width: 3px;
+            //                         -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 25, 0.1, 0, 20);
+            //                         -fx-background-color: rgba(0, 0, 0, 0.55);
+            //                         -fx-blur: 10px;
+            //                         -fx-transition: all 0.5s ease-in-out;
+            //                         -fx-background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.3));
+            //                 """);
 
             // Create the outer HBox layout
             HBox mainLayout = new HBox();
@@ -2405,7 +2401,7 @@ public class CourtsManagementSystem extends Application {
             leftLayout.setBackground(new Background(
                     new BackgroundImage(
                             new Image(
-                                    "file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/2.png"),
+                                    "file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/2.png"),
                             BackgroundRepeat.NO_REPEAT,
                             BackgroundRepeat.NO_REPEAT,
                             BackgroundPosition.CENTER,
@@ -2471,7 +2467,7 @@ public class CourtsManagementSystem extends Application {
                     + "-fx-border-radius: 15px; "
                     + "-fx-border-color: #e0e0e0; "
                     + "-fx-border-width: 0px;"
-                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
+                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
                     + "-fx-background-size: cover; " // Ensures the image covers the entire area
                     + "-fx-background-position: center center; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
@@ -2697,7 +2693,7 @@ public class CourtsManagementSystem extends Application {
             VBox layout = new VBox(25); // Vertical box layout with spacing of 25
             layout.setStyle("-fx-padding:0px 300px;"
                     + " -fx-alignment: center;"
-                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
+                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
                     + "-fx-background-size: cover; " // Ensures the image covers the entire area
                     + "-fx-background-position: center center; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
@@ -2832,7 +2828,7 @@ public class CourtsManagementSystem extends Application {
         layout.setStyle("-fx-padding: 50px; "
                 + "-fx-alignment: center; "
                 + "-fx-fill-width: true; "
-                + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/awesome%207.jpg');"
+                + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/awesome%207.jpg');"
                 + "-fx-background-size: cover; " // Ensures the image covers the entire area
                 + "-fx-background-position: center center; " // Centers the image
                 + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image

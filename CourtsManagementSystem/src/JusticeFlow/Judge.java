@@ -226,7 +226,23 @@ public class Judge extends User {
                     if (selectedFile != null) {
                         try {
                             String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
-                            CaseFile judgmentFile = new CaseFile(selectedFile.getAbsolutePath(), fileHash, 2);
+
+                            File storageDirectory = new File("File Storage");
+                            if (!storageDirectory.exists()) {
+                                storageDirectory.mkdirs();
+                            }
+
+                            String folderName = cases.getCaseID() + "_" + cases.getCaseTitle();
+                            File caseDirectory = new File(storageDirectory, folderName);
+                            if (!caseDirectory.exists()) {
+                                caseDirectory.mkdirs();
+                            }
+
+                            File destinationFile = new File(caseDirectory, selectedFile.getName());
+                            fileHandler.copyFile(selectedFile.getAbsolutePath(), destinationFile.getAbsolutePath());
+
+                            CaseFile judgmentFile = new CaseFile(destinationFile.getAbsolutePath(),
+                                    fileHandler.getFileHash(destinationFile.getAbsolutePath()), 2);
                             cases.addJudgement(judgmentFile);
 
                             DatabaseHandler dbHandler = new DatabaseHandler();
@@ -238,6 +254,7 @@ public class Judge extends User {
                             successLabel
                                     .setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight: bold;");
                             mainLayout.getChildren().add(successLabel);
+                            primaryStage.setScene(previousScene);
 
                         } catch (IOException | NoSuchAlgorithmException ex) {
                             ex.printStackTrace();
@@ -620,8 +637,9 @@ public class Judge extends User {
             });
 
             approveButton2.setOnAction(e -> {
-              
-                cases.viewCaseDetailsJudge(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges, AllLawyers, AllWitnesses, AllCourts, primaryStage, gui, system);
+
+                cases.viewCaseDetailsJudge(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges,
+                        AllLawyers, AllWitnesses, AllCourts, primaryStage, gui, system);
                 // dbHandler.saveOrUpdateCase(cases);
 
             });
@@ -634,7 +652,7 @@ public class Judge extends User {
             GridPane.setMargin(rejectButton, new Insets(10, 10, 10, 0));
 
             // Add buttons to the GridPane
-            eachCase.getChildren().addAll(approveButton2,approveButton, rejectButton);
+            eachCase.getChildren().addAll(approveButton2, approveButton, rejectButton);
 
             // Add the GridPane to the formLayout
             formLayout.getChildren().add(eachCase);

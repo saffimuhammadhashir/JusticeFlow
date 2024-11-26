@@ -225,16 +225,31 @@ public class ProbationOfficer extends User {
                     File selectedFile = fileHandler.openFileDialog();
                     if (selectedFile != null) {
                         try {
-                            // Generate file hash
                             String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
 
-                            CaseFile my_file = new CaseFile(selectedFile.getAbsolutePath(), fileHash);
+                            File storageDirectory = new File("File Storage");
+                            if (!storageDirectory.exists()) {
+                                storageDirectory.mkdirs();
+                            }
+
+                            String folderName = cases.getCaseID() + "_" + cases.getCaseTitle();
+                            File caseDirectory = new File(storageDirectory, folderName);
+                            if (!caseDirectory.exists()) {
+                                caseDirectory.mkdirs();
+                            }
+
+                            File destinationFile = new File(caseDirectory, selectedFile.getName());
+                            fileHandler.copyFile(selectedFile.getAbsolutePath(), destinationFile.getAbsolutePath());
+
+                            CaseFile my_file = new CaseFile(destinationFile.getAbsolutePath(),
+                                    fileHandler.getFileHash(destinationFile.getAbsolutePath()), 0);
+                            
                             cases.addFile(my_file);
                             System.out.println("File added to case, waiting for Registrar to approve.");
 
                             // // Update the database with file details
                             DatabaseHandler dbHandler = new DatabaseHandler();
-                            dbHandler.saveFileDetails(cases.getCaseID(), selectedFile.getAbsolutePath(), fileHash,
+                            dbHandler.saveFileDetails(cases.getCaseID(), destinationFile.getAbsolutePath(), fileHandler.getFileHash(destinationFile.getAbsolutePath()),
                                     false);
                             System.out.println("File Added in Database.");
 
@@ -243,6 +258,7 @@ public class ProbationOfficer extends User {
                                     "File submitted successfully! Waiting for Registrar approval.");
                             successLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight:bold;");
                             mainLayout.getChildren().add(successLabel);
+                            primaryStage.setScene(previousScene);
 
                         } catch (IOException | NoSuchAlgorithmException ex) {
                             ex.printStackTrace();

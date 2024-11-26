@@ -469,12 +469,22 @@ public class Lawyer extends User {
         for (Witness w : AllWitnesses) {
 
             boolean exists = false;
-            for (Slot s : AllSlots) {
-                if (s.getCaseID() != null) {
-                    if (s.getWitnessID() != null) {
-                        if (s.getCaseID() == cases.getCaseID() && s.getWitnessID() == w.getWitnessID()) {
-                            exists = true;
-                        }
+            // for (Slot s : AllSlots) {
+            // if (s.getCaseID() != null) {
+            // if (s.getWitnessID() != null) {
+            // if (s.getCaseID() == cases.getCaseID() && s.getWitnessID() ==
+            // w.getWitnessID()) {
+            // exists = true;
+            // }
+            // }
+            // }
+            // }
+            List<Integer> l = dbHandler.getCase_Witnesses(cases.getCaseID());
+            if (l.isEmpty() == false) {
+                for (Integer witnessID : l) {
+                    if (witnessID.equals(w.getWitnessID())) {
+                        exists = true;
+                        break;
                     }
                 }
             }
@@ -539,6 +549,8 @@ public class Lawyer extends User {
                             dbHandler.updateWitness(w, s);
                             s.setWitnessID(w.getWitnessID());
                             dbHandler.updateOrInsertSlots(AllSlots);
+                            // Add the GridPane to the formLayout
+                            formLayout.getChildren().remove(eachCase);
                         }
                     } catch (NumberFormatException ex) {
                         Label invalidInputLabel = new Label("Invalid input for Witness Number.");
@@ -660,16 +672,31 @@ public class Lawyer extends User {
                     File selectedFile = fileHandler.openFileDialog();
                     if (selectedFile != null) {
                         try {
-                            // Generate file hash
                             String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
 
-                            CaseFile my_file = new CaseFile(selectedFile.getAbsolutePath(), fileHash);
+                            File storageDirectory = new File("File Storage");
+                            if (!storageDirectory.exists()) {
+                                storageDirectory.mkdirs();
+                            }
+
+                            String folderName = cases.getCaseID() + "_" + cases.getCaseTitle();
+                            File caseDirectory = new File(storageDirectory, folderName);
+                            if (!caseDirectory.exists()) {
+                                caseDirectory.mkdirs();
+                            }
+
+                            File destinationFile = new File(caseDirectory, selectedFile.getName());
+                            fileHandler.copyFile(selectedFile.getAbsolutePath(), destinationFile.getAbsolutePath());
+
+                            CaseFile my_file = new CaseFile(destinationFile.getAbsolutePath(),
+                                    fileHandler.getFileHash(destinationFile.getAbsolutePath()), 0);
+
                             cases.addFile(my_file);
                             System.out.println("File added to case, waiting for Registrar to approve.");
 
                             // // Update the database with file details
                             DatabaseHandler dbHandler = new DatabaseHandler();
-                            dbHandler.saveFileDetails(cases.getCaseID(), selectedFile.getAbsolutePath(), fileHash,
+                            dbHandler.saveFileDetails(cases.getCaseID(), destinationFile.getAbsolutePath(), fileHandler.getFileHash(destinationFile.getAbsolutePath()),
                                     false);
                             System.out.println("File Added in Database.");
 
@@ -678,6 +705,7 @@ public class Lawyer extends User {
                                     "File submitted successfully! Waiting for Registrar approval.");
                             successLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px; -fx-font-weight:bold;");
                             mainLayout.getChildren().add(successLabel);
+                            primaryStage.setScene(previousScene);
 
                         } catch (IOException | NoSuchAlgorithmException ex) {
                             ex.printStackTrace();
@@ -758,7 +786,7 @@ public class Lawyer extends User {
 
         // Iterate over all cases and add only lawyer's cases
         for (Case cases : AllCases) {
-            if (cases.getLawyerId() == lawyerID&&cases.getCaseStatus().equalsIgnoreCase("Opened")) {
+            if (cases.getLawyerId() == lawyerID && cases.getCaseStatus().equalsIgnoreCase("Opened")) {
 
                 // Create a GridPane for each case
                 GridPane eachCase = new GridPane();
@@ -1348,7 +1376,6 @@ public class Lawyer extends User {
         primaryStage.show();
     }
 
-
     public void Re_OpenCase(List<Case> AllCases, FileHandler fileHandler, DatabaseHandler dbHandler, Stage primaryStage,
             Scene previousScene) {
         // Title Label
@@ -1425,6 +1452,7 @@ public class Lawyer extends User {
                 approveButton.setOnAction(e -> {
                     cases.setCaseStatus("Appeal");
                     dbHandler.saveOrUpdateCase(cases);
+                    formLayout.getChildren().remove(eachCase);
                     System.out.println("Case Status set to Appeal in Database");
                 });
 
@@ -1453,22 +1481,19 @@ public class Lawyer extends User {
         primaryStage.setScene(registerScene);
         primaryStage.show();
     }
+
     public void TrackCase(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
             List<Slot> AllSlots, List<Clients> allclients, List<Judge> AllJudges, List<Lawyer> AllLawyers,
             List<Witness> AllWitnesses, List<Court> AllCourts,
             Stage primaryStage, GUI_Menu gui, CourtsManagementSystem system) {
         List<Case> PendingCases = new ArrayList<>();
 
-
-
-        List<Case> Lawyercases=new ArrayList<>();
-        for(Case c:AllCases){
-            if(c.getLawyerId()==this.lawyerID){
+        List<Case> Lawyercases = new ArrayList<>();
+        for (Case c : AllCases) {
+            if (c.getLawyerId() == this.lawyerID) {
                 Lawyercases.add(c);
             }
         }
-
-
 
         // Title Label
         Label titleLabel = new Label("Track Cases to be Managed");
@@ -1546,13 +1571,15 @@ public class Lawyer extends User {
                             "-fx-border-radius: 8px; " +
                             "-fx-background-radius: 8px;");
             approveButton.setOnAction(e -> {
-                cases.DisplayDetailsLawyer(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges, AllLawyers,
+                cases.DisplayDetailsLawyer(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges,
+                        AllLawyers,
                         AllWitnesses, AllCourts,
                         primaryStage, gui, system);
 
             });
             rejectButton.setOnAction(e -> {
-                cases.displayWitnesseslawyer(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges, AllLawyers, AllWitnesses, AllCourts, primaryStage, gui, system, cases);
+                cases.displayWitnesseslawyer(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges,
+                        AllLawyers, AllWitnesses, AllCourts, primaryStage, gui, system, cases);
 
             });
             // Add spacing and alignment for buttons

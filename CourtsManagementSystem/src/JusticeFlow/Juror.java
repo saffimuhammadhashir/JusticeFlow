@@ -224,15 +224,29 @@ public class Juror extends User {
                     File selectedFile = fileHandler.openFileDialog();
                     if (selectedFile != null) {
                         try {
-                            // Generate file hash
                             String fileHash = fileHandler.getFileHash(selectedFile.getAbsolutePath());
 
-                            CaseFile my_file = new CaseFile(selectedFile.getAbsolutePath(), fileHash,2);
-                            cases.addJudgement(my_file);
+                            File storageDirectory = new File("File Storage");
+                            if (!storageDirectory.exists()) {
+                                storageDirectory.mkdirs();
+                            }
+
+                            String folderName = cases.getCaseID() + "_" + cases.getCaseTitle();
+                            File caseDirectory = new File(storageDirectory, folderName);
+                            if (!caseDirectory.exists()) {
+                                caseDirectory.mkdirs();
+                            }
+
+                            File destinationFile = new File(caseDirectory, selectedFile.getName());
+                            fileHandler.copyFile(selectedFile.getAbsolutePath(), destinationFile.getAbsolutePath());
+
+                            CaseFile judgmentFile = new CaseFile(destinationFile.getAbsolutePath(),
+                                    fileHandler.getFileHash(destinationFile.getAbsolutePath()), 2);
+                            cases.addJudgement(judgmentFile);
                             System.out.println("Judgement added to case, waiting for Registrar to approve.");
 
                             DatabaseHandler dbHandler = new DatabaseHandler();
-                        dbHandler.addJudgement(cases.getCaseID(), my_file.getFileName(), my_file.getFileHash(), 2);
+                        dbHandler.addJudgement(cases.getCaseID(), judgmentFile.getFileName(), judgmentFile.getFileHash(), 2);
 
                             System.out.println("Judgement Added in Database.");
 
@@ -252,6 +266,7 @@ public class Juror extends User {
                         Label noFileLabel = new Label("No file selected.");
                         noFileLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
                         mainLayout.getChildren().add(noFileLabel);
+                        primaryStage.setScene(previousScene);
                     }
 
                 });

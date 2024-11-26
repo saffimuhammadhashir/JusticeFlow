@@ -465,6 +465,8 @@ public class Slot {
             List<Witness> AllWitnesses, Case cases, DatabaseHandler dbHandler,
             Stage primaryStage, GUI_Menu gui, CourtsManagementSystem system) {
 
+        Scene previousScene = primaryStage.getScene();
+        
         for (Slot s : AllSlot) {
             System.out.println(s.toString());
         }
@@ -599,6 +601,7 @@ public class Slot {
                 dbHandler.saveOrUpdateCase(cases);
                 // system.ReviewUpcomingCaseRequests(primaryStage, gui);
                 System.out.println("New slot scheduled: " + newSlot);
+                primaryStage.setScene(previousScene);
             }
         });
 
@@ -785,6 +788,7 @@ public class Slot {
                         AllJudges, allLawyers, AllWitnesses, AllCourt,
                         primaryStage, gui, system);
                 System.out.println("New slot scheduled: " + newSlot);
+                
             }
         });
         rejectButton.setOnAction(e -> cases.displaySchedules(dbHandler, fileHandler, allCases, AllSlot, allclients,

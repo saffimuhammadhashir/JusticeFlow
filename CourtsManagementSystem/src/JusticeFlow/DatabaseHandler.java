@@ -29,7 +29,7 @@ import com.mysql.cj.xdevapi.Client;
 public class DatabaseHandler {
     private String url = "jdbc:mysql://localhost:3306/sda_project?useSSL=false";
     private final String dbUsername = "root";
-    private final String dbPassword = "test12345";
+    private final String dbPassword = "12345678";
 
     public void getAllFiles(List<Case> AllCases) {
         // SQL query to retrieve all case files
@@ -84,6 +84,39 @@ public class DatabaseHandler {
             }
         }
         return null; // Return null if no matching CaseID is found
+    }
+
+    public List<Integer> getCase_Witnesses(int caseID) {
+        // SQL query to retrieve witness IDs for the given case ID
+        String query = "SELECT WitnessID FROM WitnessTable WHERE CaseID = " + caseID;
+    
+        // Initialize the list to store witness IDs
+        List<Integer> witnessList = new ArrayList<>();
+    
+        // Use try-with-resources to ensure proper closing of resources
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+    
+            // Process the result set and add witness IDs to the list
+            while (resultSet.next()) {
+                int witnessID = resultSet.getInt("WitnessID"); // Retrieve the WitnessID from the current row
+                witnessList.add(witnessID); // Add it to the list
+            }
+    
+            // Log a message if no witnesses were found
+            if (witnessList.isEmpty()) {
+                System.out.println("No witnesses found for Case ID: " + caseID);
+            }
+    
+        } catch (SQLException e) {
+            // Log the error message for debugging
+            System.err.println("Error retrieving witness data: " + e.getMessage());
+            e.printStackTrace();
+        }
+    
+        // Return the list of witnesses (empty if none were found)
+        return witnessList;
     }
 
     public User getUserById(int userID) {
@@ -831,62 +864,71 @@ public class DatabaseHandler {
     }
 
     // public void updateOrInsertSlots(List<Slot> allSlots) {
-    //     // SQL queries for update and insert
-    //     String updateQuery = "UPDATE slots SET dayName = ?, startTime = ?, endTime = ?, slotNumber = ?, caseID = ?, judgeID = ?, witnessID = ?, CourtId = ? WHERE slotID = ?";
-    //     String insertQuery = "INSERT INTO slots (slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID, CourtId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // // SQL queries for update and insert
+    // String updateQuery = "UPDATE slots SET dayName = ?, startTime = ?, endTime =
+    // ?, slotNumber = ?, caseID = ?, judgeID = ?, witnessID = ?, CourtId = ? WHERE
+    // slotID = ?";
+    // String insertQuery = "INSERT INTO slots (slotID, dayName, startTime, endTime,
+    // slotNumber, caseID, judgeID, witnessID, CourtId) VALUES (?, ?, ?, ?, ?, ?, ?,
+    // ?, ?)";
 
-    //     try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-    //             PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
-    //             PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+    // try (Connection connection = DriverManager.getConnection(url, dbUsername,
+    // dbPassword);
+    // PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
+    // PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
 
-    //         // Iterate through all slots to either update or insert
-    //         for (Slot slot : allSlots) {
-    //             // Check if the slot already exists (based on slotID)
-    //             if (doesSlotExist(slot.getSlotID(), connection)) {
-    //                 // If slot exists, update it
-    //                 updateStmt.setString(1, slot.getDayName().toString());
-    //                 updateStmt.setTime(2, Time.valueOf(slot.getStartTime())); // Convert LocalTime to java.sql.Time
-    //                 updateStmt.setTime(3, Time.valueOf(slot.getEndTime())); // Convert LocalTime to java.sql.Time
-    //                 updateStmt.setInt(4, slot.getSlotNumber());
-    //                 updateStmt.setObject(5, slot.getCaseID());
-    //                 updateStmt.setObject(6, slot.getCaseID() == null ? null : slot.getJudgeID());
-    //                 updateStmt.setObject(7, slot.getCaseID() == null ? null : slot.getWitnessID());
-    //                 updateStmt.setObject(8, slot.getCaseID() == null ? null : slot.getCourtId());
-    //                 updateStmt.setInt(9, slot.getSlotID()); // Set slotID for update
-    //                 updateStmt.executeUpdate(); // Execute the update statement
-    //             } else {
-    //                 // If slot does not exist, insert it
-    //                 insertStmt.setInt(1, slot.getSlotID());
-    //                 insertStmt.setString(2, slot.getDayName().toString());
-    //                 insertStmt.setTime(3, Time.valueOf(slot.getStartTime())); // Convert LocalTime to java.sql.Time
-    //                 insertStmt.setTime(4, Time.valueOf(slot.getEndTime())); // Convert LocalTime to java.sql.Time
-    //                 insertStmt.setInt(5, slot.getSlotNumber());
-    //                 insertStmt.setObject(6, slot.getCaseID());
-    //                 insertStmt.setObject(7, slot.getCaseID() == null ? null : slot.getJudgeID());
-    //                 insertStmt.setObject(8, slot.getCaseID() == null ? null : slot.getWitnessID());
-    //                 insertStmt.setObject(9, slot.getCaseID() == null ? null : slot.getCourtId());
-    //                 insertStmt.executeUpdate(); // Execute the insert statement
-    //             }
-    //         }
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //     }
+    // // Iterate through all slots to either update or insert
+    // for (Slot slot : allSlots) {
+    // // Check if the slot already exists (based on slotID)
+    // if (doesSlotExist(slot.getSlotID(), connection)) {
+    // // If slot exists, update it
+    // updateStmt.setString(1, slot.getDayName().toString());
+    // updateStmt.setTime(2, Time.valueOf(slot.getStartTime())); // Convert
+    // LocalTime to java.sql.Time
+    // updateStmt.setTime(3, Time.valueOf(slot.getEndTime())); // Convert LocalTime
+    // to java.sql.Time
+    // updateStmt.setInt(4, slot.getSlotNumber());
+    // updateStmt.setObject(5, slot.getCaseID());
+    // updateStmt.setObject(6, slot.getCaseID() == null ? null : slot.getJudgeID());
+    // updateStmt.setObject(7, slot.getCaseID() == null ? null :
+    // slot.getWitnessID());
+    // updateStmt.setObject(8, slot.getCaseID() == null ? null : slot.getCourtId());
+    // updateStmt.setInt(9, slot.getSlotID()); // Set slotID for update
+    // updateStmt.executeUpdate(); // Execute the update statement
+    // } else {
+    // // If slot does not exist, insert it
+    // insertStmt.setInt(1, slot.getSlotID());
+    // insertStmt.setString(2, slot.getDayName().toString());
+    // insertStmt.setTime(3, Time.valueOf(slot.getStartTime())); // Convert
+    // LocalTime to java.sql.Time
+    // insertStmt.setTime(4, Time.valueOf(slot.getEndTime())); // Convert LocalTime
+    // to java.sql.Time
+    // insertStmt.setInt(5, slot.getSlotNumber());
+    // insertStmt.setObject(6, slot.getCaseID());
+    // insertStmt.setObject(7, slot.getCaseID() == null ? null : slot.getJudgeID());
+    // insertStmt.setObject(8, slot.getCaseID() == null ? null :
+    // slot.getWitnessID());
+    // insertStmt.setObject(9, slot.getCaseID() == null ? null : slot.getCourtId());
+    // insertStmt.executeUpdate(); // Execute the insert statement
     // }
-
-
+    // }
+    // } catch (SQLException e) {
+    // e.printStackTrace();
+    // }
+    // }
 
     public void updateOrInsertSlots(List<Slot> allSlots) {
         // SQL queries for deletion and insertion
         String deleteQuery = "DELETE FROM slots";
         String insertQuery = "INSERT INTO slots ( dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID, CourtId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    
+
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-             Statement deleteStmt = connection.createStatement();
-             PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
-    
+                Statement deleteStmt = connection.createStatement();
+                PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+
             // Step 1: Delete all existing entries
             deleteStmt.executeUpdate(deleteQuery);
-    
+
             // Step 2: Reinsert all slots from the provided list
             for (Slot slot : allSlots) {
 
@@ -900,12 +942,11 @@ public class DatabaseHandler {
                 insertStmt.setObject(8, slot.getCaseID() == null ? null : slot.getCourtId());
                 insertStmt.executeUpdate(); // Execute the insert statement
             }
-    
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
 
     // Assume you have a method to check if a slot exists in the database based on
     // slotID
@@ -1173,25 +1214,25 @@ public class DatabaseHandler {
 
     public boolean saveFileDetailssecure(int caseID, String fileName, String fileHash, boolean status) {
         String insertSQL = "INSERT INTO CaseFiles (CaseID, FileName, FileHash, status) VALUES (?, ?, ?, ?)";
-        
+
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-             PreparedStatement insertStatement = connection.prepareStatement(insertSQL)) {
-    
+                PreparedStatement insertStatement = connection.prepareStatement(insertSQL)) {
+
             // Check if the connection is successful
             if (connection == null) {
                 System.out.println("Connection failed!");
                 return false;
             }
-    
+
             // Set values for the prepared statement
             insertStatement.setInt(1, caseID);
             insertStatement.setString(2, fileName);
             insertStatement.setString(3, fileHash);
             insertStatement.setInt(4, status ? 1 : 0); // Set status as 1 for true, 0 for false
-    
+
             // Execute the insert operation
             int rowsAffected = insertStatement.executeUpdate();
-    
+
             // Check if the insert was successful
             if (rowsAffected > 0) {
                 System.out.println("File details saved successfully!");
@@ -1200,7 +1241,7 @@ public class DatabaseHandler {
                 System.out.println("Failed to save file details.");
                 return false;
             }
-    
+
         } catch (SQLException e) {
             // Log the exception and return false if there was an SQL error
             System.err.println("Error executing SQL query: " + e.getMessage());
@@ -1400,38 +1441,38 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
-   
+
     public void deleteWitness(Witness w, int id) {
         // Update SQL query to delete the relevant entries
         String deleteSQL = "DELETE FROM WitnessTable WHERE CaseId = ? AND WitnessID = ?";
-    
+
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-             PreparedStatement deleteStatement = connection.prepareStatement(deleteSQL)) {
-    
+                PreparedStatement deleteStatement = connection.prepareStatement(deleteSQL)) {
+
             // Check if the connection is valid (optional)
             if (connection != null) {
                 System.out.println("Connection successful!");
             }
-    
+
             // Set the values for the prepared statement
             deleteStatement.setInt(1, id); // CaseID
             deleteStatement.setInt(2, w.getWitnessID()); // WitnessID
-    
+
             // Execute the delete query
             int rowsAffected = deleteStatement.executeUpdate();
-    
+
             // Check if the deletion was successful
             if (rowsAffected > 0) {
                 System.out.println("Witness's Cases deleted successfully!");
             } else {
                 System.out.println("No matching record found to delete.");
             }
-    
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
+
     public void updateOrCreateNotification(Notification notification) {
         String checkQuery = "SELECT COUNT(*) AS count FROM Notifications WHERE NotificationID = ?";
         String updateQuery = "UPDATE Notifications SET CaseID = ?, RecipientsID = ?, SenderID = ?, SenderType = ?, Notification = ? WHERE NotificationID = ?";
