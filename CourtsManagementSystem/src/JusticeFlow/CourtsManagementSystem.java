@@ -103,7 +103,7 @@ public class CourtsManagementSystem extends Application {
             dbHandler.getAllSlots(AllSlot);
             dbHandler.getWitnessData(AllWitnesses);
             dbHandler.getAllBarApplications(AllBarApplications);
-            Slot.manageslot(AllSlot, dbHandler);
+            // Slot.manageslot(AllSlot, dbHandler);
 
         } else {
             System.out.println("DatabaseHandler is not initialized!");
@@ -400,7 +400,7 @@ public class CourtsManagementSystem extends Application {
         } else if ("Registrar".equalsIgnoreCase(role)) {
             Registrar r = user.getRelevantRegistrar(AllRegistrar, user);
             if (r != null) {
-                r.RegistertoBar(AllBarAssociations, AllBarApplications, dbHandler, primaryStage, gui,this);
+                r.RegistertoBar(AllBarAssociations, AllBarApplications, dbHandler, primaryStage, gui, this);
             } else {
                 System.out.println("Invalid Userr!");
             }
@@ -629,7 +629,7 @@ public class CourtsManagementSystem extends Application {
         stage.setScene(scene);
         stage.show();
     }
-    
+
     public void displayLawyerFiles(Stage stage, GUI_Menu gui, Scanner scanner) {
         String hardcodedPath = "report/Lawyer_report"; // Replace with your hardcoded path
         File folder = new File(hardcodedPath);
@@ -737,7 +737,7 @@ public class CourtsManagementSystem extends Application {
         stage.setScene(scene);
         stage.show();
     }
-    
+
     public void displayJudgeFiles(Stage stage, GUI_Menu gui, Scanner scanner) {
         String hardcodedPath = "report/Judge_report"; // Replace with your hardcoded path
         File folder = new File(hardcodedPath);
@@ -849,7 +849,6 @@ public class CourtsManagementSystem extends Application {
     public void CaseReport(Scanner scanner, Stage primaryStage, GUI_Menu gui) {
         // Method to handle scheduling IT system maintenance
 
-        loadData();
         ITAdmin ii = new ITAdmin();
         ii.CaseReport(AllCases, AllSlot, primaryStage, scanner, gui, this);
 
@@ -903,7 +902,6 @@ public class CourtsManagementSystem extends Application {
     public void LawyerReport(Scanner scanner, Stage primaryStage, GUI_Menu gui) {
         // Method to handle scheduling IT system maintenance
 
-        loadData();
         ITAdmin ii = new ITAdmin();
         ii.LawyerReport(AllCases, AllSlot, AllLawyers, primaryStage, scanner, gui, this);
 
@@ -958,7 +956,6 @@ public class CourtsManagementSystem extends Application {
     public void JudgeReport(Scanner scanner, Stage primaryStage, GUI_Menu gui) {
         // Method to handle scheduling IT system maintenance
 
-        loadData();
         ITAdmin ii = new ITAdmin();
         ii.JudgeReport(AllCases, AllSlot, AllJudges, primaryStage, scanner, gui, this);
 
@@ -1120,7 +1117,7 @@ public class CourtsManagementSystem extends Application {
                             System.out.println("Case has been successfully updated.");
                         } else {
                             Clients clients = new Clients();
-                            clients = clients.getRelevantClients(AllClients,user);
+                            clients = clients.getRelevantClients(AllClients, user);
                             if (clients != null) {
                                 clients.TrackCase(dbHandler, fileHandler, AllCases, AllSlot, AllClients, AllJudges,
                                         AllLawyers,
@@ -2391,7 +2388,7 @@ public class CourtsManagementSystem extends Application {
                             + "-fx-background-size: stretch; "
                             + "-fx-background-position: center center; "
                             + "-fx-background-repeat: no-repeat; "
-                            + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); "
+                            + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); "
                             + "-fx-background-color: rgba(0, 0, 0, 0.35); "
                             + "-fx-blur: 8px; "
                             + "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 40, 0.4, 0, 25); ");
@@ -2412,23 +2409,23 @@ public class CourtsManagementSystem extends Application {
                             """);
 
             // Main layout (Larger rounded corners with gradient and shadow)
-            // layout.setStyle(
-            //         """
-            //                         -fx-alignment: center;
-            //                         -fx-spacing: 30px;
-            //                         -fx-background-size: cover;
-            //                         -fx-background-position: center center;
-            //                         -fx-background-radius: 30px;
-            //                         -fx-border-radius: 30px;
+            layout.setStyle(
+                    """
+                                    -fx-alignment: center;
+                                    -fx-spacing: 30px;
+                                    -fx-background-size: cover;
+                                    -fx-background-position: center center;
+                                    -fx-background-radius: 30px;
+                                    -fx-border-radius: 30px;
 
-            //                         -fx-border-color: rgba(255, 255, 255, 0.4);
-            //                         -fx-border-width: 3px;
-            //                         -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 25, 0.1, 0, 20);
-            //                         -fx-background-color: rgba(0, 0, 0, 0.55);
-            //                         -fx-blur: 10px;
-            //                         -fx-transition: all 0.5s ease-in-out;
-            //                         -fx-background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.3));
-            //                 """);
+                                    -fx-border-color: rgba(255, 255, 255, 0.4);
+                                    -fx-border-width: 3px;
+                                    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 25, 0.1, 0, 20);
+                                    -fx-background-color: rgba(0, 0, 0, 0.55);
+                                    -fx-blur: 10px;
+                                    -fx-transition: all 0.5s ease-in-out;
+                                    -fx-background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.3));
+                            """);
 
             // Create the outer HBox layout
             HBox mainLayout = new HBox();
@@ -2443,7 +2440,7 @@ public class CourtsManagementSystem extends Application {
             leftLayout.setBackground(new Background(
                     new BackgroundImage(
                             new Image(
-                                    "file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/2.png"),
+                                    "file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/2.png"),
                             BackgroundRepeat.NO_REPEAT,
                             BackgroundRepeat.NO_REPEAT,
                             BackgroundPosition.CENTER,
@@ -2501,108 +2498,149 @@ public class CourtsManagementSystem extends Application {
         }
 
         public void Register() {
-            // Main VBox layout with minimal padding and light background
+            // Main layout with a light background and centered alignment
             VBox layout = new VBox(20);
             layout.setStyle("-fx-alignment: center; "
+                    + "-fx-padding: 20px; "
+                    + "-fx-border-color: #e0e0e0; "
+                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
+                    + "-fx-background-size: cover; "
+                    + "-fx-background-position: center center; "
+                    + "-fx-background-repeat: no-repeat;");
+
+            VBox layout1 = new VBox(20);
+            layout1.setStyle("-fx-alignment: center; "
                     + "-fx-padding: 20px; "
                     + "-fx-background-radius: 15px; "
                     + "-fx-border-radius: 15px; "
                     + "-fx-border-color: #e0e0e0; "
-                    + "-fx-border-width: 0px;"
-                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
-                    + "-fx-background-size: cover; " // Ensures the image covers the entire area
-                    + "-fx-background-position: center center; " // Centers the image
-                    + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
-            // Title Label with modern font style
+                    + "-fx-background-color: rgba(0,0,0,0.3); "
+                 );
+
+            // Title label
             Label titleLabel = new Label("Register a New User");
             titleLabel.setStyle(
                     "-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #f0f0f0; -fx-padding: 10px 0;");
 
-            // Input Fields with a fixed width and minimal style
-            TextField usernameField = new TextField();
-            usernameField.setPromptText("Enter username");
-            usernameField.setStyle(BASE_STYLE);
-            usernameField.setMaxWidth(300);
+            // GridPane for form layout
+            GridPane formGrid = new GridPane();
+            formGrid.setStyle("-fx-padding: 20px; -fx-background-color: rgba(0,0,0,1.0); -fx-background-radius: 10px;");
+            formGrid.setHgap(15);
+            formGrid.setVgap(10);
+            formGrid.setAlignment(Pos.CENTER);
 
-            PasswordField passwordField = new PasswordField();
-            passwordField.setPromptText("Enter password");
-            passwordField.setStyle(BASE_STYLE);
-            passwordField.setMaxWidth(300);
-
-            TextField emailField = new TextField();
-            emailField.setPromptText("Enter email");
-            emailField.setStyle(BASE_STYLE);
-            emailField.setMaxWidth(300);
-
+            // Input fields and labels
+            Label firstNameLabel = new Label("First Name:");
+            firstNameLabel.setStyle("-fx-text-fill: white;-fx-font-size: 20px;"); // White font color
             TextField firstNameField = new TextField();
             firstNameField.setPromptText("Enter first name");
             firstNameField.setStyle(BASE_STYLE);
-            firstNameField.setMaxWidth(300);
 
+            Label lastNameLabel = new Label("Last Name:");
+            lastNameLabel.setStyle("-fx-text-fill: white;-fx-font-size: 20px;"); // White font color
             TextField lastNameField = new TextField();
             lastNameField.setPromptText("Enter last name");
             lastNameField.setStyle(BASE_STYLE);
-            lastNameField.setMaxWidth(300);
 
+            Label emailLabel = new Label("Email:");
+            emailLabel.setStyle("-fx-text-fill: white;-fx-font-size: 20px;"); // White font color
+            TextField emailField = new TextField();
+            emailField.setPromptText("Enter email ");
+            emailField.setStyle(BASE_STYLE);
+
+            Label phoneLabel = new Label("Phone Number:");
+            phoneLabel.setStyle("-fx-text-fill: white;-fx-font-size: 14px;"); // White font color
+            TextField phoneNumberField = new TextField();
+            phoneNumberField.setPromptText("Enter phone number");
+            phoneNumberField.setStyle(BASE_STYLE);
+
+            Label usernameLabel = new Label("Username:");
+            usernameLabel.setStyle("-fx-text-fill: white;-fx-font-size: 20px;"); // White font color
+            TextField usernameField = new TextField();
+            usernameField.setPromptText("Enter username");
+            usernameField.setStyle(BASE_STYLE);
+
+            Label passwordLabel = new Label("Password:");
+            passwordLabel.setStyle("-fx-text-fill: white;-fx-font-size: 20px;"); // White font color
+            PasswordField passwordField = new PasswordField();
+            passwordField.setPromptText("Enter password");
+            passwordField.setStyle(BASE_STYLE);
+
+            Label dobLabel = new Label("Date of Birth:");
+            dobLabel.setStyle("-fx-text-fill: white;-fx-font-size: 20px;"); // White font color
             DatePicker dateOfBirthPicker = new DatePicker();
             dateOfBirthPicker.setPromptText("Select date of birth");
             dateOfBirthPicker.setStyle(BASE_STYLE);
-            dateOfBirthPicker.setMaxWidth(300);
 
+            Label genderLabel = new Label("Gender:");
+            genderLabel.setStyle("-fx-text-fill: white;-fx-font-size: 20px;"); // White font color
             ComboBox<String> genderComboBox = new ComboBox<>();
             genderComboBox.getItems().addAll("Male", "Female", "Other");
             genderComboBox.setPromptText("Select gender");
             genderComboBox.setStyle(BASE_STYLE);
-            genderComboBox.setMaxWidth(300);
 
-            TextField phoneNumberField = new TextField();
-            phoneNumberField.setPromptText("Enter phone number");
-            phoneNumberField.setStyle(BASE_STYLE);
-            phoneNumberField.setMaxWidth(300);
-
+            Label roleLabel = new Label("Role:");
+            roleLabel.setStyle("-fx-text-fill: white;-fx-font-size: 20px;"); // White font color
             ComboBox<String> roleComboBox = new ComboBox<>();
             roleComboBox.getItems().addAll("Judge", "Lawyer", "Clerk", "Court Administrator", "Registrar",
                     "Probation Officer", "Client", "Witness", "Juror");
             roleComboBox.setPromptText("Select role");
             roleComboBox.setStyle(BASE_STYLE);
-            roleComboBox.setMaxWidth(300);
 
-            // Dynamic Fields (will be shown based on role selection)
+            // Dynamic Fields
+            Label courtIDLabel = new Label("Court ID:");
+            courtIDLabel.setStyle("-fx-text-fill: white;-fx-font-size: 20px;"); // White font color
             TextField courtIDField = new TextField();
             courtIDField.setPromptText("Enter Court ID");
             courtIDField.setVisible(false);
             courtIDField.setStyle(BASE_STYLE);
-            courtIDField.setMaxWidth(300);
 
+            Label licenseLabel = new Label("License Number:");
+            licenseLabel.setStyle("-fx-text-fill: white;-fx-font-size: 12px;"); // White font color
             TextField licenseField = new TextField();
             licenseField.setPromptText("Enter License Number");
             licenseField.setVisible(false);
             licenseField.setStyle(BASE_STYLE);
-            licenseField.setMaxWidth(300);
 
+            Label barIDLabel = new Label("Bar Association ID:");
+            barIDLabel.setStyle("-fx-text-fill: white;-fx-font-size: 14px;"); // White font color
             TextField barAssociationIDField = new TextField();
             barAssociationIDField.setPromptText("Enter Bar Association ID");
             barAssociationIDField.setVisible(false);
             barAssociationIDField.setStyle(BASE_STYLE);
-            barAssociationIDField.setMaxWidth(300);
 
+            Label appointmentLabel = new Label("Date of Appointment:");
+            appointmentLabel.setStyle("-fx-text-fill: white;-fx-font-size: 12px;"); // White font color
             DatePicker dateOfAppointmentPicker = new DatePicker();
             dateOfAppointmentPicker.setPromptText("Select Date of Appointment");
             dateOfAppointmentPicker.setVisible(false);
             dateOfAppointmentPicker.setStyle(BASE_STYLE);
-            dateOfAppointmentPicker.setMaxWidth(300);
 
+            Label hiringLabel = new Label("Date of Hiring:");
+            hiringLabel.setStyle("-fx-text-fill: white;-fx-font-size: 16px;"); // White font color
             DatePicker dateOfHiringPicker = new DatePicker();
             dateOfHiringPicker.setPromptText("Select Date of Hiring");
             dateOfHiringPicker.setVisible(false);
             dateOfHiringPicker.setStyle(BASE_STYLE);
-            dateOfHiringPicker.setMaxWidth(300);
 
+            Label addressLabel = new Label("Address:");
+            addressLabel.setStyle("-fx-text-fill: white;-fx-font-size: 20px;"); // White font color
             TextField addressField = new TextField();
             addressField.setPromptText("Enter Address");
             addressField.setVisible(false);
             addressField.setStyle(BASE_STYLE);
-            addressField.setMaxWidth(300);
+            courtIDField.setVisible(false);
+            licenseField.setVisible(false);
+            barAssociationIDField.setVisible(false);
+            dateOfAppointmentPicker.setVisible(false);
+            dateOfHiringPicker.setVisible(false);
+            addressField.setVisible(false);
+            hiringLabel.setVisible(false);
+            courtIDLabel.setVisible(false);
+            licenseLabel.setVisible(false);
+            barIDLabel.setVisible(false);
+            appointmentLabel.setVisible(false);
+            addressLabel.setVisible(false);
 
             // Update visibility of dynamic fields based on role selection
             roleComboBox.setOnAction(e -> {
@@ -2613,118 +2651,105 @@ public class CourtsManagementSystem extends Application {
                 dateOfAppointmentPicker.setVisible(false);
                 dateOfHiringPicker.setVisible(false);
                 addressField.setVisible(false);
+                hiringLabel.setVisible(false);
+                courtIDLabel.setVisible(false);
+                licenseLabel.setVisible(false);
+                barIDLabel.setVisible(false);
+                appointmentLabel.setVisible(false);
+                addressLabel.setVisible(false);
 
-                if (role.equalsIgnoreCase("Judge") || role.equalsIgnoreCase("Court Administrator") ||
-                        role.equalsIgnoreCase("Registrar") || role.equalsIgnoreCase("Probation Officer")) {
+                if ("Judge".equalsIgnoreCase(role) || "Court Administrator".equalsIgnoreCase(role) ||
+                        "Registrar".equalsIgnoreCase(role) || "Probation Officer".equalsIgnoreCase(role)) {
                     courtIDField.setVisible(true);
+                    courtIDLabel.setVisible(true);
                 }
-
-                if (role.equalsIgnoreCase("Lawyer")) {
+                if ("Lawyer".equalsIgnoreCase(role)) {
                     licenseField.setVisible(true);
+                    licenseLabel.setVisible(true);
                     barAssociationIDField.setVisible(true);
+                    barIDLabel.setVisible(true);
                 }
-
-                if (role.equalsIgnoreCase("Judge")) {
+                if ("Judge".equalsIgnoreCase(role)) {
                     dateOfAppointmentPicker.setVisible(true);
+                    appointmentLabel.setVisible(true);
                 }
-
-                if (role.equalsIgnoreCase("Registrar") || role.equalsIgnoreCase("Court Administrator")) {
+                if ("Registrar".equalsIgnoreCase(role) || "Court Administrator".equalsIgnoreCase(role)) {
                     dateOfHiringPicker.setVisible(true);
+                    hiringLabel.setVisible(true);
                 }
-
-                if (role.equalsIgnoreCase("Client") || role.equalsIgnoreCase("Witness")
-                        || role.equalsIgnoreCase("Juror")) {
+                if ("Client".equalsIgnoreCase(role) || "Witness".equalsIgnoreCase(role)
+                        || "Juror".equalsIgnoreCase(role)) {
                     addressField.setVisible(true);
+                    addressLabel.setVisible(true);
                 }
             });
-            Label statusLabel = new Label("");
-            statusLabel.setStyle(
-                    "-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #f0f0f0; -fx-padding: 10px 0;");
 
-            // Register Button with minimalistic style
+            formGrid.setStyle("-fx-padding: 20px; -fx-background-color: rgba(0,0,0,1.0); -fx-background-radius: 10px;");
+            formGrid.setHgap(30); // Increased gap between columns for clarity
+            formGrid.setVgap(15); // Gap between rows
+            formGrid.setAlignment(Pos.CENTER);
+
+            // Add inputs and labels to the grid in a row-wise fashion
+            formGrid.add(firstNameLabel, 0, 0); // Column 0, Row 0
+            formGrid.add(firstNameField, 1, 0); // Column 1, Row 0
+            formGrid.add(lastNameLabel, 2, 0); // Column 2, Row 0
+            formGrid.add(lastNameField, 3, 0); // Column 3, Row 0
+
+            formGrid.add(emailLabel, 0, 1); // Column 0, Row 1
+            formGrid.add(emailField, 1, 1); // Column 1, Row 1
+            formGrid.add(phoneLabel, 2, 1); // Column 2, Row 1
+            formGrid.add(phoneNumberField, 3, 1); // Column 3, Row 1
+
+            formGrid.add(usernameLabel, 0, 2); // Column 0, Row 2
+            formGrid.add(usernameField, 1, 2); // Column 1, Row 2
+            formGrid.add(passwordLabel, 2, 2); // Column 2, Row 2
+            formGrid.add(passwordField, 3, 2); // Column 3, Row 2
+
+            formGrid.add(dobLabel, 0, 3); // Column 0, Row 3
+            formGrid.add(dateOfBirthPicker, 1, 3); // Column 1, Row 3
+            formGrid.add(genderLabel, 2, 3); // Column 2, Row 3
+            formGrid.add(genderComboBox, 3, 3); // Column 3, Row 3
+
+            formGrid.add(roleLabel, 0, 4); // Column 0, Row 4
+            formGrid.add(roleComboBox, 1, 4); // Column 1, Row 4
+
+            // Add dynamic fields
+            formGrid.add(courtIDLabel, 2, 4); // Dynamic: Column 2, Row 5
+            formGrid.add(courtIDField, 3, 4); // Dynamic: Column 3, Row 5
+            formGrid.add(licenseLabel, 0, 6); // Dynamic: Column 2, Row 6
+            formGrid.add(licenseField, 1, 6); // Dynamic: Column 3, Row 6
+            formGrid.add(barIDLabel, 2, 6); // Dynamic: Column 0, Row 7
+            formGrid.add(barAssociationIDField, 3, 6); // Dynamic: Column 1, Row 7
+            formGrid.add(appointmentLabel, 0, 7); // Dynamic: Column 0, Row 8
+            formGrid.add(dateOfAppointmentPicker, 1, 7); // Dynamic: Column 1, Row 8
+            formGrid.add(hiringLabel, 2, 7); // Dynamic: Column 2, Row 8
+            formGrid.add(dateOfHiringPicker, 3, 7); // Dynamic: Column 3, Row 8
+            formGrid.add(addressLabel, 0, 8); // Dynamic: Column 0, Row 9
+            formGrid.add(addressField, 1, 8); // Dynamic: Column 1, Row 9
+
+            // Register button
             Button registerButton = new Button("Register");
             registerButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; "
                     + "-fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-cursor: hand;");
             registerButton.setOnAction(e -> {
-                String username = usernameField.getText().trim();
-                String password = passwordField.getText().trim();
-                String email = emailField.getText().trim();
-                String firstName = firstNameField.getText().trim();
-                String lastName = lastNameField.getText().trim();
-                LocalDate dateOfBirth = dateOfBirthPicker.getValue();
-                String gender = genderComboBox.getValue();
-                String phoneNumber = phoneNumberField.getText().trim();
-                String role = roleComboBox.getValue();
-
-                // Retrieve dynamic inputs
-                Integer courtID = courtIDField.isVisible() ? Integer.parseInt(courtIDField.getText().trim()) : null;
-                String license = licenseField.isVisible() ? licenseField.getText().trim() : null;
-                Integer barAssociationID = barAssociationIDField.isVisible()
-                        ? Integer.parseInt(barAssociationIDField.getText().trim())
-                        : null;
-
-                String dateOfAppointment = dateOfAppointmentPicker.getValue() != null
-                        ? dateOfAppointmentPicker.getValue().toString()
-                        : null;
-                String dateOfHiring = dateOfHiringPicker.getValue() != null ? dateOfHiringPicker.getValue().toString()
-                        : null;
-                String address = addressField.isVisible() ? addressField.getText().trim() : null;
-
-                // Database Interaction
-                DatabaseHandler dbHandler = new DatabaseHandler();
-                int isUserCreated = dbHandler.createUserWithRole(username, password, role, email, phoneNumber,
-                        firstName, lastName, dateOfBirth != null ? dateOfBirth.toString() : null, gender,
-                        dateOfAppointment, dateOfHiring, license, address, courtID, barAssociationID);
-
-                if (isUserCreated != -1) {
-                    statusLabel.setText("User created successfully!");
-                    statusLabel.setStyle("-fx-text-fill: green;");
-                    // Proceed to next steps if needed
-                } else {
-                    statusLabel.setText("User creation failed.");
-                    statusLabel.setStyle("-fx-text-fill: red;");
-                }
+                // Handle registration logic here
             });
-            // Back Button
+
+            // Back button
             Button backButton = new Button("Back");
             backButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 16px; "
                     + "-fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-cursor: hand;");
             backButton.setOnAction(e -> start(primaryStage));
+            formGrid.add(registerButton, 2, 8); // Dynamic: Column 1, Row 9
+            formGrid.add(backButton, 3, 8); // Dynamic: Column 1, Row 9
 
-            // Layout for buttons
-            HBox buttonLayout = new HBox(20);
-            buttonLayout.setStyle("-fx-padding:0px 20px; -fx-alignment: center;");
-            designButton(registerButton);
-            designButton(backButton);
-            buttonLayout.getChildren().addAll(registerButton, backButton);
+            // Final layout
+            layout1.getChildren().addAll(titleLabel, formGrid);
+            
+            layout.getChildren().addAll(layout1);
 
-            // Scrollable Layout for form fields
-            ScrollPane formScrollPane = new ScrollPane();
-            formScrollPane.setContent(new VBox(25));
-            VBox formLayout = new VBox(15);
-            formLayout.setStyle(
-                    "-fx-alignment: center;-fx-padding:10px 10px; -fx-spacing: 10px; -fx-background-color: black;");
-
-            formLayout.getChildren().addAll(
-                    firstNameField, lastNameField, emailField, phoneNumberField, usernameField, passwordField,
-                    genderComboBox,
-                    roleComboBox, dateOfBirthPicker, courtIDField, licenseField, barAssociationIDField,
-                    dateOfAppointmentPicker, dateOfHiringPicker, addressField);
-            formScrollPane.setContent(formLayout);
-            formScrollPane.setFitToWidth(true);
-            formScrollPane.setStyle(
-                    "-fx-padding:0px 20px;-fx-alignment: center; -fx-spacing: 0px; -fx-border-radius: 20px;-fx-background-color: black;-fx-background-radius:20px;");
-
-            // Outer Layout (title + form)
-            VBox outerLayout = new VBox(15);
-            outerLayout.setStyle("-fx-alignment: center; -fx-background-color: rgba(0,0,0,0.4); "
-                    + "-fx-background-radius:20px;-fx-padding: 20px; -fx-border-radius: 20px; -fx-border-color: #e0e0e0; -fx-border-width: 0px;");
-            outerLayout.getChildren().addAll(titleLabel, formScrollPane, statusLabel, buttonLayout);
-
-            layout.getChildren().addAll(outerLayout);
-
-            // Scene Setup with a fixed width and height
-            Scene registerScene = new Scene(layout, 1000, 700);
+            // Scene setup
+            Scene registerScene = new Scene(layout, 1000, 650);
             primaryStage.setScene(registerScene);
             primaryStage.show();
         }
@@ -2735,7 +2760,7 @@ public class CourtsManagementSystem extends Application {
             VBox layout = new VBox(25); // Vertical box layout with spacing of 25
             layout.setStyle("-fx-padding:0px 300px;"
                     + " -fx-alignment: center;"
-                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
+                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
                     + "-fx-background-size: cover; " // Ensures the image covers the entire area
                     + "-fx-background-position: center center; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
@@ -2870,7 +2895,7 @@ public class CourtsManagementSystem extends Application {
         layout.setStyle("-fx-padding: 50px; "
                 + "-fx-alignment: center; "
                 + "-fx-fill-width: true; "
-                + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/awesome%207.jpg');"
+                + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/awesome%207.jpg');"
                 + "-fx-background-size: cover; " // Ensures the image covers the entire area
                 + "-fx-background-position: center center; " // Centers the image
                 + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
