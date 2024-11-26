@@ -143,6 +143,34 @@ public class User {
         return null;
     }
 
+    public Clients getRelevantClients(List<Clients> AllCourt_Administrators,
+            User user) {
+        // Iterate through the list of all lawyers
+        for (Clients CourtAdmin : AllCourt_Administrators) {
+            // Check if the current lawyer's ID matches the provided UserID
+            System.out.println(CourtAdmin.getUserID());
+            if (CourtAdmin.getUserID() == user.getUserID()) {
+                return CourtAdmin; // Return the matched lawyer
+            }
+        }
+
+        return null;
+    }
+
+    public Clients getRelevantClients(List<Clients> AllCourt_Administrators,
+            int ID) {
+        // Iterate through the list of all lawyers
+        for (Clients CourtAdmin : AllCourt_Administrators) {
+            // Check if the current lawyer's ID matches the provided UserID
+            System.out.println(CourtAdmin.getUserID());
+            if (CourtAdmin.getUserID() == ID) {
+                return CourtAdmin; // Return the matched lawyer
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Searches for a lawyer in the provided list based on the given UserID.
      *

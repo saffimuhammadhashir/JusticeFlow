@@ -9,8 +9,22 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import JusticeFlow.CourtsManagementSystem.GUI_Menu;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class ITAdmin extends User {
     private int adminID;
@@ -191,7 +205,9 @@ public class ITAdmin extends User {
     // }
     // }
 
-    public void CaseReport(List<Case> cases, List<Slot> slots) {
+
+ 
+    public void CaseReport(List<Case> cases, List<Slot> slots,Stage primaryStage,Scanner scanner,GUI_Menu gui,CourtsManagementSystem system) {
         try (PDDocument document = new PDDocument()) {
             // Load the custom font
             File fontFile = new File("lib/fonts/Roboto-Black.ttf");
@@ -350,15 +366,25 @@ public class ITAdmin extends User {
             contentStream.endText(); // End the text block after all content is added
             contentStream.close(); // Close the content stream after adding all the content
 
+            String folderPath = "report/case_report";
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                folder.mkdirs(); // Create directories if not exist
+            }
+
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String filePath = folderPath + "/CaseReport_" + timeStamp + ".pdf";
+
             // Save the document
-            document.save("CaseReport.pdf");
+            document.save(filePath);
+            system.displayCaseFiles(primaryStage,gui,scanner);
             System.out.println("Case Report PDF created successfully!");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void LawyerReport(List<Case> cases, List<Slot> slots, List<Lawyer> lawyers) {
+    public void LawyerReport(List<Case> cases, List<Slot> slots, List<Lawyer> lawyers,Stage primaryStage,Scanner scanner,GUI_Menu gui,CourtsManagementSystem system) {
         try (PDDocument document = new PDDocument()) {
             // Load the custom font
             File fontFile = new File("lib/fonts/Roboto-Black.ttf");
@@ -546,16 +572,25 @@ public class ITAdmin extends User {
 
             contentStream.endText();
             contentStream.close(); // Close the content stream after adding all the content
-
+            String folderPath = "report/Lawyer_report";
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                folder.mkdirs(); // Create directories if not exist
+            }
+    
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String filePath = folderPath + "/LawyerReport_" + timeStamp + ".pdf";
+    
             // Save the document
-            document.save("LawyerReport.pdf");
+            document.save(filePath);
+            system.displayLawyerFiles(primaryStage,gui,scanner);
             System.out.println("Lawyer Report PDF created successfully!");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void JudgeReport(List<Case> cases, List<Slot> slots, List<Judge> judges) {
+    public void JudgeReport(List<Case> cases, List<Slot> slots, List<Judge> judges,Stage primaryStage,Scanner scanner,GUI_Menu gui,CourtsManagementSystem system) {
         try (PDDocument document = new PDDocument()) {
             // Load the custom font
             File fontFile = new File("lib/fonts/Roboto-Black.ttf");
@@ -736,7 +771,18 @@ public class ITAdmin extends User {
             contentStream.close(); // Close the content stream after adding all the content
 
             // Save the document
-            document.save("JudgeReport.pdf");
+            String folderPath = "report/Judge_report";
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                folder.mkdirs(); // Create directories if not exist
+            }
+    
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String filePath = folderPath + "/JudgeReport_" + timeStamp + ".pdf";
+    
+            // Save the document
+            document.save(filePath);
+            system.displayJudgeFiles(primaryStage,gui,scanner);
             System.out.println("Judge Report PDF created successfully!");
         } catch (IOException e) {
             e.printStackTrace();

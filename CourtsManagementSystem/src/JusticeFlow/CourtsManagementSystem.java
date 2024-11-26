@@ -1,5 +1,9 @@
 package JusticeFlow;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +38,9 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -461,10 +467,16 @@ public class CourtsManagementSystem extends Application {
 
     /////////////////////////////////////// Judge
     /////////////////////////////////////// ////////////////////////////////////////////////////////////////////////////////
-    public void TrackUpdates() {
+    public void TrackUpdates(Stage primaryStage,GUI_Menu gui) {
         // Method to handle tracking updates
+        String role = user.getRole();
         System.out.println("Implement tracking updates logic here.");
-
+        if ("Judge".equalsIgnoreCase(role)) {
+            Judge jud = user.getRelevantJudge(AllJudges, user);
+            if (jud!=null) {
+                jud.TrackUpdates(dbHandler, fileHandler, AllCases, AllSlot, AllClients, AllJudges, AllLawyers, AllWitnesses, AllCourts, primaryStage, gui, this);
+            }
+        }
     }
 
     public void ReviewDocumentLogJudgment(Scanner scanner) {
@@ -506,15 +518,325 @@ public class CourtsManagementSystem extends Application {
         // Method to handle scheduling IT system maintenance
 
         ITAdmin i = new ITAdmin();
-        i.CaseReport(AllCases, AllSlot);
+        // i.CaseReport(AllCases, AllSlot,stage,scanner);
     }
 
-    public void CaseReport(Scanner scanner, Stage primaryStage) {
+
+    public void displayCaseFiles(Stage stage, GUI_Menu gui, Scanner scanner) {
+        String hardcodedPath = "report/case_report"; // Replace with your hardcoded path
+        File folder = new File(hardcodedPath);
+    
+        if (!folder.exists() || !folder.isDirectory()) {
+            System.out.println("Invalid path or directory does not exist.");
+            return;
+        }
+    
+        // Root layout
+        BorderPane root = new BorderPane();
+        root.setPrefSize(1000, 600);
+        root.setStyle("-fx-background-color: #f5f5f5; -fx-padding: 20;");
+    
+        // Title at the top
+        Label title = new Label("Cases Report Viewer");
+        title.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        BorderPane.setAlignment(title, Pos.CENTER);
+        root.setTop(title);
+    
+        // GridPane to hold file details
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(20);
+        gridPane.setVgap(15);
+        gridPane.setPadding(new Insets(20));
+        gridPane.setStyle("-fx-background-color: #ffffff; -fx-border-color: #dddddd; -fx-border-radius: 8px; "
+                + "-fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.5, 0, 2);");
+    
+        int row = 0;
+        for (File file : folder.listFiles()) {
+            if (file.isFile()) {
+                try {
+                    // Get file creation time
+                    BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+                    String creationTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                            .format(new Date(attributes.creationTime().toMillis()));
+    
+                    // File name and creation time label
+                    Label fileLabel = new Label(file.getName() + " | Created: " + creationTime);
+                    fileLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #555;");
+    
+                    // Open button
+                    Button openButton = new Button("Open");
+                    openButton.setStyle("-fx-font-size: 16px; -fx-background-color: #4caf50; -fx-text-fill: white; "
+                            + "-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+                    openButton.setOnMouseEntered(e -> openButton.setStyle("-fx-font-size: 16px; -fx-background-color: #45a049; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+                    openButton.setOnMouseExited(e -> openButton.setStyle("-fx-font-size: 16px; -fx-background-color: #4caf50; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+                    openButton.setOnAction(event -> {
+                        try {
+                            // Open the file
+                            new ProcessBuilder("explorer", file.getAbsolutePath()).start();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+    
+                    // Add elements to the grid
+                    gridPane.add(fileLabel, 0, row);
+                    gridPane.add(openButton, 1, row);
+    
+                    row++;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    
+        // ScrollPane to handle large data
+        ScrollPane scrollPane = new ScrollPane(gridPane);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: #f5f5f5; -fx-border-color: transparent;");
+        root.setCenter(scrollPane);
+    
+        // Bottom buttons
+        Button returnButton = new Button("Return");
+        returnButton.setStyle("-fx-font-size: 16px; -fx-background-color: #e53935; -fx-text-fill: white; "
+                + "-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+        returnButton.setOnMouseEntered(e -> returnButton.setStyle("-fx-font-size: 16px; -fx-background-color: #d32f2f; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        returnButton.setOnMouseExited(e -> returnButton.setStyle("-fx-font-size: 16px; -fx-background-color: #e53935; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        returnButton.setOnAction(event -> gui.GUI_startmenu(stage));
+    
+        Button newReportButton = new Button("New Report");
+        newReportButton.setStyle("-fx-font-size: 16px; -fx-background-color: #1e88e5; -fx-text-fill: white; "
+                + "-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+        newReportButton.setOnMouseEntered(e -> newReportButton.setStyle("-fx-font-size: 16px; -fx-background-color: #1976d2; -fx-text-fill: white; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        newReportButton.setOnMouseExited(e -> newReportButton.setStyle("-fx-font-size: 16px; -fx-background-color: #1e88e5; -fx-text-fill: white; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        newReportButton.setOnAction(event -> CaseReport(scanner, stage,gui));
+    
+        HBox bottomBox = new HBox(15, returnButton, newReportButton);
+        bottomBox.setAlignment(Pos.CENTER);
+        bottomBox.setPadding(new Insets(15));
+        bottomBox.setStyle("-fx-background-color: #e8e8e8; -fx-border-color: #dddddd; -fx-border-radius: 8px;");
+    
+        root.setBottom(bottomBox);
+    
+        // Set the scene
+        Scene scene = new Scene(root, 1000, 600);
+        stage.setTitle("Case Files Viewer");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+
+    public void displayLawyerFiles(Stage stage, GUI_Menu gui, Scanner scanner) {
+        String hardcodedPath = "report/Lawyer_report"; // Replace with your hardcoded path
+        File folder = new File(hardcodedPath);
+    
+        if (!folder.exists() || !folder.isDirectory()) {
+            System.out.println("Invalid path or directory does not exist.");
+            return;
+        }
+    
+        // Root layout
+        BorderPane root = new BorderPane();
+        root.setPrefSize(1000, 600);
+        root.setStyle("-fx-background-color: #f5f5f5; -fx-padding: 20;");
+    
+        // Title at the top
+        Label title = new Label("Lawyers Report Viewer");
+        title.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        BorderPane.setAlignment(title, Pos.CENTER);
+        root.setTop(title);
+    
+        // GridPane to hold file details
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(20);
+        gridPane.setVgap(15);
+        gridPane.setPadding(new Insets(20));
+        gridPane.setStyle("-fx-background-color: #ffffff; -fx-border-color: #dddddd; -fx-border-radius: 8px; "
+                + "-fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.5, 0, 2);");
+    
+        int row = 0;
+        for (File file : folder.listFiles()) {
+            if (file.isFile()) {
+                try {
+                    // Get file creation time
+                    BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+                    String creationTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                            .format(new Date(attributes.creationTime().toMillis()));
+    
+                    // File name and creation time label
+                    Label fileLabel = new Label(file.getName() + " | Created: " + creationTime);
+                    fileLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #555;");
+    
+                    // Open button
+                    Button openButton = new Button("Open");
+                    openButton.setStyle("-fx-font-size: 16px; -fx-background-color: #4caf50; -fx-text-fill: white; "
+                            + "-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+                    openButton.setOnMouseEntered(e -> openButton.setStyle("-fx-font-size: 16px; -fx-background-color: #45a049; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+                    openButton.setOnMouseExited(e -> openButton.setStyle("-fx-font-size: 16px; -fx-background-color: #4caf50; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+                    openButton.setOnAction(event -> {
+                        try {
+                            // Open the file
+                            new ProcessBuilder("explorer", file.getAbsolutePath()).start();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+    
+                    // Add elements to the grid
+                    gridPane.add(fileLabel, 0, row);
+                    gridPane.add(openButton, 1, row);
+    
+                    row++;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    
+        // ScrollPane to handle large data
+        ScrollPane scrollPane = new ScrollPane(gridPane);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: #f5f5f5; -fx-border-color: transparent;");
+        root.setCenter(scrollPane);
+    
+        // Bottom buttons
+        Button returnButton = new Button("Return");
+        returnButton.setStyle("-fx-font-size: 16px; -fx-background-color: #e53935; -fx-text-fill: white; "
+                + "-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+        returnButton.setOnMouseEntered(e -> returnButton.setStyle("-fx-font-size: 16px; -fx-background-color: #d32f2f; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        returnButton.setOnMouseExited(e -> returnButton.setStyle("-fx-font-size: 16px; -fx-background-color: #e53935; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        returnButton.setOnAction(event -> gui.GUI_startmenu(stage));
+    
+        Button newReportButton = new Button("New Report");
+        newReportButton.setStyle("-fx-font-size: 16px; -fx-background-color: #1e88e5; -fx-text-fill: white; "
+                + "-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+        newReportButton.setOnMouseEntered(e -> newReportButton.setStyle("-fx-font-size: 16px; -fx-background-color: #1976d2; -fx-text-fill: white; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        newReportButton.setOnMouseExited(e -> newReportButton.setStyle("-fx-font-size: 16px; -fx-background-color: #1e88e5; -fx-text-fill: white; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        newReportButton.setOnAction(event -> LawyerReport(scanner, stage,gui));
+    
+        HBox bottomBox = new HBox(15, returnButton, newReportButton);
+        bottomBox.setAlignment(Pos.CENTER);
+        bottomBox.setPadding(new Insets(15));
+        bottomBox.setStyle("-fx-background-color: #e8e8e8; -fx-border-color: #dddddd; -fx-border-radius: 8px;");
+    
+        root.setBottom(bottomBox);
+    
+        // Set the scene
+        Scene scene = new Scene(root, 1000, 600);
+        stage.setTitle("Case Files Viewer");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    
+    public void displayJudgeFiles(Stage stage, GUI_Menu gui, Scanner scanner) {
+        String hardcodedPath = "report/Judge_report"; // Replace with your hardcoded path
+        File folder = new File(hardcodedPath);
+    
+        if (!folder.exists() || !folder.isDirectory()) {
+            System.out.println("Invalid path or directory does not exist.");
+            return;
+        }
+    
+        // Root layout
+        BorderPane root = new BorderPane();
+        root.setPrefSize(1000, 600);
+        root.setStyle("-fx-background-color: #f5f5f5; -fx-padding: 20;");
+    
+        // Title at the top
+        Label title = new Label("Judges Report Viewer");
+        title.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        BorderPane.setAlignment(title, Pos.CENTER);
+        root.setTop(title);
+    
+        // GridPane to hold file details
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(20);
+        gridPane.setVgap(15);
+        gridPane.setPadding(new Insets(20));
+        gridPane.setStyle("-fx-background-color: #ffffff; -fx-border-color: #dddddd; -fx-border-radius: 8px; "
+                + "-fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.5, 0, 2);");
+    
+        int row = 0;
+        for (File file : folder.listFiles()) {
+            if (file.isFile()) {
+                try {
+                    // Get file creation time
+                    BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+                    String creationTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                            .format(new Date(attributes.creationTime().toMillis()));
+    
+                    // File name and creation time label
+                    Label fileLabel = new Label(file.getName() + " | Created: " + creationTime);
+                    fileLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #555;");
+    
+                    // Open button
+                    Button openButton = new Button("Open");
+                    openButton.setStyle("-fx-font-size: 16px; -fx-background-color: #4caf50; -fx-text-fill: white; "
+                            + "-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+                    openButton.setOnMouseEntered(e -> openButton.setStyle("-fx-font-size: 16px; -fx-background-color: #45a049; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+                    openButton.setOnMouseExited(e -> openButton.setStyle("-fx-font-size: 16px; -fx-background-color: #4caf50; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+                    openButton.setOnAction(event -> {
+                        try {
+                            // Open the file
+                            new ProcessBuilder("explorer", file.getAbsolutePath()).start();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+    
+                    // Add elements to the grid
+                    gridPane.add(fileLabel, 0, row);
+                    gridPane.add(openButton, 1, row);
+    
+                    row++;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    
+        // ScrollPane to handle large data
+        ScrollPane scrollPane = new ScrollPane(gridPane);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: #f5f5f5; -fx-border-color: transparent;");
+        root.setCenter(scrollPane);
+    
+        // Bottom buttons
+        Button returnButton = new Button("Return");
+        returnButton.setStyle("-fx-font-size: 16px; -fx-background-color: #e53935; -fx-text-fill: white; "
+                + "-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+        returnButton.setOnMouseEntered(e -> returnButton.setStyle("-fx-font-size: 16px; -fx-background-color: #d32f2f; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        returnButton.setOnMouseExited(e -> returnButton.setStyle("-fx-font-size: 16px; -fx-background-color: #e53935; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        returnButton.setOnAction(event -> gui.GUI_startmenu(stage));
+    
+        Button newReportButton = new Button("New Report");
+        newReportButton.setStyle("-fx-font-size: 16px; -fx-background-color: #1e88e5; -fx-text-fill: white; "
+                + "-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+        newReportButton.setOnMouseEntered(e -> newReportButton.setStyle("-fx-font-size: 16px; -fx-background-color: #1976d2; -fx-text-fill: white; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        newReportButton.setOnMouseExited(e -> newReportButton.setStyle("-fx-font-size: 16px; -fx-background-color: #1e88e5; -fx-text-fill: white; -fx-text-fill: white;-fx-padding: 8 20; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        newReportButton.setOnAction(event -> JudgeReport(scanner, stage,gui));
+    
+        HBox bottomBox = new HBox(15, returnButton, newReportButton);
+        bottomBox.setAlignment(Pos.CENTER);
+        bottomBox.setPadding(new Insets(15));
+        bottomBox.setStyle("-fx-background-color: #e8e8e8; -fx-border-color: #dddddd; -fx-border-radius: 8px;");
+    
+        root.setBottom(bottomBox);
+    
+        // Set the scene
+        Scene scene = new Scene(root, 1000, 600);
+        stage.setTitle("Case Files Viewer");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    
+    public void CaseReport(Scanner scanner, Stage primaryStage,GUI_Menu gui) {
         // Method to handle scheduling IT system maintenance
 
         loadData();
         ITAdmin ii = new ITAdmin();
-        ii.CaseReport(AllCases, AllSlot);
+        ii.CaseReport(AllCases, AllSlot, primaryStage, scanner, gui, this);
 
         // Create a green label to display "Successful Download"
         Label successLabel = new Label("Case Report successfully downloaded in Project Directory!");
@@ -543,6 +865,7 @@ public class CourtsManagementSystem extends Application {
         pause.setOnFinished(event -> {
             // Remove the success label after 3 seconds
             currentLayout.getChildren().remove(successLabel);
+            
         });
         pause.play(); // Start the timer
 
@@ -559,15 +882,15 @@ public class CourtsManagementSystem extends Application {
         // Method to handle scheduling IT system maintenance
 
         ITAdmin i = new ITAdmin();
-        i.LawyerReport(AllCases, AllSlot, AllLawyers);
+        // i.LawyerReport(AllCases, AllSlot, AllLawyers);
     }
 
-    public void LawyerReport(Scanner scanner, Stage primaryStage) {
+    public void LawyerReport(Scanner scanner, Stage primaryStage,GUI_Menu gui) {
         // Method to handle scheduling IT system maintenance
 
         loadData();
         ITAdmin ii = new ITAdmin();
-        ii.LawyerReport(AllCases, AllSlot, AllLawyers);
+        ii.LawyerReport(AllCases, AllSlot, AllLawyers, primaryStage, scanner, gui, this);
 
         // Create a green label to display "Successful Download"
         Label successLabel = new Label("Lawyer Report successfully downloaded in Project Directory!");
@@ -596,6 +919,7 @@ public class CourtsManagementSystem extends Application {
         pause.setOnFinished(event -> {
             // Remove the success label after 3 seconds
             currentLayout.getChildren().remove(successLabel);
+          
         });
         pause.play(); // Start the timer
 
@@ -606,21 +930,22 @@ public class CourtsManagementSystem extends Application {
         // Update the scene with the modified layout
         primaryStage.setScene(currentScene);
         primaryStage.show();
+
     }
 
     public void JudgeReport(Scanner scanner) {
         // Method to handle scheduling IT system maintenance
 
         ITAdmin i = new ITAdmin();
-        i.JudgeReport(AllCases, AllSlot, AllJudges);
+        // i.JudgeReport(AllCases, AllSlot, AllJudges);
     }
 
-    public void JudgeReport(Scanner scanner, Stage primaryStage) {
+    public void JudgeReport(Scanner scanner, Stage primaryStage,GUI_Menu gui) {
         // Method to handle scheduling IT system maintenance
 
         loadData();
         ITAdmin ii = new ITAdmin();
-        ii.JudgeReport(AllCases, AllSlot, AllJudges);
+        ii.JudgeReport(AllCases, AllSlot, AllJudges, primaryStage, scanner, gui, this);
 
         // Create a green label to display "Successful Download"
         Label successLabel = new Label("Judge Report successfully downloaded in Project Directory!");
@@ -774,6 +1099,7 @@ public class CourtsManagementSystem extends Application {
                     }
                 }
             }
+            
         }
     }
 
@@ -935,7 +1261,7 @@ public class CourtsManagementSystem extends Application {
                         case 1:
                             // Track Updates
                             System.out.println("Track Updates selected.");
-                            TrackUpdates(); // Calling method to track updates
+                            // TrackUpdates(); // Calling method to track updates
                             break;
                         case 2:
                             // Track Case
@@ -1012,7 +1338,7 @@ public class CourtsManagementSystem extends Application {
                         case 2:
                             // Track Updates
                             System.out.println("Track Updates selected.");
-                            TrackUpdates(); // Calling method to track updates
+                            // TrackUpdates(); // Calling method to track updates
                             break;
                         case 3:
                             // Register to Bar
@@ -1127,7 +1453,7 @@ public class CourtsManagementSystem extends Application {
                         case 1:
                             // Track Updates
                             System.out.println("Track Updates selected.");
-                            TrackUpdates(); // Calling method to track updates
+                            // TrackUpdates(); // Calling method to track updates
                             break;
                         case 2:
                             // Request for Case Re-Opening/Appeal
@@ -1751,7 +2077,7 @@ public class CourtsManagementSystem extends Application {
 
                 caseReportButton.setOnAction(e -> {
                     System.out.println("Generate Report of Cases selected.");
-                    CaseReport(scanner, primaryStage); // Call your method
+                    system.displayCaseFiles(primaryStage,this,scanner); // Call your method
                 });
 
                 caseNotificationButton.setOnAction(e -> {
@@ -1761,12 +2087,12 @@ public class CourtsManagementSystem extends Application {
 
                 lawyerReportButton.setOnAction(e -> {
                     System.out.println("Generate Report for Lawyers selected.");
-                    LawyerReport(scanner, primaryStage); // Call your method
+                    system.displayLawyerFiles(primaryStage,this,scanner); // Call your method
                 });
 
                 judgeReportButton.setOnAction(e -> {
                     System.out.println("Generate Report for Judges selected.");
-                    JudgeReport(scanner, primaryStage); // Call your method
+                    system.displayJudgeFiles(primaryStage,this,scanner); // Call your method
                 });
 
                 logoutButton.setOnAction(e -> {
@@ -1795,7 +2121,7 @@ public class CourtsManagementSystem extends Application {
 
                 trackUpdatesButton.setOnAction(e -> {
                     System.out.println("Track Updates selected.");
-                    TrackUpdates(); // Call your method
+                    system.TrackUpdates(primaryStage, this); // Call your method
                 });
 
                 trackCaseButton.setOnAction(e -> {
@@ -1949,7 +2275,7 @@ public class CourtsManagementSystem extends Application {
                 titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Client");
                 Button btnTrackUpdates = new Button("Track Updates");
-                btnTrackUpdates.setOnAction(e -> TrackUpdates());
+                btnTrackUpdates.setOnAction(e -> TrackUpdates(primaryStage,this));
 
                 // Button btnRequestReOpeningAppeal = new Button("Request for Case
                 // Re-Opening/Appeal");

@@ -439,6 +439,223 @@ public class Case {
         primaryStage.show();
     }
 
+    public void viewCaseDetailsJudge(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> allCases,
+            List<Slot> allSlots, List<Clients> allclients, List<Judge> allJudges, List<Lawyer> allLawyers,
+            List<Witness> allWitnesses, List<Court> allCourts, Stage primaryStage, GUI_Menu gui,
+            CourtsManagementSystem system) {
+
+        // Main layout with larger spacing
+        HBox mainLayout = new HBox(20);
+        mainLayout.setPadding(new Insets(20));
+
+        // Left side: Display case details
+        VBox detailsLayout = new VBox(20);
+        detailsLayout.setPadding(new Insets(20));
+        detailsLayout.setAlignment(Pos.TOP_LEFT);
+
+        Label detailsTitle = new Label("Case Details");
+        detailsTitle.setStyle("-fx-font-size: 46px; -fx-font-weight: bold;");
+
+        // Display case attributes
+        Label caseTitleLabel = new Label("Case Title: " + caseTitle);
+        Label caseTypeLabel = new Label("Case Type: " + caseType);
+        Label caseStatusLabel = new Label("Case Status: " + caseStatus);
+
+        // Display associated Plaintiff, Defendant, and Lawyer
+        Clients plaintiff = allclients.stream()
+                .filter(c -> c.getclientID() == plaintiffID)
+                .findFirst()
+                .orElse(null);
+        Clients defendant = allclients.stream()
+                .filter(c -> c.getclientID() == defendantID)
+                .findFirst()
+                .orElse(null);
+        Lawyer lawyer = allLawyers.stream()
+                .filter(l -> l.getLawyerID() == Lawyerid)
+                .findFirst()
+                .orElse(null);
+
+        Label plaintiffLabel = new Label("Plaintiff: " +
+                (plaintiff != null ? plaintiff.getFirstName() + " " + plaintiff.getLastName() : "N/A"));
+        Label defendantLabel = new Label("Defendant: " +
+                (defendant != null ? defendant.getFirstName() + " " + defendant.getLastName() : "N/A"));
+        Label lawyerLabel = new Label("Lawyer: " +
+                (lawyer != null ? lawyer.getFirstName() + " " + lawyer.getLastName() : "N/A"));
+
+        Button deleteButton = new Button("Delete Case");
+        deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+
+        Button closeButton = new Button("Return");
+        closeButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+
+        // Delete button action
+        deleteButton.setOnAction(e -> {
+            try {
+                gui.showMessage("Case and associated data deleted successfully!");
+                system.TrackUpdates(primaryStage, gui); // Navigate back to updates
+            } catch (Exception ex) {
+                gui.showMessage("Error deleting case: " + ex.getMessage());
+            }
+        });
+
+        // Close button action
+        closeButton.setOnAction(e -> {
+            try {
+                system.TrackUpdates(primaryStage, gui);
+            } catch (Exception ex) {
+                gui.showMessage("Error returning to main menu: " + ex.getMessage());
+            }
+        });
+
+        HBox buttonBox = new HBox(25, deleteButton, closeButton);
+        detailsLayout.getChildren().addAll(detailsTitle, caseTitleLabel, caseTypeLabel, caseStatusLabel,
+                plaintiffLabel, defendantLabel, lawyerLabel, buttonBox);
+
+        // Right side: Display slot details
+        VBox slotDetailsLayout = new VBox(10);
+        slotDetailsLayout.setPadding(new Insets(10));
+        slotDetailsLayout.setAlignment(Pos.CENTER);
+        Label slotTitle = new Label("Slot Details");
+        slotTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: blue;");
+
+        // Add slot details with delete buttons
+        for (Slot slot : allSlots) {
+            if (slot.getCaseID() != null && slot.getCaseID() == caseID) {
+                // Slot details as text
+                String slotText = "Slot: " + slot.getDayName() + " / " + 
+                                  "Time: " + slot.getStartTime() + " - " + slot.getEndTime() +
+                                  "\nCourtroom: " + slot.getCourtId();
+        
+                // Slot label design
+                Label slotLabel = new Label(slotText);
+                slotLabel.setStyle("-fx-font-size: 14px; "
+                        + "-fx-padding: 10px; "
+                        + "-fx-border-color: #B0BEC5; "
+                        + "-fx-border-radius: 5px; "
+                        + "-fx-border-width: 1px; "
+                        + "-fx-background-color: #f0f0f0;");
+        
+                // Delete Slot button design
+                Button deleteSlotButton = new Button("Delete Slot");
+                deleteSlotButton.setStyle("-fx-font-size: 14px; "
+                        + "-fx-font-weight: bold; "
+                        + "-fx-padding: 8px 15px; "
+                        + "-fx-background-color: #f44336; "
+                        + "-fx-text-fill: white; "
+                        + "-fx-border-radius: 5px; "
+                        + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
+        
+                deleteSlotButton.setOnAction(e -> {
+                    try {
+                        // dbHandler.deleteSlot(slot.getSlotID());
+                        gui.showMessage("Slot deleted successfully!");
+                        Slot.newSlotCreationandDeletion(allSlots, allJudges, allCourts, allWitnesses, this, dbHandler, fileHandler, allCases, allLawyers, allclients, primaryStage, gui, system, slot);
+                    } catch (Exception ex) {
+                        gui.showMessage("Error deleting slot: " + ex.getMessage());
+                    }
+                });
+        
+                // Combine label and button into an HBox
+                
+                VBox slotBox = new VBox( slotLabel, deleteSlotButton);
+                slotBox.setAlignment(Pos.CENTER); // Align items to the left
+                slotBox.setPadding(new Insets(5)); // Add padding for spacing
+                slotBox.setStyle("-fx-border-color: #D3D3D3; "
+                        + "-fx-border-width: 1px; "
+                        + "-fx-border-radius: 5px; "
+                        + "-fx-background-color: #FFFFFF;");
+        
+                // Add the slot box to the layout
+                slotDetailsLayout.getChildren().add(slotBox);
+            }
+        }
+        
+
+        // Judgement details with delete and open buttons
+        VBox judgementDetailsLayout = new VBox(10);
+        judgementDetailsLayout.setPadding(new Insets(10));
+        judgementDetailsLayout.setAlignment(Pos.CENTER);
+        Label judgementTitle = new Label("Judgements");
+        judgementTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: blue");
+
+        for (CaseFile judgement : this.getJudgements()) {
+            String judgementPath = judgement.getFileName();
+
+            // Judgement label design
+            Label judgementLabel = new Label("Judgement: " + judgement.getFileName());
+            judgementLabel.setStyle("-fx-font-size: 14px; "
+                    + "-fx-padding: 10px; "
+                    + "-fx-border-color: #B0BEC5; "
+                    + "-fx-border-radius: 5px; "
+                    + "-fx-border-width: 1px; "
+                    + "-fx-background-color: #f0f0f0;");
+
+            // Open button design
+            Button openJudgementButton = new Button("Open");
+            openJudgementButton.setStyle("-fx-font-size: 14px; "
+                    + "-fx-font-weight: bold; "
+                    + "-fx-padding: 8px 15px; "
+                    + "-fx-background-color: #4CAF50; "
+                    + "-fx-text-fill: white; "
+                    + "-fx-border-radius: 5px; "
+                    + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
+
+            openJudgementButton.setOnAction(e -> openFile(judgementPath));
+
+            // Delete button design
+            Button deleteJudgementButton = new Button("Delete");
+            deleteJudgementButton.setStyle("-fx-font-size: 14px; "
+                    + "-fx-font-weight: bold; "
+                    + "-fx-padding: 8px 15px; "
+                    + "-fx-background-color: #f44336; "
+                    + "-fx-text-fill: white; "
+                    + "-fx-border-radius: 5px; "
+                    + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
+
+            deleteJudgementButton.setOnAction(e -> {
+                try {
+                    // dbHandler.deleteJudgement(judgement.getFileName());
+                    gui.showMessage("Judgement deleted successfully!");
+                    viewCaseDetailsJudge(dbHandler, fileHandler, allCases, allSlots, allclients, allJudges, allLawyers,
+                            allWitnesses, allCourts, primaryStage, gui, system);
+                } catch (Exception ex) {
+                    gui.showMessage("Error deleting judgement: " + ex.getMessage());
+                }
+            });
+
+            // Combine label and buttons into HBox
+            HBox judgementBox = new HBox(10, openJudgementButton, deleteJudgementButton);
+            VBox temp=new VBox(judgementLabel,judgementBox);
+            temp.setAlignment(Pos.CENTER); // Align items to the left for consistency
+            temp.setPadding(new Insets(5)); // Add padding for spacing
+            temp.setStyle("-fx-border-color: #D3D3D3; "
+                    + "-fx-border-width: 1px; "
+                    + "-fx-border-radius: 5px; "
+                    + "-fx-background-color: #FFFFFF;");
+
+            // Add the HBox to the layout
+            judgementDetailsLayout.getChildren().add(temp);
+        }
+
+        ScrollPane judgementScrollPane = new ScrollPane(judgementDetailsLayout);
+        judgementScrollPane.setFitToWidth(true);
+        judgementScrollPane.setMinHeight(250);
+        judgementScrollPane.setMaxHeight(250);
+
+        ScrollPane scrollPane = new ScrollPane(slotDetailsLayout);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setMinHeight(250);
+        scrollPane.setMaxHeight(250);
+
+        VBox verticaBox = new VBox(slotTitle, scrollPane, judgementTitle, judgementScrollPane);
+        mainLayout.getChildren().addAll(detailsLayout, verticaBox);
+
+        Scene scene = new Scene(mainLayout, 1000, 600);
+        primaryStage.setTitle("Case Details");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
     public void DisplayDetailsJudge(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> allCases,
             List<Slot> allSlots, List<Clients> allclients, List<Judge> allJudges, List<Lawyer> allLawyers,
             List<Witness> allWitnesses, List<Court> allCourts, Stage primaryStage, GUI_Menu gui,
@@ -613,7 +830,7 @@ public class Case {
                         "-fx-padding: 10px; " +
                         "-fx-border-radius: 5px; " +
                         "-fx-border-color: #B0BEC5; " +
-                        "-fx-min-width:250px;"+
+                        "-fx-min-width:250px;" +
                         "-fx-border-width: 1px; " +
                         "-fx-background-color: " + (i % 2 == 0 ? "#f0f0f0" : "#ffffff") + "; " +
                         "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
@@ -629,7 +846,7 @@ public class Case {
         slotScrollPane.setFitToWidth(true); // Ensures the content fits the width of the ScrollPane
         slotScrollPane.setMinHeight(130);
         slotScrollPane.setMaxHeight(130);
-        
+
         // Add ScrollPane for Files
         VBox fileDetailsLayout = new VBox(10);
         fileDetailsLayout.setPadding(new Insets(10));
@@ -751,8 +968,6 @@ public class Case {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-
 
     public void DisplayDetailsLawyer(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> allCases,
             List<Slot> allSlots, List<Clients> allclients, List<Judge> allJudges, List<Lawyer> allLawyers,
@@ -928,7 +1143,7 @@ public class Case {
                         "-fx-padding: 10px; " +
                         "-fx-border-radius: 5px; " +
                         "-fx-border-color: #B0BEC5; " +
-                        "-fx-min-width:250px;"+
+                        "-fx-min-width:250px;" +
                         "-fx-border-width: 1px; " +
                         "-fx-background-color: " + (i % 2 == 0 ? "#f0f0f0" : "#ffffff") + "; " +
                         "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
@@ -944,7 +1159,7 @@ public class Case {
         slotScrollPane.setFitToWidth(true); // Ensures the content fits the width of the ScrollPane
         slotScrollPane.setMinHeight(130);
         slotScrollPane.setMaxHeight(130);
-        
+
         // Add ScrollPane for Files
         VBox fileDetailsLayout = new VBox(10);
         fileDetailsLayout.setPadding(new Insets(10));
@@ -1066,12 +1281,6 @@ public class Case {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-
-
-
-
-
 
     // Method to open the file using the given path
     private void openFile(String filePath) {
@@ -1418,8 +1627,6 @@ public class Case {
         primaryStage.show();
     }
 
-
-
     public void displayWitnesseslawyer(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> allCases,
             List<Slot> allSlots, List<Clients> allclients, List<Judge> allJudges, List<Lawyer> allLawyers,
             List<Witness> allWitnesses, List<Court> allCourts, Stage primaryStage, GUI_Menu gui,
@@ -1610,7 +1817,7 @@ public class Case {
         Button closeButton = new Button("Close");
         closeButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 12px 20px; " +
                 "-fx-font-size: 16px; -fx-border-radius: 25; -fx-font-weight: bold;");
-        closeButton.setOnAction(e -> system.TrackCase(primaryStage,gui));
+        closeButton.setOnAction(e -> system.TrackCase(primaryStage, gui));
 
         buttonLayout.getChildren().addAll(registerNewButton, closeButton);
         mainLayout.getChildren().add(buttonLayout);
@@ -1621,7 +1828,6 @@ public class Case {
         primaryStage.setTitle("Witness Management");
         primaryStage.show();
     }
-
 
     // Add witness to the case
     private void addWitnessToCase(Witness witness, Case currentCase, List<Witness> linkedWitnesses,
@@ -1824,9 +2030,6 @@ public class Case {
         primaryStage.show();
     }
 
-
-
-
     public void registerRegisterlawyer(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> allCases,
             List<Slot> allSlots, List<Clients> allclients, List<Judge> allJudges, List<Lawyer> allLawyers,
             List<Witness> allWitnesses, List<Court> allCourts, Stage primaryStage, GUI_Menu gui,
@@ -1999,7 +2202,6 @@ public class Case {
         primaryStage.show();
     }
 
-
     private void clearForm(TextField firstNameField, TextField lastNameField, DatePicker dobPicker,
             ComboBox<String> genderComboBox, TextField addressField, TextField phoneNumberField,
             TextField emailField, TextField usernameField, TextField passwordField) {
@@ -2044,52 +2246,6 @@ public class Case {
     private int generateWitnessID() {
         return (int) (Math.random() * 10000); // Example random witness ID
     }
-
-    // // Function to display files (simple representation)
-    // private void displayFiles(Stage primaryStage, List<String> allFiles) {
-    // StackPane filePane = new StackPane();
-    // VBox fileLayout = new VBox(10);
-
-    // for (String file : allFiles) {
-    // fileLayout.getChildren().add(new Label("File: " + file));
-    // }
-
-    // Button returnButton = new Button("Return");
-    // returnButton.setOnAction(e -> primaryStage.setScene(new Scene(new VBox(10,
-    // new Button("Go back to Main")))));
-
-    // fileLayout.getChildren().add(returnButton);
-    // filePane.getChildren().add(fileLayout);
-
-    // Scene fileScene = new Scene(filePane, 400, 400);
-    // primaryStage.setScene(fileScene);
-    // }
-
-    // Method to schedule the next slot (for demonstration, it moves to the next
-    // slot)
-    // private void scheduleNextSlot(Stage primaryStage, List<Slot> allSlots) {
-    // // Simulate scheduling the next slot (in this case, we just move to the next
-    // // slot in the list)
-    // Slot nextSlot = allSlots.get(1); // Schedule the second slot for
-    // demonstration
-
-    // StackPane nextSlotPane = new StackPane();
-    // VBox nextSlotLayout = new VBox(10);
-    // Label nextSlotLabel = new Label("Next Slot: " + nextSlot.() +
-    // "\nLocation: " + nextSlot.getLocation() +
-    // "\nTime: " + nextSlot.getTime() +
-    // "\nAssigned To: " + nextSlot.getAssignedTo());
-
-    // Button returnButton = new Button("Return");
-    // returnButton.setOnAction(e -> primaryStage.setScene(new Scene(new VBox(10,
-    // new Button("Go back to Main")))));
-
-    // nextSlotLayout.getChildren().addAll(nextSlotLabel, returnButton);
-    // nextSlotPane.getChildren().add(nextSlotLayout);
-
-    // Scene nextSlotScene = new Scene(nextSlotPane, 400, 400);
-    // primaryStage.setScene(nextSlotScene);
-    // }
 
     /**
      * Checks if a case with the given caseID exists in the AllCases list.

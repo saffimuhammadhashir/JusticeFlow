@@ -1526,7 +1526,7 @@ public class Lawyer extends User {
             eachCase.getChildren().addAll(caseName, casetype, caseplaintiff, casedefendant, CaseFiling);
 
             // Approve and Reject Buttons
-            Button approveButton = new Button("Update Case");
+            Button approveButton = new Button("View Case");
             approveButton.setStyle(
                     "-fx-background-color: #27ae60; " +
                             "-fx-text-fill: white; " +

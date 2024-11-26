@@ -830,48 +830,82 @@ public class DatabaseHandler {
         return recipientsType;
     }
 
+    // public void updateOrInsertSlots(List<Slot> allSlots) {
+    //     // SQL queries for update and insert
+    //     String updateQuery = "UPDATE slots SET dayName = ?, startTime = ?, endTime = ?, slotNumber = ?, caseID = ?, judgeID = ?, witnessID = ?, CourtId = ? WHERE slotID = ?";
+    //     String insertQuery = "INSERT INTO slots (slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID, CourtId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    //     try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+    //             PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
+    //             PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+
+    //         // Iterate through all slots to either update or insert
+    //         for (Slot slot : allSlots) {
+    //             // Check if the slot already exists (based on slotID)
+    //             if (doesSlotExist(slot.getSlotID(), connection)) {
+    //                 // If slot exists, update it
+    //                 updateStmt.setString(1, slot.getDayName().toString());
+    //                 updateStmt.setTime(2, Time.valueOf(slot.getStartTime())); // Convert LocalTime to java.sql.Time
+    //                 updateStmt.setTime(3, Time.valueOf(slot.getEndTime())); // Convert LocalTime to java.sql.Time
+    //                 updateStmt.setInt(4, slot.getSlotNumber());
+    //                 updateStmt.setObject(5, slot.getCaseID());
+    //                 updateStmt.setObject(6, slot.getCaseID() == null ? null : slot.getJudgeID());
+    //                 updateStmt.setObject(7, slot.getCaseID() == null ? null : slot.getWitnessID());
+    //                 updateStmt.setObject(8, slot.getCaseID() == null ? null : slot.getCourtId());
+    //                 updateStmt.setInt(9, slot.getSlotID()); // Set slotID for update
+    //                 updateStmt.executeUpdate(); // Execute the update statement
+    //             } else {
+    //                 // If slot does not exist, insert it
+    //                 insertStmt.setInt(1, slot.getSlotID());
+    //                 insertStmt.setString(2, slot.getDayName().toString());
+    //                 insertStmt.setTime(3, Time.valueOf(slot.getStartTime())); // Convert LocalTime to java.sql.Time
+    //                 insertStmt.setTime(4, Time.valueOf(slot.getEndTime())); // Convert LocalTime to java.sql.Time
+    //                 insertStmt.setInt(5, slot.getSlotNumber());
+    //                 insertStmt.setObject(6, slot.getCaseID());
+    //                 insertStmt.setObject(7, slot.getCaseID() == null ? null : slot.getJudgeID());
+    //                 insertStmt.setObject(8, slot.getCaseID() == null ? null : slot.getWitnessID());
+    //                 insertStmt.setObject(9, slot.getCaseID() == null ? null : slot.getCourtId());
+    //                 insertStmt.executeUpdate(); // Execute the insert statement
+    //             }
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
+
+
+
     public void updateOrInsertSlots(List<Slot> allSlots) {
-        // SQL queries for update and insert
-        String updateQuery = "UPDATE slots SET dayName = ?, startTime = ?, endTime = ?, slotNumber = ?, caseID = ?, judgeID = ?, witnessID = ?, CourtId = ? WHERE slotID = ?";
-        String insertQuery = "INSERT INTO slots (slotID, dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID, CourtId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+        // SQL queries for deletion and insertion
+        String deleteQuery = "DELETE FROM slots";
+        String insertQuery = "INSERT INTO slots ( dayName, startTime, endTime, slotNumber, caseID, judgeID, witnessID, CourtId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-                PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
-                PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
-
-            // Iterate through all slots to either update or insert
+             Statement deleteStmt = connection.createStatement();
+             PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+    
+            // Step 1: Delete all existing entries
+            deleteStmt.executeUpdate(deleteQuery);
+    
+            // Step 2: Reinsert all slots from the provided list
             for (Slot slot : allSlots) {
-                // Check if the slot already exists (based on slotID)
-                if (doesSlotExist(slot.getSlotID(), connection)) {
-                    // If slot exists, update it
-                    updateStmt.setString(1, slot.getDayName().toString());
-                    updateStmt.setTime(2, Time.valueOf(slot.getStartTime())); // Convert LocalTime to java.sql.Time
-                    updateStmt.setTime(3, Time.valueOf(slot.getEndTime())); // Convert LocalTime to java.sql.Time
-                    updateStmt.setInt(4, slot.getSlotNumber());
-                    updateStmt.setObject(5, slot.getCaseID());
-                    updateStmt.setObject(6, slot.getCaseID() == null ? null : slot.getJudgeID());
-                    updateStmt.setObject(7, slot.getCaseID() == null ? null : slot.getWitnessID());
-                    updateStmt.setObject(8, slot.getCaseID() == null ? null : slot.getCourtId());
-                    updateStmt.setInt(9, slot.getSlotID()); // Set slotID for update
-                    updateStmt.executeUpdate(); // Execute the update statement
-                } else {
-                    // If slot does not exist, insert it
-                    insertStmt.setInt(1, slot.getSlotID());
-                    insertStmt.setString(2, slot.getDayName().toString());
-                    insertStmt.setTime(3, Time.valueOf(slot.getStartTime())); // Convert LocalTime to java.sql.Time
-                    insertStmt.setTime(4, Time.valueOf(slot.getEndTime())); // Convert LocalTime to java.sql.Time
-                    insertStmt.setInt(5, slot.getSlotNumber());
-                    insertStmt.setObject(6, slot.getCaseID());
-                    insertStmt.setObject(7, slot.getCaseID() == null ? null : slot.getJudgeID());
-                    insertStmt.setObject(8, slot.getCaseID() == null ? null : slot.getWitnessID());
-                    insertStmt.setObject(9, slot.getCaseID() == null ? null : slot.getCourtId());
-                    insertStmt.executeUpdate(); // Execute the insert statement
-                }
+
+                insertStmt.setString(1, slot.getDayName().toString());
+                insertStmt.setTime(2, Time.valueOf(slot.getStartTime())); // Convert LocalTime to java.sql.Time
+                insertStmt.setTime(3, Time.valueOf(slot.getEndTime())); // Convert LocalTime to java.sql.Time
+                insertStmt.setInt(4, slot.getSlotNumber());
+                insertStmt.setObject(5, slot.getCaseID());
+                insertStmt.setObject(6, slot.getCaseID() == null ? null : slot.getJudgeID());
+                insertStmt.setObject(7, slot.getCaseID() == null ? null : slot.getWitnessID());
+                insertStmt.setObject(8, slot.getCaseID() == null ? null : slot.getCourtId());
+                insertStmt.executeUpdate(); // Execute the insert statement
             }
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    
 
     // Assume you have a method to check if a slot exists in the database based on
     // slotID

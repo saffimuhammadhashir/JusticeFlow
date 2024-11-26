@@ -13,6 +13,7 @@ public class Clients extends User {
     private String email;
     private int userID;
 
+    public Clients(){}
     public Clients(int userID, String username, String password, String role, String email, String phoneNumber,
             boolean activate,
             int clientID, String firstName, String lastName, Date dateOfBirth, String gender,
