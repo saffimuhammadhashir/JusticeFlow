@@ -249,6 +249,7 @@ public class CourtAdministrator extends User {
                 // ApproveCase(dbHandler, fileHandler, caseID);
             } else if ("Reject".equalsIgnoreCase(caseDecision)) {
                 cases.setCaseStatus("Not Allowed");
+
                 dbHandler.saveOrUpdateCase(cases);
                 // RejectCase(dbHandler, fileHandler, caseID);
             } else {
@@ -515,7 +516,16 @@ public class CourtAdministrator extends User {
                 });
                 rejectButton.setOnAction(e -> {
                     cases.setCaseStatus("Not Allowed");
+                    Notification.createNotification(cases,
+                            "Case : " + cases.getCaseTitle() + " is Blocked by : " + system.user.getUsername() + "("
+                                    + system.user.getRole() + ")",
+                            system);
+                    Notification.createNotification(cases,
+                            "Case : " + cases.getCaseTitle() + " is Blocked by : " + system.user.getUsername() + "("
+                                    + system.user.getRole() + ")",
+                            system);
                     dbHandler.saveOrUpdateCase(cases);
+
                     ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlots, AllJudges, AllWitnesses, AllCourts,
                             primaryStage, gui, system);
 
@@ -554,7 +564,7 @@ public class CourtAdministrator extends User {
     public void showHearingSlots(DatabaseHandler dbHandler, FileHandler fileHandler, List<Case> AllCases,
             List<Slot> AllSlots, List<Judge> AllJudges, List<Witness> AllWitnesses, List<Court> AllCourts,
             Stage primaryStage, GUI_Menu gui, Case cases) {
-        
+
         Label titleLabel = new Label("Select Slot from here!");
         titleLabel.setStyle(
                 "-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #333333; -fx-padding: 20px 0; -fx-alignment: center;");
@@ -664,9 +674,10 @@ public class CourtAdministrator extends User {
                     if (isSlotUpdated) {
                         dbHandler.updateOrInsertSlots(AllSlots); // Update the database with changes
                         gui.GUI_startmenu(primaryStage);
-                        // ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlots, AllJudges, AllWitnesses,
-                        //         AllCourts,
-                        //         primaryStage, gui);
+                        // ReviewCaseRequest(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
+                        // AllWitnesses,
+                        // AllCourts,
+                        // primaryStage, gui);
                     }
 
                 });
@@ -694,11 +705,9 @@ public class CourtAdministrator extends User {
         //
     }
 
-
     public void scheduleHearing(Scanner scanner, List<Case> AllCases, List<Slot> AllSlots, List<Judge> AllJudges,
             List<Court> AllCourts, List<Witness> AllWitnesses, FileHandler fileHandler,
             DatabaseHandler dbHandler, Stage primaryStage, GUI_Menu gui, CourtsManagementSystem system) {
-
 
         // Title Label
         Label titleLabel = new Label("Choose Case to Schedule Hearing!");
@@ -715,7 +724,7 @@ public class CourtAdministrator extends User {
 
         // Iterate over all cases and add only pending cases
         for (Case cases : AllCases) {
-            if (cases.getCaseStatus().equalsIgnoreCase("Open")||cases.getCaseStatus().equalsIgnoreCase("Opened")) {
+            if (cases.getCaseStatus().equalsIgnoreCase("Open") || cases.getCaseStatus().equalsIgnoreCase("Opened")) {
 
                 // Create a GridPane for each case
                 GridPane eachCase = new GridPane();
@@ -762,29 +771,32 @@ public class CourtAdministrator extends User {
                     // showandscheduleslots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
                     // AllWitnesses, AllCourts,
                     // primaryStage, gui, cases);
-                    // showHearingSlots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges, AllWitnesses, AllCourts,
-                    //         primaryStage, gui, cases);
-                    Judge judges=null;
-                    int i=0;
-                    for (Slot s: AllSlots){
-                        if (s.getCaseID()!=null){
-                            if (s.getCaseID()==cases.getCaseID()){
-                                i=s.getJudgeID();
+                    // showHearingSlots(dbHandler, fileHandler, AllCases, AllSlots, AllJudges,
+                    // AllWitnesses, AllCourts,
+                    // primaryStage, gui, cases);
+                    Judge judges = null;
+                    int i = 0;
+                    for (Slot s : AllSlots) {
+                        if (s.getCaseID() != null) {
+                            if (s.getCaseID() == cases.getCaseID()) {
+                                i = s.getJudgeID();
                                 break;
                             }
                         }
                     }
-                    for (Judge j:AllJudges){
-                        if (j.getJudgeID()==i){
-                            judges=j;
+                    for (Judge j : AllJudges) {
+                        if (j.getJudgeID() == i) {
+                            judges = j;
                             break;
                         }
                     }
-                    Slot.newSlotCreation_Hearing(AllSlots, judges, AllCourts, AllWitnesses, cases, dbHandler, primaryStage, gui, system);
+                    Slot.newSlotCreation_Hearing(AllSlots, judges, AllCourts, AllWitnesses, cases, dbHandler,
+                            primaryStage, gui, system);
 
                     // cases.setCaseStatus("Opened");
                     dbHandler.saveOrUpdateCase(cases);
-                    // showFiles(dbHandler, fileHandler, AllCases, primaryStage, previousScene, cases);
+                    // showFiles(dbHandler, fileHandler, AllCases, primaryStage, previousScene,
+                    // cases);
                     // cases.setCaseStatus("Opened");
                     // dbHandler.saveOrUpdateCase(cases);
 
@@ -824,23 +836,27 @@ public class CourtAdministrator extends User {
 
         // // Title label
         // Label titleLabel = new Label("Schedule a Hearing");
-        // titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
+        // titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px;
+        // -fx-font-weight: bold;");
         // mainLayout.getChildren().add(titleLabel);
 
         // // Scrollable ViewBox for displaying cases
         // ScrollPane caseScrollPane = new ScrollPane();
         // VBox caseViewBox = new VBox(10);
         // caseViewBox.setStyle(
-        //         "-fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-radius: 10px; -fx-background-radius: 10px;");
+        // "-fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5);
+        // -fx-border-radius: 10px; -fx-background-radius: 10px;");
 
         // Label casesLabel = new Label("Available Cases:");
-        // casesLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+        // casesLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;
+        // -fx-font-weight: bold;");
         // caseViewBox.getChildren().add(casesLabel);
 
         // for (Case caseObj : AllCases) {
-        //     Label caseEntry = new Label(caseObj.toString());
-        //     caseEntry.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5;");
-        //     caseViewBox.getChildren().add(caseEntry);
+        // Label caseEntry = new Label(caseObj.toString());
+        // caseEntry.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding:
+        // 5;");
+        // caseViewBox.getChildren().add(caseEntry);
         // }
 
         // caseScrollPane.setContent(caseViewBox);
@@ -858,113 +874,134 @@ public class CourtAdministrator extends User {
         // // Create "Back" button
         // Button backButton = new Button("Back");
         // backButton.setStyle(
-        //         "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #FF6347; -fx-text-fill: white;");
+        // "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px;
+        // -fx-background-radius: 10px; -fx-background-color: #FF6347; -fx-text-fill:
+        // white;");
         // backButton.setOnAction(ev -> {
-        //     primaryStage.setScene(prevScene); // Go back to case selection scene
+        // primaryStage.setScene(prevScene); // Go back to case selection scene
         // });
 
         // Button nextButton = new Button("Next");
         // nextButton.setStyle(
-        //         "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+        // "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px;
+        // -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill:
+        // white;");
 
         // // Create an HBox to place the "Back" and "Submit" buttons in a line
         // HBox buttonLayout1 = new HBox(20, backButton, nextButton);
         // buttonLayout1.setAlignment(Pos.CENTER); // Align buttons to the center
 
-        // VBox caseInputSection = new VBox(10, caseIdLabel, caseIdField, buttonLayout1);
+        // VBox caseInputSection = new VBox(10, caseIdLabel, caseIdField,
+        // buttonLayout1);
         // caseInputSection.setStyle("-fx-alignment: center;");
         // mainLayout.getChildren().add(caseInputSection);
 
         // // Transition to slots after CaseID input
         // nextButton.setOnAction(e -> {
-        //     try {
-        //         int caseId = Integer.parseInt(caseIdField.getText());
-        //         boolean caseExists = AllCases.stream().anyMatch(c -> c.getCaseID() == caseId);
-        //         if (!caseExists) {
-        //             System.out.println("Invalid Case ID.");
-        //             return;
-        //         }
+        // try {
+        // int caseId = Integer.parseInt(caseIdField.getText());
+        // boolean caseExists = AllCases.stream().anyMatch(c -> c.getCaseID() ==
+        // caseId);
+        // if (!caseExists) {
+        // System.out.println("Invalid Case ID.");
+        // return;
+        // }
 
-        //         VBox slotLayout = new VBox(20);
-        //         slotLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+        // VBox slotLayout = new VBox(20);
+        // slotLayout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
 
-        //         Label slotTitleLabel = new Label("Available Slots:");
-        //         slotTitleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
-        //         slotLayout.getChildren().add(slotTitleLabel);
+        // Label slotTitleLabel = new Label("Available Slots:");
+        // slotTitleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px;
+        // -fx-font-weight: bold;");
+        // slotLayout.getChildren().add(slotTitleLabel);
 
-        //         ScrollPane slotScrollPane = new ScrollPane();
-        //         VBox slotViewBox = new VBox(10);
-        //         slotViewBox.setStyle(
-        //                 "-fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-radius: 10px; -fx-background-radius: 10px;");
+        // ScrollPane slotScrollPane = new ScrollPane();
+        // VBox slotViewBox = new VBox(10);
+        // slotViewBox.setStyle(
+        // "-fx-padding: 10px; -fx-background-color: rgba(0, 0, 0, 0.5);
+        // -fx-border-radius: 10px; -fx-background-radius: 10px;");
 
-        //         for (Slot slotObj : AllSlots) {
-        //             Label slotEntry = new Label(slotObj.toString());
-        //             slotEntry.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5;");
-        //             slotViewBox.getChildren().add(slotEntry);
-        //         }
+        // for (Slot slotObj : AllSlots) {
+        // Label slotEntry = new Label(slotObj.toString());
+        // slotEntry.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding:
+        // 5;");
+        // slotViewBox.getChildren().add(slotEntry);
+        // }
 
-        //         slotScrollPane.setContent(slotViewBox);
-        //         slotScrollPane.setFitToWidth(true);
-        //         slotScrollPane.setPrefHeight(300);
-        //         slotLayout.getChildren().add(slotScrollPane);
+        // slotScrollPane.setContent(slotViewBox);
+        // slotScrollPane.setFitToWidth(true);
+        // slotScrollPane.setPrefHeight(300);
+        // slotLayout.getChildren().add(slotScrollPane);
 
-        //         Label slotIdLabel = new Label("Enter Slot ID:");
-        //         slotIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
-        //         TextField slotIdField = new TextField();
-        //         slotIdField.setPromptText("Slot ID");
-        //         slotIdField.setPrefWidth(200);
+        // Label slotIdLabel = new Label("Enter Slot ID:");
+        // slotIdLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+        // TextField slotIdField = new TextField();
+        // slotIdField.setPromptText("Slot ID");
+        // slotIdField.setPrefWidth(200);
 
-        //         Button submitButton = new Button("Submit");
-        //         submitButton.setStyle(
-        //                 "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+        // Button submitButton = new Button("Submit");
+        // submitButton.setStyle(
+        // "-fx-font-size: 14px; -fx-padding: 5px 15px; -fx-border-radius: 10px;
+        // -fx-background-radius: 10px; -fx-background-color: #4CAF50; -fx-text-fill:
+        // white;");
 
-        //         // Create an HBox to place the "Back" and "Submit" buttons in a line
-        //         HBox buttonLayout = new HBox(20, backButton, submitButton);
-        //         buttonLayout.setAlignment(Pos.CENTER); // Align buttons to the center
+        // // Create an HBox to place the "Back" and "Submit" buttons in a line
+        // HBox buttonLayout = new HBox(20, backButton, submitButton);
+        // buttonLayout.setAlignment(Pos.CENTER); // Align buttons to the center
 
-        //         Label successLabel = new Label();
-        //         successLabel.setStyle("-fx-text-fill: lime; -fx-font-size: 14px; -fx-font-weight: bold;");
+        // Label successLabel = new Label();
+        // successLabel.setStyle("-fx-text-fill: lime; -fx-font-size: 14px;
+        // -fx-font-weight: bold;");
 
-        //         VBox slotInputSection = new VBox(10, slotIdLabel, slotIdField, buttonLayout, successLabel);
-        //         slotInputSection.setStyle("-fx-alignment: center;");
-        //         slotLayout.getChildren().add(slotInputSection);
+        // VBox slotInputSection = new VBox(10, slotIdLabel, slotIdField, buttonLayout,
+        // successLabel);
+        // slotInputSection.setStyle("-fx-alignment: center;");
+        // slotLayout.getChildren().add(slotInputSection);
 
-        //         // Set scene to slot selection
-        //         Scene slotScene = new Scene(slotLayout, 1100, 650);
-        //         slotLayout.setStyle(
-        //                 "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
-        //         primaryStage.setScene(slotScene);
+        // // Set scene to slot selection
+        // Scene slotScene = new Scene(slotLayout, 1100, 650);
+        // slotLayout.setStyle(
+        // "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch;
+        // -fx-background-position: center; -fx-background-repeat: no-repeat;
+        // -fx-background-image:
+        // url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        // primaryStage.setScene(slotScene);
 
-        //         submitButton.setOnAction(ev -> {
-        //             try {
-        //                 int slotId = Integer.parseInt(slotIdField.getText());
-        //                 Slot selectedSlot = AllSlots.stream().filter(s -> s.getSlotID() == slotId).findFirst()
-        //                         .orElse(null);
+        // submitButton.setOnAction(ev -> {
+        // try {
+        // int slotId = Integer.parseInt(slotIdField.getText());
+        // Slot selectedSlot = AllSlots.stream().filter(s -> s.getSlotID() ==
+        // slotId).findFirst()
+        // .orElse(null);
 
-        //                 if (selectedSlot == null || selectedSlot.getCaseID() != null) {
-        //                     System.out.println("Invalid or unavailable Slot ID.");
-        //                     return;
-        //                 }
+        // if (selectedSlot == null || selectedSlot.getCaseID() != null) {
+        // System.out.println("Invalid or unavailable Slot ID.");
+        // return;
+        // }
 
-        //                 selectedSlot.setCaseID(caseId);
-        //                 databaseHandler.updateOrInsertSlots(AllSlots);
-        //                 System.out.println("Hearing Scheduled for Slot ID: " + slotId);
+        // selectedSlot.setCaseID(caseId);
+        // databaseHandler.updateOrInsertSlots(AllSlots);
+        // System.out.println("Hearing Scheduled for Slot ID: " + slotId);
 
-        //                 // Show success message
-        //                 successLabel.setText("Hearing successfully scheduled for Slot ID: " + slotId + "!");
-        //             } catch (NumberFormatException ex) {
-        //                 System.out.println("Invalid Slot ID input.");
-        //             }
-        //         });
-        //     } catch (NumberFormatException ex) {
-        //         System.out.println("Invalid Case ID input.");
-        //     }
+        // // Show success message
+        // successLabel.setText("Hearing successfully scheduled for Slot ID: " + slotId
+        // + "!");
+        // } catch (NumberFormatException ex) {
+        // System.out.println("Invalid Slot ID input.");
+        // }
+        // });
+        // } catch (NumberFormatException ex) {
+        // System.out.println("Invalid Case ID input.");
+        // }
         // });
 
         // // Set scene and display
         // Scene caseScene = new Scene(mainLayout, 1100, 650);
         // mainLayout.setStyle(
-        //         "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch; -fx-background-position: center; -fx-background-repeat: no-repeat; -fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
+        // "-fx-padding: 80px; -fx-alignment: center; -fx-background-size: stretch;
+        // -fx-background-position: center; -fx-background-repeat: no-repeat;
+        // -fx-background-image:
+        // url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg');");
         // primaryStage.setScene(caseScene);
         // primaryStage.show();
     }
@@ -1436,6 +1473,10 @@ public class CourtAdministrator extends User {
             });
             rejectButton.setOnAction(e -> {
                 cases.setCaseStatus("Not Allowed");
+                Notification.createNotification(cases,
+                        "Case : " + cases.getCaseTitle() + " is Blocked by : " + system.user.getUsername() + "("
+                                + system.user.getRole() + ")",
+                        system);
                 dbHandler.saveOrUpdateCase(cases);
                 UpdateCase(dbHandler, fileHandler, AllCases, AllSlots, allclients, AllJudges, AllLawyers, AllWitnesses,
                         AllCourts,
@@ -1478,7 +1519,8 @@ public class CourtAdministrator extends User {
 
     }
 
-    public void closeCase(List<Case> AllCases, FileHandler fileHandler, DatabaseHandler dbHandler, Stage primaryStage, Scene previousScene){
+    public void closeCase(List<Case> AllCases, FileHandler fileHandler, DatabaseHandler dbHandler, Stage primaryStage,
+            Scene previousScene) {
         // Title Label
         Label titleLabel = new Label("Close Case!");
         titleLabel.setStyle(
@@ -1582,7 +1624,8 @@ public class CourtAdministrator extends User {
         primaryStage.show();
     }
 
-    public void Re_OpenCase(List<Case> AllCases, FileHandler fileHandler, DatabaseHandler dbHandler, Stage primaryStage, Scene previousScene){
+    public void Re_OpenCase(List<Case> AllCases, FileHandler fileHandler, DatabaseHandler dbHandler, Stage primaryStage,
+            Scene previousScene) {
         // Title Label
         Label titleLabel = new Label("Re-Open Case!");
         titleLabel.setStyle(

@@ -452,16 +452,20 @@ public class Case {
         VBox detailsLayout = new VBox(20);
         detailsLayout.setPadding(new Insets(20));
         detailsLayout.setAlignment(Pos.TOP_LEFT);
-
+        
+        // Title Styling
         Label detailsTitle = new Label("Case Details");
-        detailsTitle.setStyle("-fx-font-size: 46px; -fx-font-weight: bold;");
-
-        // Display case attributes
+        detailsTitle.setStyle("-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #2196F3;");
+        
+        // Case attributes with larger font size
         Label caseTitleLabel = new Label("Case Title: " + caseTitle);
+        caseTitleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #000000;");
         Label caseTypeLabel = new Label("Case Type: " + caseType);
+        caseTypeLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #000000;");
         Label caseStatusLabel = new Label("Case Status: " + caseStatus);
-
-        // Display associated Plaintiff, Defendant, and Lawyer
+        caseStatusLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #000000;");
+        
+        // Display associated Plaintiff, Defendant, and Lawyer with larger font size
         Clients plaintiff = allclients.stream()
                 .filter(c -> c.getclientID() == plaintiffID)
                 .findFirst()
@@ -474,30 +478,23 @@ public class Case {
                 .filter(l -> l.getLawyerID() == Lawyerid)
                 .findFirst()
                 .orElse(null);
-
+        
         Label plaintiffLabel = new Label("Plaintiff: " +
                 (plaintiff != null ? plaintiff.getFirstName() + " " + plaintiff.getLastName() : "N/A"));
+        plaintiffLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: #000000;");
         Label defendantLabel = new Label("Defendant: " +
                 (defendant != null ? defendant.getFirstName() + " " + defendant.getLastName() : "N/A"));
+        defendantLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: #000000;");
         Label lawyerLabel = new Label("Lawyer: " +
                 (lawyer != null ? lawyer.getFirstName() + " " + lawyer.getLastName() : "N/A"));
-
-        Button deleteButton = new Button("Delete Case");
-        deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+        lawyerLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: #000000;");
+        
 
         Button closeButton = new Button("Return");
-        closeButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        closeButton.setStyle("-fx-font-size: 16px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-border-radius: 20px;");
+        
 
-        // Delete button action
-        deleteButton.setOnAction(e -> {
-            try {
-                gui.showMessage("Case and associated data deleted successfully!");
-                system.TrackUpdates(primaryStage, gui); // Navigate back to updates
-            } catch (Exception ex) {
-                gui.showMessage("Error deleting case: " + ex.getMessage());
-            }
-        });
-
+        
         // Close button action
         closeButton.setOnAction(e -> {
             try {
@@ -506,10 +503,15 @@ public class Case {
                 gui.showMessage("Error returning to main menu: " + ex.getMessage());
             }
         });
-
-        HBox buttonBox = new HBox(25, deleteButton, closeButton);
+        
+        // Create a container for the buttons with padding and alignment
+        HBox buttonBox = new HBox(25, closeButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        
+        // Add all components to the main layout
         detailsLayout.getChildren().addAll(detailsTitle, caseTitleLabel, caseTypeLabel, caseStatusLabel,
                 plaintiffLabel, defendantLabel, lawyerLabel, buttonBox);
+        
 
         // Right side: Display slot details
         VBox slotDetailsLayout = new VBox(10);
@@ -522,10 +524,10 @@ public class Case {
         for (Slot slot : allSlots) {
             if (slot.getCaseID() != null && slot.getCaseID() == caseID) {
                 // Slot details as text
-                String slotText = "Slot: " + slot.getDayName() + " / " + 
-                                  "Time: " + slot.getStartTime() + " - " + slot.getEndTime() +
-                                  "\nCourtroom: " + slot.getCourtId();
-        
+                String slotText = "Slot: " + slot.getDayName() + " / " +
+                        "Time: " + slot.getStartTime() + " - " + slot.getEndTime() +
+                        "\nCourtroom: " + slot.getCourtId();
+
                 // Slot label design
                 Label slotLabel = new Label(slotText);
                 slotLabel.setStyle("-fx-font-size: 14px; "
@@ -534,7 +536,7 @@ public class Case {
                         + "-fx-border-radius: 5px; "
                         + "-fx-border-width: 1px; "
                         + "-fx-background-color: #f0f0f0;");
-        
+
                 // Delete Slot button design
                 Button deleteSlotButton = new Button("Delete Slot");
                 deleteSlotButton.setStyle("-fx-font-size: 14px; "
@@ -544,109 +546,120 @@ public class Case {
                         + "-fx-text-fill: white; "
                         + "-fx-border-radius: 5px; "
                         + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
-        
+
                 deleteSlotButton.setOnAction(e -> {
                     try {
                         // dbHandler.deleteSlot(slot.getSlotID());
                         gui.showMessage("Slot deleted successfully!");
-                        Slot.newSlotCreationandDeletion(allSlots, allJudges, allCourts, allWitnesses, this, dbHandler, fileHandler, allCases, allLawyers, allclients, primaryStage, gui, system, slot);
+                        Slot.newSlotCreationandDeletion(allSlots, allJudges, allCourts, allWitnesses, this, dbHandler,
+                                fileHandler, allCases, allLawyers, allclients, primaryStage, gui, system, slot);
                     } catch (Exception ex) {
                         gui.showMessage("Error deleting slot: " + ex.getMessage());
                     }
                 });
-        
+
                 // Combine label and button into an HBox
-                
-                VBox slotBox = new VBox( slotLabel, deleteSlotButton);
+
+                VBox slotBox = new VBox(slotLabel, deleteSlotButton);
                 slotBox.setAlignment(Pos.CENTER); // Align items to the left
                 slotBox.setPadding(new Insets(5)); // Add padding for spacing
                 slotBox.setStyle("-fx-border-color: #D3D3D3; "
                         + "-fx-border-width: 1px; "
                         + "-fx-border-radius: 5px; "
-                        + "-fx-background-color: #FFFFFF;");
-        
+                        + "-fx-background-color: #FFFFFF;"
+                        + "-fx-spacing:10px;");
+
                 // Add the slot box to the layout
                 slotDetailsLayout.getChildren().add(slotBox);
             }
         }
-        
 
         // Judgement details with delete and open buttons
         VBox judgementDetailsLayout = new VBox(10);
         judgementDetailsLayout.setPadding(new Insets(10));
         judgementDetailsLayout.setAlignment(Pos.CENTER);
         Label judgementTitle = new Label("Judgements");
+        judgementDetailsLayout.setMinWidth(350);
         judgementTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: blue");
 
         for (CaseFile judgement : this.getJudgements()) {
-            String judgementPath = judgement.getFileName();
+            if (judgement.getStatus() == 3) {
+                String judgementPath = judgement.getFileName();
 
-            // Judgement label design
-            Label judgementLabel = new Label("Judgement: " + judgement.getFileName());
-            judgementLabel.setStyle("-fx-font-size: 14px; "
-                    + "-fx-padding: 10px; "
-                    + "-fx-border-color: #B0BEC5; "
-                    + "-fx-border-radius: 5px; "
-                    + "-fx-border-width: 1px; "
-                    + "-fx-background-color: #f0f0f0;");
+                // Judgement label design
+                Label judgementLabel = new Label("Judgement: " + judgement.getFileName());
+                judgementLabel.setStyle("-fx-font-size: 14px; "
+                        + "-fx-padding: 10px; "
+                        + "-fx-border-color: #B0BEC5; "
+                        + "-fx-border-radius: 5px; "
+                        + "-fx-border-width: 1px; "
+                        + "-fx-background-color: #f0f0f0;");
 
-            // Open button design
-            Button openJudgementButton = new Button("Open");
-            openJudgementButton.setStyle("-fx-font-size: 14px; "
-                    + "-fx-font-weight: bold; "
-                    + "-fx-padding: 8px 15px; "
-                    + "-fx-background-color: #4CAF50; "
-                    + "-fx-text-fill: white; "
-                    + "-fx-border-radius: 5px; "
-                    + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
+                // Open button design
+                Button openJudgementButton = new Button("Open");
+                openJudgementButton.setStyle("-fx-font-size: 14px; "
+                        + "-fx-font-weight: bold; "
+                        + "-fx-padding: 8px 15px; "
+                        + "-fx-background-color: #4CAF50; "
+                        + "-fx-text-fill: white; "
+                        + "-fx-border-radius: 5px; "
+                        + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
 
-            openJudgementButton.setOnAction(e -> openFile(judgementPath));
+                openJudgementButton.setOnAction(e -> openFile(judgementPath));
 
-            // Delete button design
-            Button deleteJudgementButton = new Button("Delete");
-            deleteJudgementButton.setStyle("-fx-font-size: 14px; "
-                    + "-fx-font-weight: bold; "
-                    + "-fx-padding: 8px 15px; "
-                    + "-fx-background-color: #f44336; "
-                    + "-fx-text-fill: white; "
-                    + "-fx-border-radius: 5px; "
-                    + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
+                // Delete button design
+                Button deleteJudgementButton = new Button("Delete");
+                deleteJudgementButton.setStyle("-fx-font-size: 14px; "
+                        + "-fx-font-weight: bold; "
+                        + "-fx-padding: 8px 15px; "
+                        + "-fx-background-color: #f44336; "
+                        + "-fx-text-fill: white; "
+                        + "-fx-border-radius: 5px; "
+                        + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
 
-            deleteJudgementButton.setOnAction(e -> {
-                try {
-                    // dbHandler.deleteJudgement(judgement.getFileName());
-                    gui.showMessage("Judgement deleted successfully!");
-                    viewCaseDetailsJudge(dbHandler, fileHandler, allCases, allSlots, allclients, allJudges, allLawyers,
-                            allWitnesses, allCourts, primaryStage, gui, system);
-                } catch (Exception ex) {
-                    gui.showMessage("Error deleting judgement: " + ex.getMessage());
-                }
-            });
+                deleteJudgementButton.setOnAction(e -> {
+                    try {
+                        // dbHandler.deleteJudgement(judgement.getFileName());
+                        gui.showMessage("Judgement deleted successfully!");
+                        judgement.setStatus(2);
+                        viewCaseDetailsJudge(dbHandler, fileHandler, allCases, allSlots, allclients, allJudges,
+                                allLawyers,
+                                allWitnesses, allCourts, primaryStage, gui, system);
+                    } catch (Exception ex) {
+                        gui.showMessage("Error deleting judgement: " + ex.getMessage());
+                    }
+                });
 
-            // Combine label and buttons into HBox
-            HBox judgementBox = new HBox(10, openJudgementButton, deleteJudgementButton);
-            VBox temp=new VBox(judgementLabel,judgementBox);
-            temp.setAlignment(Pos.CENTER); // Align items to the left for consistency
-            temp.setPadding(new Insets(5)); // Add padding for spacing
-            temp.setStyle("-fx-border-color: #D3D3D3; "
-                    + "-fx-border-width: 1px; "
-                    + "-fx-border-radius: 5px; "
-                    + "-fx-background-color: #FFFFFF;");
-
-            // Add the HBox to the layout
-            judgementDetailsLayout.getChildren().add(temp);
+                // Combine label and buttons into HBox
+                HBox judgementBox = new HBox(10, openJudgementButton, deleteJudgementButton);
+                VBox temp = new VBox(judgementLabel, judgementBox);
+                judgementBox.setAlignment(Pos.CENTER); // Align items to the left for consistency
+                temp.setAlignment(Pos.CENTER); // Align items to the left for consistency
+                temp.setPadding(new Insets(5)); // Add padding for spacing
+                temp.setStyle("-fx-border-color: #D3D3D3; "
+                        + "-fx-border-width: 1px; "
+                        + "-fx-border-radius: 5px; "
+                        + "-fx-background-color: #FFFFFF;"
+                        + "-fx-spacing:10px;");
+                // Add the HBox to the layout
+                judgementDetailsLayout.getChildren().add(temp);
+            }
         }
 
         ScrollPane judgementScrollPane = new ScrollPane(judgementDetailsLayout);
         judgementScrollPane.setFitToWidth(true);
         judgementScrollPane.setMinHeight(250);
         judgementScrollPane.setMaxHeight(250);
+        judgementScrollPane.setMinWidth(500);
+
 
         ScrollPane scrollPane = new ScrollPane(slotDetailsLayout);
         scrollPane.setFitToWidth(true);
         scrollPane.setMinHeight(250);
         scrollPane.setMaxHeight(250);
+        scrollPane.setMinWidth(500);
 
+        
         VBox verticaBox = new VBox(slotTitle, scrollPane, judgementTitle, judgementScrollPane);
         mainLayout.getChildren().addAll(detailsLayout, verticaBox);
 
@@ -856,36 +869,38 @@ public class Case {
 
         // Populate the file details
         for (CaseFile file : this.getFiles()) { // Using caseObj's files list
-            String filePath = fileHandler.getFilePathFromCase(file.getFileName(), this); // Resolve file path
+            if (file.getStatus() == 1) {
+                String filePath = fileHandler.getFilePathFromCase(file.getFileName(), this); // Resolve file path
 
-            // Create a label for the file name
-            Label fileLabel = new Label("File: " + file.getFileName());
-            fileLabel.setStyle("-fx-font-size: 14px; "
-                    + "-fx-font-weight: normal; "
-                    + "-fx-padding: 10px; "
-                    + "-fx-border-radius: 5px; "
-                    + "-fx-border-color: #B0BEC5; "
-                    + "-fx-border-width: 1px; "
-                    + "-fx-background-color: #f0f0f0; "
-                    + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
-
-            // Create a button to open the file if the file path is valid
-            if (filePath != null) {
-                Button openFileButton = new Button("Open File");
-                openFileButton.setOnAction(e -> openFile(filePath)); // Method to open the file
-                openFileButton.setStyle("-fx-font-size: 14px; "
-                        + "-fx-font-weight: bold; "
-                        + "-fx-padding: 8px 15px; "
-                        + "-fx-background-color: #4CAF50; "
-                        + "-fx-text-fill: white; "
+                // Create a label for the file name
+                Label fileLabel = new Label("File: " + file.getFileName());
+                fileLabel.setStyle("-fx-font-size: 14px; "
+                        + "-fx-font-weight: normal; "
+                        + "-fx-padding: 10px; "
                         + "-fx-border-radius: 5px; "
+                        + "-fx-border-color: #B0BEC5; "
+                        + "-fx-border-width: 1px; "
+                        + "-fx-background-color: #f0f0f0; "
                         + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
 
-                // Add the file label and open button to the layout
-                fileDetailsLayout.getChildren().addAll(fileLabel, openFileButton);
-            } else {
-                // If file path is null, just display the label
-                fileDetailsLayout.getChildren().add(fileLabel);
+                // Create a button to open the file if the file path is valid
+                if (filePath != null) {
+                    Button openFileButton = new Button("Open File");
+                    openFileButton.setOnAction(e -> openFile(filePath)); // Method to open the file
+                    openFileButton.setStyle("-fx-font-size: 14px; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-padding: 8px 15px; "
+                            + "-fx-background-color: #4CAF50; "
+                            + "-fx-text-fill: white; "
+                            + "-fx-border-radius: 5px; "
+                            + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
+
+                    // Add the file label and open button to the layout
+                    fileDetailsLayout.getChildren().addAll(fileLabel, openFileButton);
+                } else {
+                    // If file path is null, just display the label
+                    fileDetailsLayout.getChildren().add(fileLabel);
+                }
             }
         }
 
@@ -904,36 +919,38 @@ public class Case {
 
         // Populate the judgement details
         for (CaseFile judgement : this.getJudgements()) { // Using caseObj's judgements list
-            String judgementPath = judgement.getFileName(); // Resolve judgement path
+            if (judgement.getStatus() == 3) {
+                String judgementPath = judgement.getFileName(); // Resolve judgement path
 
-            // Create a label for the judgement file name
-            Label judgementLabel = new Label("Judgement: " + judgement.getFileName());
-            judgementLabel.setStyle("-fx-font-size: 14px; "
-                    + "-fx-font-weight: normal; "
-                    + "-fx-padding: 10px; "
-                    + "-fx-border-radius: 5px; "
-                    + "-fx-border-color: #B0BEC5; "
-                    + "-fx-border-width: 1px; "
-                    + "-fx-background-color: #f0f0f0; "
-                    + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
-
-            // Create a button to open the judgement file if the path is valid
-            if (judgementPath != null) {
-                Button openJudgementButton = new Button("Open Judgement");
-                openJudgementButton.setOnAction(e -> openFile(judgementPath)); // Method to open the file
-                openJudgementButton.setStyle("-fx-font-size: 14px; "
-                        + "-fx-font-weight: bold; "
-                        + "-fx-padding: 8px 15px; "
-                        + "-fx-background-color: #4CAF50; "
-                        + "-fx-text-fill: white; "
+                // Create a label for the judgement file name
+                Label judgementLabel = new Label("Judgement: " + judgement.getFileName());
+                judgementLabel.setStyle("-fx-font-size: 14px; "
+                        + "-fx-font-weight: normal; "
+                        + "-fx-padding: 10px; "
                         + "-fx-border-radius: 5px; "
+                        + "-fx-border-color: #B0BEC5; "
+                        + "-fx-border-width: 1px; "
+                        + "-fx-background-color: #f0f0f0; "
                         + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
 
-                // Add the judgement label and open button to the layout
-                judgementDetailsLayout.getChildren().addAll(judgementLabel, openJudgementButton);
-            } else {
-                // If judgement path is null, just display the label
-                judgementDetailsLayout.getChildren().add(judgementLabel);
+                // Create a button to open the judgement file if the path is valid
+                if (judgementPath != null) {
+                    Button openJudgementButton = new Button("Open Judgement");
+                    openJudgementButton.setOnAction(e -> openFile(judgementPath)); // Method to open the file
+                    openJudgementButton.setStyle("-fx-font-size: 14px; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-padding: 8px 15px; "
+                            + "-fx-background-color: #4CAF50; "
+                            + "-fx-text-fill: white; "
+                            + "-fx-border-radius: 5px; "
+                            + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
+
+                    // Add the judgement label and open button to the layout
+                    judgementDetailsLayout.getChildren().addAll(judgementLabel, openJudgementButton);
+                } else {
+                    // If judgement path is null, just display the label
+                    judgementDetailsLayout.getChildren().add(judgementLabel);
+                }
             }
         }
 
@@ -1169,36 +1186,38 @@ public class Case {
 
         // Populate the file details
         for (CaseFile file : this.getFiles()) { // Using caseObj's files list
-            String filePath = fileHandler.getFilePathFromCase(file.getFileName(), this); // Resolve file path
+            if (file.getStatus() == 1) {
+                String filePath = fileHandler.getFilePathFromCase(file.getFileName(), this); // Resolve file path
 
-            // Create a label for the file name
-            Label fileLabel = new Label("File: " + file.getFileName());
-            fileLabel.setStyle("-fx-font-size: 14px; "
-                    + "-fx-font-weight: normal; "
-                    + "-fx-padding: 10px; "
-                    + "-fx-border-radius: 5px; "
-                    + "-fx-border-color: #B0BEC5; "
-                    + "-fx-border-width: 1px; "
-                    + "-fx-background-color: #f0f0f0; "
-                    + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
-
-            // Create a button to open the file if the file path is valid
-            if (filePath != null) {
-                Button openFileButton = new Button("Open File");
-                openFileButton.setOnAction(e -> openFile(filePath)); // Method to open the file
-                openFileButton.setStyle("-fx-font-size: 14px; "
-                        + "-fx-font-weight: bold; "
-                        + "-fx-padding: 8px 15px; "
-                        + "-fx-background-color: #4CAF50; "
-                        + "-fx-text-fill: white; "
+                // Create a label for the file name
+                Label fileLabel = new Label("File: " + file.getFileName());
+                fileLabel.setStyle("-fx-font-size: 14px; "
+                        + "-fx-font-weight: normal; "
+                        + "-fx-padding: 10px; "
                         + "-fx-border-radius: 5px; "
+                        + "-fx-border-color: #B0BEC5; "
+                        + "-fx-border-width: 1px; "
+                        + "-fx-background-color: #f0f0f0; "
                         + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
 
-                // Add the file label and open button to the layout
-                fileDetailsLayout.getChildren().addAll(fileLabel, openFileButton);
-            } else {
-                // If file path is null, just display the label
-                fileDetailsLayout.getChildren().add(fileLabel);
+                // Create a button to open the file if the file path is valid
+                if (filePath != null) {
+                    Button openFileButton = new Button("Open File");
+                    openFileButton.setOnAction(e -> openFile(filePath)); // Method to open the file
+                    openFileButton.setStyle("-fx-font-size: 14px; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-padding: 8px 15px; "
+                            + "-fx-background-color: #4CAF50; "
+                            + "-fx-text-fill: white; "
+                            + "-fx-border-radius: 5px; "
+                            + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
+
+                    // Add the file label and open button to the layout
+                    fileDetailsLayout.getChildren().addAll(fileLabel, openFileButton);
+                } else {
+                    // If file path is null, just display the label
+                    fileDetailsLayout.getChildren().add(fileLabel);
+                }
             }
         }
 
@@ -1217,36 +1236,38 @@ public class Case {
 
         // Populate the judgement details
         for (CaseFile judgement : this.getJudgements()) { // Using caseObj's judgements list
-            String judgementPath = judgement.getFileName(); // Resolve judgement path
+            if (judgement.getStatus() == 3) {
+                String judgementPath = judgement.getFileName(); // Resolve judgement path
 
-            // Create a label for the judgement file name
-            Label judgementLabel = new Label("Judgement: " + judgement.getFileName());
-            judgementLabel.setStyle("-fx-font-size: 14px; "
-                    + "-fx-font-weight: normal; "
-                    + "-fx-padding: 10px; "
-                    + "-fx-border-radius: 5px; "
-                    + "-fx-border-color: #B0BEC5; "
-                    + "-fx-border-width: 1px; "
-                    + "-fx-background-color: #f0f0f0; "
-                    + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
-
-            // Create a button to open the judgement file if the path is valid
-            if (judgementPath != null) {
-                Button openJudgementButton = new Button("Open Judgement");
-                openJudgementButton.setOnAction(e -> openFile(judgementPath)); // Method to open the file
-                openJudgementButton.setStyle("-fx-font-size: 14px; "
-                        + "-fx-font-weight: bold; "
-                        + "-fx-padding: 8px 15px; "
-                        + "-fx-background-color: #4CAF50; "
-                        + "-fx-text-fill: white; "
+                // Create a label for the judgement file name
+                Label judgementLabel = new Label("Judgement: " + judgement.getFileName());
+                judgementLabel.setStyle("-fx-font-size: 14px; "
+                        + "-fx-font-weight: normal; "
+                        + "-fx-padding: 10px; "
                         + "-fx-border-radius: 5px; "
+                        + "-fx-border-color: #B0BEC5; "
+                        + "-fx-border-width: 1px; "
+                        + "-fx-background-color: #f0f0f0; "
                         + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
 
-                // Add the judgement label and open button to the layout
-                judgementDetailsLayout.getChildren().addAll(judgementLabel, openJudgementButton);
-            } else {
-                // If judgement path is null, just display the label
-                judgementDetailsLayout.getChildren().add(judgementLabel);
+                // Create a button to open the judgement file if the path is valid
+                if (judgementPath != null) {
+                    Button openJudgementButton = new Button("Open Judgement");
+                    openJudgementButton.setOnAction(e -> openFile(judgementPath)); // Method to open the file
+                    openJudgementButton.setStyle("-fx-font-size: 14px; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-padding: 8px 15px; "
+                            + "-fx-background-color: #4CAF50; "
+                            + "-fx-text-fill: white; "
+                            + "-fx-border-radius: 5px; "
+                            + "-fx-effect: innershadow(gauss, rgba(0, 0, 0, 0.3), 5, 0, 0, 1);");
+
+                    // Add the judgement label and open button to the layout
+                    judgementDetailsLayout.getChildren().addAll(judgementLabel, openJudgementButton);
+                } else {
+                    // If judgement path is null, just display the label
+                    judgementDetailsLayout.getChildren().add(judgementLabel);
+                }
             }
         }
 

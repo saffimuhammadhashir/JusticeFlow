@@ -171,6 +171,20 @@ public class User {
         return null;
     }
 
+    public Clients getRelevantClients2(List<Clients> AllCourt_Administrators,
+            int ID) {
+        // Iterate through the list of all lawyers
+        for (Clients CourtAdmin : AllCourt_Administrators) {
+            // Check if the current lawyer's ID matches the provided UserID
+            System.out.println(CourtAdmin.getclientID());
+            if (CourtAdmin.getclientID() == ID) {
+                return CourtAdmin; // Return the matched lawyer
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Searches for a lawyer in the provided list based on the given UserID.
      *
@@ -191,11 +205,35 @@ public class User {
         return null;
     }
 
+    public Lawyer getRelevantLawyer(List<Lawyer> AllLawyers, int id) {
+        // Iterate through the list of all lawyers
+        for (Lawyer lawyer : AllLawyers) {
+            // Check if the current lawyer's ID matches the provided UserID
+            if (lawyer.getLawyerID() == id) {
+                return lawyer; // Return the matched lawyer
+            }
+        }
+        // Return null if no matching lawyer is found
+        return null;
+    }
+
     public Witness getRelevantWitness(List<Witness> AllWitnesses, User user) {
         // Iterate through the list of all lawyers
         for (Witness witness : AllWitnesses) {
             // Check if the current lawyer's ID matches the provided UserID
             if (witness.getUserID() == user.getUserID()) {
+                return witness; // Return the matched lawyer
+            }
+        }
+        // Return null if no matching lawyer is found
+        return null;
+    }
+
+    public Witness getRelevantWitness(List<Witness> AllWitnesses, int id) {
+        // Iterate through the list of all lawyers
+        for (Witness witness : AllWitnesses) {
+            // Check if the current lawyer's ID matches the provided UserID
+            if (witness.getUserID() == id) {
                 return witness; // Return the matched lawyer
             }
         }
@@ -318,28 +356,32 @@ public class User {
 
         for (Notification notification : myNotifications) {
 
-            if (dbHandler.findCaseByID(AllCases, notification.getCaseID()) != null) {
-                // Create a container for each notification
-                HBox notificationBox = new HBox(20);
-                notificationBox.setStyle(
-                        "-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 1px; -fx-padding: 10px;");
-                notificationBox.setAlignment(Pos.CENTER); // Center-align contents of the HBox
-                notificationBox.setPadding(new Insets(10));
+            // Create a container for each notification
+            HBox notificationBox = new HBox(20);
+            notificationBox.setStyle(
+                    "-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 1px; -fx-padding: 10px;");
+            notificationBox.setAlignment(Pos.CENTER); // Center-align contents of the HBox
+            notificationBox.setPadding(new Insets(10));
+            // Button to show details
+            Button detailsButton = new Button("Show Details");
+            detailsButton.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-size: 12px;");
+            detailsButton.setOnAction(event -> showNotificationDetails(notification, dbHandler, AllCases));
 
+            if (dbHandler.findCaseByID(AllCases, notification.getCaseID()) != null || this.getRole() == "Lawyer") {
                 // Display notification summary
                 Label notificationSummary = new Label("Notification ID: " + notification.getNotificationID() +
                         " | Case Title: " + dbHandler.findCaseByID(AllCases, notification.getCaseID()).getCaseTitle());
                 notificationSummary.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
-
-                // Button to show details
-                Button detailsButton = new Button("Show Details");
-                detailsButton.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-size: 12px;");
-                detailsButton.setOnAction(event -> showNotificationDetails(notification, dbHandler, AllCases));
-
-                // Add elements to the notification box
                 notificationBox.getChildren().addAll(notificationSummary, detailsButton);
-                notificationLayout.getChildren().add(notificationBox);
+            } else {
+                Label notificationSummary = new Label("Notification ID: " + notification.getNotificationID() +
+                        " | " + notification.getNotification());
+                notificationSummary.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
+                notificationBox.getChildren().addAll(notificationSummary,detailsButton);
             }
+
+            // Add elements to the notification box
+            notificationLayout.getChildren().add(notificationBox);
         }
 
         Button returnButton = new Button(
@@ -380,31 +422,46 @@ public class User {
 
         // Header Label
         Label headerLabel = new Label("Notification Details");
-        headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-padding: 10;");
+        headerLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #34495e; -fx-padding: 10;");
 
         // Separator
         Separator separator = new Separator();
-        separator.setStyle("-fx-background-color: #2c3e50; -fx-padding: 10;");
+        separator.setStyle("-fx-background-color: #34495e;");
 
-        // Details layout
+        // Details layout (Scrollable Content)
         VBox detailsLayout = new VBox(15);
         detailsLayout.setPadding(new Insets(20));
         detailsLayout.setStyle(
-                "-fx-background-color: #f4f7f9; -fx-border-radius: 10px; -fx-border-color: #2c3e50; -fx-border-width: 2px;");
+                "-fx-background-color: #ecf0f1; -fx-border-radius: 10px; -fx-border-color: #34495e; -fx-border-width: 2px;");
+        String title1="",title2="";
+        if(cases==null){
+            title1="Bar";
+            title2="Application";
 
-        // Add notification details
+        }
+        else{
+            title1="Case Title: ";
+            title2= cases.getCaseTitle();
+        }
+        // Add notification details with wrapping
         detailsLayout.getChildren().addAll(
                 createStyledDetail("Notification ID", String.valueOf(notification.getNotificationID())),
-                createStyledDetail("Case Title", cases.getCaseTitle()),
+                createStyledDetail(title1, title2),
                 createStyledDetail("Recipients", dbHandler.getUserById(notification.getRecipientsID()).getUsername()),
                 createStyledDetail("Sender", dbHandler.getUserById(notification.getSenderID()).getUsername()),
                 createStyledDetail("Sender Type", notification.getSenderType()),
-                createStyledDetail("Message", notification.getNotification()));
+                createStyledDetailWithWrapping("Message", notification.getNotification()));
+
+        // Scroll Pane for content
+        ScrollPane scrollPane = new ScrollPane(detailsLayout);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: transparent; -fx-border-radius: 10px;");
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         // Close button
         Button closeButton = new Button("Close");
         closeButton.setStyle(
-                "-fx-background-color: #d9534f; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-border-radius: 5px;");
+                "-fx-background-color: #d9534f; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-border-radius: 5px;");
         closeButton.setOnAction(event -> detailsStage.close());
 
         // Footer layout
@@ -413,28 +470,39 @@ public class User {
         footerLayout.setPadding(new Insets(10));
 
         // Main layout
-        VBox mainLayout = new VBox(10, headerLabel, separator, detailsLayout, footerLayout);
+        VBox mainLayout = new VBox(15, headerLabel, separator, scrollPane, footerLayout);
         mainLayout.setStyle("-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-radius: 10px;");
         mainLayout.setAlignment(Pos.CENTER);
 
         // Set up the scene for the popup
-        Scene detailsScene = new Scene(mainLayout, 450, 600);
+        Scene detailsScene = new Scene(mainLayout, 500, 600); // Increased width for better spacing
         detailsStage.setTitle("Notification Details");
         detailsStage.setScene(detailsScene);
         detailsStage.show();
     }
 
-    // Helper function to create a styled detail layout
-    private HBox createStyledDetail(String key, String value) {
-        Label keyLabel = new Label(key + ":");
-        keyLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #34495e;");
-
-        Label valueLabel = new Label(value);
-        valueLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
-
-        HBox detailBox = new HBox(10, keyLabel, valueLabel);
+    // Helper method for styled details
+    private HBox createStyledDetail(String label, String value) {
+        Label labelNode = new Label(label + ": ");
+        labelNode.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #34495e;");
+        Label valueNode = new Label(value);
+        valueNode.setStyle("-fx-font-size: 16px; -fx-text-fill: #2c3e50;");
+        valueNode.setWrapText(true);
+        HBox detailBox = new HBox(10, labelNode, valueNode);
         detailBox.setAlignment(Pos.TOP_LEFT);
-        detailBox.setStyle("-fx-padding: 5;");
+        return detailBox;
+    }
+
+    // Helper method for styled details with wrapping
+    private VBox createStyledDetailWithWrapping(String label, String value) {
+        Label labelNode = new Label(label + ":");
+        labelNode.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #34495e;");
+        Label valueNode = new Label(value);
+        valueNode.setStyle("-fx-font-size: 16px; -fx-text-fill: #2c3e50;");
+        valueNode.setWrapText(true); // Enable text wrapping
+        valueNode.setMaxWidth(400); // Set a max width to ensure wrapping
+        VBox detailBox = new VBox(5, labelNode, valueNode);
+        detailBox.setAlignment(Pos.TOP_LEFT);
         return detailBox;
     }
 

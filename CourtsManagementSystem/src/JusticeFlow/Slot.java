@@ -230,6 +230,9 @@ public class Slot {
                 dbHandler.updateOrInsertSlots(AllSlot);
                 cases.setCaseStatus("Opened");
                 dbHandler.saveOrUpdateCase(cases);
+                Notification.createNotification(cases,
+                        "Slot for Case : " + cases.getCaseTitle() + " is added for Date : " + selectedDate + "!",
+                        system);
                 system.ReviewUpcomingCaseRequests(primaryStage, gui);
                 System.out.println("New slot scheduled: " + newSlot);
             }
@@ -279,8 +282,9 @@ public class Slot {
     }
 
     public static void newSlotCreationandDeletion(List<Slot> AllSlot, List<Judge> AllJudges, List<Court> AllCourt,
-            List<Witness> AllWitnesses, Case cases, DatabaseHandler dbHandler,FileHandler fileHandler,List<Case> allCases,List<Lawyer> allLawyers,List<Clients> allClients,
-            Stage primaryStage, GUI_Menu gui, CourtsManagementSystem system,Slot temp) {
+            List<Witness> AllWitnesses, Case cases, DatabaseHandler dbHandler, FileHandler fileHandler,
+            List<Case> allCases, List<Lawyer> allLawyers, List<Clients> allClients,
+            Stage primaryStage, GUI_Menu gui, CourtsManagementSystem system, Slot temp) {
 
         for (Slot s : AllSlot) {
             System.out.println(s.toString());
@@ -359,7 +363,8 @@ public class Slot {
         WitnessComboBox.setVisible(false);
         WitnessLabel.setVisible(false);
         rejectButton.setOnAction(e -> {
-            cases.viewCaseDetailsJudge(dbHandler, fileHandler, allCases, AllSlot, allClients, AllJudges, allLawyers, AllWitnesses, AllCourt, primaryStage, gui, system);
+            cases.viewCaseDetailsJudge(dbHandler, fileHandler, allCases, AllSlot, allClients, AllJudges, allLawyers,
+                    AllWitnesses, AllCourt, primaryStage, gui, system);
         });
         // Populate available courts and judges based on the selected date and time slot
         searchButton.setOnAction(e -> {
@@ -412,9 +417,13 @@ public class Slot {
                 dbHandler.saveOrUpdateCase(cases);
                 AllSlot.remove(temp);
                 dbHandler.updateOrInsertSlots(AllSlot);
-                cases.viewCaseDetailsJudge(dbHandler, fileHandler, allCases, AllSlot, allClients, AllJudges, allLawyers, AllWitnesses, AllCourt, primaryStage, gui, system);
+                Notification.createNotification(cases,
+                "Slot for Case : " + cases.getCaseTitle() + " is updated to Date : " + selectedDate + "!",
+                system);
+                cases.viewCaseDetailsJudge(dbHandler, fileHandler, allCases, AllSlot, allClients, AllJudges, allLawyers,
+                        AllWitnesses, AllCourt, primaryStage, gui, system);
                 System.out.println("New slot scheduled: " + newSlot);
-                //delete temp slot from list(AllSLot)
+                // delete temp slot from list(AllSLot)
             }
         });
 
@@ -598,6 +607,9 @@ public class Slot {
                 cases.setCaseStatus("Opened");
                 dbHandler.saveOrUpdateCase(cases);
                 // system.ReviewUpcomingCaseRequests(primaryStage, gui);
+                Notification.createNotification(cases,
+                "New Hearing Slot for Case : " + cases.getCaseTitle() + " is updated to Date : " + selectedDate + "!",
+                system);
                 System.out.println("New slot scheduled: " + newSlot);
             }
         });
