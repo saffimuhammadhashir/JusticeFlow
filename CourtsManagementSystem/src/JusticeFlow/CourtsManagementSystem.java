@@ -2031,8 +2031,8 @@ public class CourtsManagementSystem extends Application {
                 primaryStage.setTitle("Main Menu for Court Administrator");
                 titleLabel = new Label("Court Administrator's Menu");
                 titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
-                Button caseFilingButton = new Button("Case Filing/Scheduling");
-                Button trackUpdatesButton = new Button("Track/Manage Updates");
+                Button caseFilingButton = new Button("Case Scheduling");
+                Button trackUpdatesButton = new Button("Manage Updates");
                 Button trackCaseButton = new Button("Track Case");
                 Button scheduleHearingButton = new Button("Schedule Hearing");
                 Button ReOpenCaseButton = new Button("Re-Open Case");
@@ -2049,12 +2049,12 @@ public class CourtsManagementSystem extends Application {
                 styleLogoutButton(logoutButton);
 
                 caseFilingButton.setOnAction(e -> {
-                    System.out.println("Case Filing/Scheduling selected.");
+                    System.out.println("Case Scheduling selected.");
                     system.ReviewUpcomingCaseRequests(primaryStage, this); // Call your method
                 });
 
                 trackUpdatesButton.setOnAction(e -> {
-                    System.out.println("Track/Manage Updates selected.");
+                    System.out.println("Manage Updates selected.");
                     system.TrackManageUpdates(primaryStage, this); // Call your method
                 });
 
@@ -2143,7 +2143,7 @@ public class CourtsManagementSystem extends Application {
                 titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 Button trackUpdatesButton = new Button("Track Updates");
                 Button trackCaseButton = new Button("Track Case");
-                Button reviewDocumentButton = new Button("Review Document/Log Judgment");
+                Button reviewDocumentButton = new Button("Log Judgment");
                 Button notificationButton = new Button("Display Notifications");
                 Button logoutButton = new Button("Log Out");
 
@@ -2164,7 +2164,7 @@ public class CourtsManagementSystem extends Application {
                 });
 
                 reviewDocumentButton.setOnAction(e -> {
-                    System.out.println("Review Document/Log Judgment selected.");
+                    System.out.println("Log Judgment selected.");
                     system.ReviewDocumentLogJudgment(scanner, primaryStage); // Call your method
                 });
 
@@ -2187,7 +2187,7 @@ public class CourtsManagementSystem extends Application {
                 titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Juror");
 
-                Button btnReviewDocLogJudgment = new Button("Review Document/Log Judgment");
+                Button btnReviewDocLogJudgment = new Button("Log Judgment");
                 btnReviewDocLogJudgment.setOnAction(e -> system.ReviewDocumentLogJudgment(scanner, primaryStage));
 
                 Button btnViewNotifications = new Button("Display Notifications");
@@ -2210,7 +2210,7 @@ public class CourtsManagementSystem extends Application {
                 titleLabel = new Label("Lawyer's Menu");
                 titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Lawyer");
-                Button btnCaseFiling = new Button("Case Filing/Scheduling");
+                Button btnCaseFiling = new Button("Case Filing");
                 btnCaseFiling.setOnAction(e -> system.AddNewCase(primaryStage, this));
 
                 Button btnTrackUpdates = new Button("Track Updates");
@@ -2338,7 +2338,7 @@ public class CourtsManagementSystem extends Application {
                 titleLabel = new Label("Registrar's Menu");
                 titleLabel.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;-fx-text-fill: white; ");
                 primaryStage.setTitle("Main Menu for Registrar");
-                Button btnCaseFiling = new Button("Case Filing/Scheduling");
+                Button btnCaseFiling = new Button("Case Scheduling");
                 btnCaseFiling.setOnAction(e -> system.ReviewUpcomingCaseRequests(primaryStage, this));
 
                 Button btnBarRegistration = new Button("Bar Registration");
@@ -2388,7 +2388,7 @@ public class CourtsManagementSystem extends Application {
                             + "-fx-background-size: stretch; "
                             + "-fx-background-position: center center; "
                             + "-fx-background-repeat: no-repeat; "
-                            + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); "
+                            + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/img(3).jpeg'); "
                             + "-fx-background-color: rgba(0, 0, 0, 0.35); "
                             + "-fx-blur: 8px; "
                             + "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 40, 0.4, 0, 25); ");
@@ -2440,7 +2440,7 @@ public class CourtsManagementSystem extends Application {
             leftLayout.setBackground(new Background(
                     new BackgroundImage(
                             new Image(
-                                    "file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/2.png"),
+                                    "file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/2.png"),
                             BackgroundRepeat.NO_REPEAT,
                             BackgroundRepeat.NO_REPEAT,
                             BackgroundPosition.CENTER,
@@ -2503,7 +2503,7 @@ public class CourtsManagementSystem extends Application {
             layout.setStyle("-fx-alignment: center; "
                     + "-fx-padding: 20px; "
                     + "-fx-border-color: #e0e0e0; "
-                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
+                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/91674.jpg'); "
                     + "-fx-background-size: cover; "
                     + "-fx-background-position: center center; "
                     + "-fx-background-repeat: no-repeat;");
@@ -2760,7 +2760,7 @@ public class CourtsManagementSystem extends Application {
             VBox layout = new VBox(25); // Vertical box layout with spacing of 25
             layout.setStyle("-fx-padding:0px 300px;"
                     + " -fx-alignment: center;"
-                    + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
+                    + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/login.jpg'); "
                     + "-fx-background-size: cover; " // Ensures the image covers the entire area
                     + "-fx-background-position: center center; " // Centers the image
                     + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
@@ -2895,7 +2895,7 @@ public class CourtsManagementSystem extends Application {
         layout.setStyle("-fx-padding: 50px; "
                 + "-fx-alignment: center; "
                 + "-fx-fill-width: true; "
-                + "-fx-background-image: url('file:///E:/Github%20Projects/JusticeFlow/CourtsManagementSystem/lib/resources/awesome%207.jpg');"
+                + "-fx-background-image: url('file:///D:/Github/JusticeFlow/CourtsManagementSystem/lib/resources/awesome%207.jpg');"
                 + "-fx-background-size: cover; " // Ensures the image covers the entire area
                 + "-fx-background-position: center center; " // Centers the image
                 + "-fx-background-repeat: no-repeat; "); // Prevents repeating the image
